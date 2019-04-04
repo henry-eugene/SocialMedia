@@ -13,16 +13,25 @@
     messagingSenderId: "837818397370"
   };
   firebase.initializeApp(config);
-                
- firebase.auth().onAuthStateChanged(function(user) {
+ 
+    // Check to see if you are logged in
+        firebase.auth().onAuthStateChanged(function(user) {
             if (user == null) {
                 alert("Not logged in.");
+                 myphotodiv = document.getElementById("invis");
+                myphotodiv.style.visibility="hidden";
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="visible";
                 return;
             } else {
                 userId = user.uid;
                 name = user.displayName;
                 imageUrl = user.photoURL;
                 email = user.email;
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="hidden";
+                myphotodiv = document.getElementById("invis");
+                myphotodiv.style.visibility="visible";
                     
                 // write user data to users
                 writeUserData(userId, name, email, imageUrl);
@@ -30,8 +39,9 @@
                 // write data to document
                 mydiv = document.getElementById("mydata");
                 mydiv.innerHTML = name
-                myphotodiv = document.getElementById("myphoto");
-                myphotodiv.innerHTML = "<img src='" + imageUrl + "'/>";
+               myphotodiv = document.getElementById("myphoto");
+               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
                     if (data == null) {
@@ -54,6 +64,7 @@
         }); // end check auth state
         
         function encodeImageFileAsURL() {
+
             var filesSelected = document.getElementById("inputFileToLoad").files;
             if (filesSelected.length > 0) {
                 var fileToLoad = filesSelected[0];
@@ -90,7 +101,25 @@
                 for (var t in data[u]) {
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
-                    var time = date.toString();
+                    var today = new Date();
+                    var difyear;
+                    var difmonth;
+                    var difday;
+                    var difhour;
+                    if (today.getFullYear() > date.getFullYear()) {
+                        
+                    }
+                    time = date.toString();
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1;
+                    var yyyy = date.getFullYear();
+                    if (dd<10) {
+                        dd="0" + dd;
+                    }
+                    if(mm<10) {
+                        mm = "0" + mm;
+                    }
+                    time = (dd+'/'+mm+'/'+yyyy).toString();
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
@@ -161,142 +190,131 @@
             firebase.auth().signOut().then(function() {
             });
         }
-        
+    
     
     </script>
+    <style>
+        body {
+           padding: 0px;
+            margin: 0px;
+        }
+        .topnav {
+            font-family: "Fredoka One";
+            overflow; hidden;
+            background-color:deepskyblue;
+            color: white;
+            font-size: 30px;
+            padding: 13px;
+            
+            
+        }
+        .topnav a {
+            color: white;
+            float: right;
+           text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: "Fredoka One";
+            padding: 9px;
+            max-height: 20px;
+            z-index: 5;
+        }
+       
+        
+        .topnav a:hover {
+            background-color:white;
+            color:deepskyblue;
+        }
+        .topnav a.active {
+            background-color: white;
+            color: deepskyblue;
+        }
+       
+    /* Dropdown Button */
+.dropbtn {
+  background-color: deepskyblue;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
 
+}
+        
 
-<body>
-        <button onclick="signin()">Sign in</button>
-        <button onclick="signout()">Sign out</button>
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: deepskyblue;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    float: right;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+    top: 51px;
+  background-color: #f1f1f1;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  float: none;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+        
     
+    </style>
+    <body>
+        <div class="topnav">    
+        <i class="fas fa-igloo"></i> Igloo  
+        <a class="active" href="home.html">Home</a>
+            <span id="invis">
+            <span class="dropdown" >
+  <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
+  <span id="myDropdown" class="dropdown-content">
+    <a href="profile.html">My Igloo</a>
+    <a onclick="signout()" href="#">Sign Out</a>
+    <a href="settings.html">Settings</a>
+  </span>
+    <a href="message.html"><i class="fas fa-plus-circle"></i></a>
+ </span>
+               
+</span>
+         <a id="signin" onclick="signin()">Sign in</a>
+            <a id="date"></a>
+    </div>
         <form>
             Tweet:<br>
             <textarea id="twit" type="text" name="thetweet" cols="100" rows="4"></textarea>
         </form> 
         <button type="button" onclick="tweet()">Submit</button>
-    
-        <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+    <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
         <div id="imgTest" style="display:none;"></div>
-        
     <div id="mytweets"></div>
     <div id="mydata"></div>
+    
     </body>
-    
-    <style>
-        .signin {
-            position: relative;
-            border-radius: 25px;
-  background-color: #0099ff;
-  border: none;
-  font-size: 18px;
-  color: #FFFFFF;
-  padding: 10px;
-  width: 100px;
-  text-align: center;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  text-decoration: none;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.signin:after {
-    border-radius: 25px;
-  content: "";
-  background: #66c2ff;
-  display: block;
-  position: absolute;
-  padding-top: 300%;
-  padding-left: 350%;
-  margin-left: -20px!important;
-  margin-top: -120%;
-  opacity: 0;
-  transition: all 0.8s
-}
-
-.signin:active:after {
-  padding: 0;
-  margin: 0;
-  opacity: 1;
-  transition: 0s
-}
-    
- .signout {
-     position: relative;
-     border-radius: 25px;
-  background-color: #ff0000;
-  border: none;
-  font-size: 18px;
-  color: #FFFFFF;
-  padding: 10px;
-  width: 100px;
-  text-align: center;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-  text-decoration: none;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.signout:after {
-  content: "";
-  background: #ff8080;
-  display: block;
-  position: absolute;
-  padding-top: 150%;
-  padding-left: 200%;
-  margin-left: -20px!important;
-  margin-top: -120%;
-  opacity: 0;
-  transition: all 0.8s
-}
-
-.signout:active:after {
-  padding: 0;
-  margin: 0;
-  opacity: 1;
-  transition: 0s
-}
-        
-.submit {
-  position: relative;
-    border-radius: 25px;
-  background-color: #00cc00;
-  border: none;
-  font-size: 18px;
-  color: #FFFFFF;
-  padding: 10px;
-  width: 100px;
-  text-align: center;
-  -webkit-transition-duration: 0.4s; 
-  transition-duration: 0.4s;
-  text-decoration: none;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.submit:after {
-    border-radius: 25px;
-  content: "";
-  background: #90EE90;
-  display: block;
-  position: absolute;
-  padding-top: 300%;
-  padding-left: 350%;
-  margin-left: -20px!important;
-  margin-top: -120%;
-  opacity: 0;
-  transition: all 0.8s
-}
-
-.submit:active:after {
-  padding: 0;
-  margin: 0;
-  opacity: 1;
-  transition: 0s
-}
-    </style>
 
     
 </html>
