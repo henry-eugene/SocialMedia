@@ -1,0 +1,364 @@
+<html>
+
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBNSzFD9R_JP_UNlF7pbpOr3d6h0XXW7hg",
+    authDomain: "social-media-69e85.firebaseapp.com",
+    databaseURL: "https://social-media-69e85.firebaseio.com",
+    projectId: "social-media-69e85",
+    storageBucket: "social-media-69e85.appspot.com",
+    messagingSenderId: "837818397370"
+  };
+  firebase.initializeApp(config);
+ 
+    // Check to see if you are logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user == null) {
+                alert("Not logged in.");
+                 myphotodiv = document.getElementById("invis");
+                myphotodiv.style.visibility="hidden";
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="visible";
+                return;
+            } else {
+                userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="hidden";
+                myphotodiv = document.getElementById("invis");
+                myphotodiv.style.visibility="visible";
+                    
+                // write user data to users
+                writeUserData(userId, name, email, imageUrl);
+                
+                // write data to document
+                mydiv = document.getElementById("mydata");
+                mydiv.innerHTML = name
+               myphotodiv = document.getElementById("myphoto");
+               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+
+                firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else {
+                        
+                      firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           updatetweets(dataarray); 
+                        }
+                      });
+                      //console.log(data)
+                      //updatetweets(data);
+                    }
+                });
+            } // end user null check
+        }); // end check auth state
+        
+        function encodeImageFileAsURL() {
+
+            var filesSelected = document.getElementById("inputFileToLoad").files;
+            if (filesSelected.length > 0) {
+                var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //var newImage = document.createElement('img');
+                    //newImage.src = srcData;
+                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    document.getElementById("imgTest").innerHTML = srcData;
+                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
+                    console.log(srcData);
+                }
+                fileReader.readAsDataURL(fileToLoad);
+            }
+        } // end function
+        
+        // write user data
+        function writeUserData(userId, name, email, imageUrl) {
+            firebase.database().ref('users/' + userId).set({
+                username: name,
+                email: email,
+                profile_picture : imageUrl
+            });
+        }
+        
+        function updatetweets(data) {
+            //var mylist = "<ul>";
+            var mytab = "<table>";
+            users = data[1]; // put on top, because changed data - not good coding change later
+            data = data[0];
+            
+            for (var u in data) {
+                for (var t in data[u]) {
+                    mytab = mytab + "<tr>";
+                    var date = new Date(data[u][t].time);
+                    var today = new Date();
+                    var difyear;
+                    var difmonth;
+                    var difday;
+                    var difhour;
+                    if (today.getFullYear() > date.getFullYear()) {
+                        
+                    }
+                    time = date.toString();
+                    var dd = date.getDate();
+                    var mm = date.getMonth()+1;
+                    var yyyy = date.getFullYear();
+                    if (dd<10) {
+                        dd="0" + dd;
+                    }
+                    if(mm<10) {
+                        mm = "0" + mm;
+                    }
+                    time = (dd+'/'+mm+'/'+yyyy).toString();
+                    if (data[u][t].img != "") {
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
+                        mytab = mytab + "<td>" + users[u].email + "</td>";
+                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                        mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
+                    } else {
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
+                        mytab = mytab + "<td>" + users[u].email + "</td>";
+                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                        mytab = mytab + "<td>" + time + "</td>";
+                        
+                        
+                    } 
+                    mytab = mytab + "</tr>";
+                }   
+            }
+            //mylist = mylist + "</ul>";
+            mytab = mytab + "</table>"
+            var mytdiv = document.getElementById("mytweets");
+            //mytdiv.innerHTML = mylist;
+            mytdiv.innerHTML = mytab;
+        }
+        
+        // write tweets to firebase
+        function tweet() {
+            
+            var twitdoc = document.getElementById("twit");
+            var twitimg = document.getElementById("imgTest");
+            var nameValue = twitdoc.value;
+            var imgValue = twitimg.innerHTML;
+            var js_time = Date.now();
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            twitdoc.value = "";
+            console.log("tweet written")
+            
+            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else { 
+                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           updatetweets(dataarray); 
+                        }
+                      });
+                    }
+                });
+            
+            
+            
+            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
+            
+        }
+        
+        function signin() {
+            console.log("Signing in");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("fbtest.html");
+            });
+        }
+        
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
+        }
+    
+    
+    </script>
+    <script>
+    var canvas = document.querySelector( 'canvas'),
+        c = canvas.getContext( '2d'),
+        mouseX = 0,
+        mouseY = 0,
+        width = 500,
+        height = 500,
+        colour = 'blue',
+        mousedown = false;
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        function draw() {
+            if(mousedown) {
+                c.fillStyle = colour;
+                c.beginPath();
+                c.arc( mouseX, mouseY, 10, 0, Math.PI*2, true);
+                c.closePath;
+                c.fill();
+            }
+        }
+        canvas.addEventListener( 'mousemove', function( event ) {
+  if( event.offsetX ){
+    mouseX = event.offsetX;
+    mouseY = event.offsetY;
+  } else {
+    mouseX = event.pageX - event.target.offsetLeft;
+    mouseY = event.pageY - event.target.offsetTop;
+  }
+  // call the draw function
+  draw();
+}, false );
+
+canvas.addEventListener( 'mousedown', function( event ) {
+    mousedown = true;
+}, false );
+canvas.addEventListener( 'mouseup', function( event ) {
+    mousedown = false;
+}, false );
+
+var link = document.createElement('a');
+    link.innerHTML = 'download image';
+link.addEventListener('click', function(ev) {
+    link.href = canvas.toDataURL();
+    link.download = "mypainting.png";
+}, false);
+document.body.appendChild(link);
+
+    
+    
+    </script>
+    <style>
+        body {
+           padding: 0px;
+            margin: 0px;
+        }
+        .topnav {
+            font-family: "Fredoka One";
+            overflow; hidden;
+            background-color:deepskyblue;
+            color: white;
+            font-size: 30px;
+            padding: 13px;
+            
+            
+        }
+        .topnav a {
+            color: white;
+            float: right;
+           text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: "Fredoka One";
+            padding: 9px;
+            max-height: 20px;
+            z-index: 5;
+        }
+       
+        
+        .topnav a:hover {
+            background-color:white;
+            color:deepskyblue;
+        }
+        .topnav a.active {
+            background-color: white;
+            color: deepskyblue;
+        }
+       
+    /* Dropdown Button */
+.dropbtn {
+  background-color: deepskyblue;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+
+}
+        
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: deepskyblue;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    float: right;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+    top: 51px;
+  background-color: #f1f1f1;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  float: none;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+        
+    
+    </style>
+    <body>
+        <div class="topnav">    
+        <i class="fas fa-igloo"></i> Igloo  
+        <a class="active" href="home.html">Home</a>
+            <span id="invis">
+            <span class="dropdown" >
+  <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
+  <span id="myDropdown" class="dropdown-content">
+    <a href="profile.html">My Igloo</a>
+    <a onclick="signout()" href="#">Sign Out</a>
+    <a href="settings.html">Settings</a>
+  </span>
+    <a href="message.html"><i class="fas fa-plus-circle"></i></a>
+ </span>
+               
+</span>
+         <a id="signin" onclick="signin()">Sign in</a>
+            <a id="date"></a>
+    </div>
+        
+    
+    </body>
+
+    
+</html>
