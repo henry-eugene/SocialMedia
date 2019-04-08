@@ -153,7 +153,14 @@
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
         
-   
+       canvas{border-style: solid; border-color:grey;}
+ b{
+     position: absolute;
+    background: #69c;
+    color: #fff;
+    margin-top:5px;
+    padding: 5px 5px;
+}
     </style>
     <body>
         <div class="topnav">    
@@ -172,10 +179,21 @@
                
 </span>
          <a id="signin" onclick="signin()">Sign in</a>
-            <a id="date"></a>
+       
     </div>
-        Paint by pressing your mouse and moving it. Download with the button below.
-        <canvas id="mycanvas" ></canvas>
+        Paint by pressing your mouse and moving it. Download with the button below. <br>
+        <canvas class="mycanvas" ></canvas>
+        <div class="colorpicker" style="display:none">
+    <canvas id="picker" var="1" width="300" height="300"></canvas>
+
+    <div class="controls">
+        <div><label>R</label> <input type="text" id="rVal" /></div>
+        <div><label>G</label> <input type="text" id="gVal" /></div>
+        <div><label>B</label> <input type="text" id="bVal" /></div>
+        <div><label>RGB</label> <input type="text" id="rgbVal" /></div>
+        <div><label>HEX</label> <input type="text" id="hexVal" /></div>
+    </div>
+        <br>
         
     
     </body>
@@ -221,7 +239,7 @@ canvas.addEventListener( 'mouseup', function( event ) {
     mousedown = false;
 }, false );
 
-var link = document.createElement('a');
+var link = document.createElement('b');
     link.innerHTML = 'download image';
 link.addEventListener('click', function(ev) {
     link.href = canvas.toDataURL();
