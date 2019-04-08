@@ -36,8 +36,7 @@
                 writeUserData(userId, name, email, imageUrl);
                 
                 // write data to document
-                mydiv = document.getElementById("mydata");
-                mydiv.innerHTML = name
+               
                myphotodiv = document.getElementById("myphoto");
                myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
 
@@ -306,7 +305,7 @@
     <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
         <div id="imgTest" style="display:none;"></div>
     <div id="mytweets"></div>
-    <div id="mydata"></div>
+
     
     </body>
 
