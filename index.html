@@ -17,7 +17,7 @@
     // Check to see if you are logged in
         firebase.auth().onAuthStateChanged(function(user) {
             if (user == null) {
-                 myphotodiv = document.getElementById("invis");
+                myphotodiv = document.getElementById("invis");
                 myphotodiv.style.visibility="hidden";
                 signinbutton = document.getElementById("signin");
                 signinbutton.style.visibility="visible";
@@ -186,6 +186,7 @@
         
         function signout() {
             console.log("Signing out");
+            document.location.reload()
             firebase.auth().signOut().then(function() {
             });
         }
