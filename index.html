@@ -1,5 +1,5 @@
 <html>
-
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
 <script>
@@ -100,14 +100,7 @@
                 for (var t in data[u]) {
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
-                    var today = new Date();
-                    var difyear;
-                    var difmonth;
-                    var difday;
-                    var difhour;
-                    if (today.getFullYear() > date.getFullYear()) {
-                        
-                    }
+                  
                     time = date.toString();
                     var dd = date.getDate();
                     var mm = date.getMonth()+1;
@@ -297,10 +290,11 @@
     <a onclick="signout()" href="#">Sign Out</a>
     <a href="settings.html">Settings</a>
   </span>
-    <a href="message.html"><i class="fas fa-plus-circle"></i></a>
+    
  </span>
                
 </span>
+            <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
          <a id="signin" onclick="signin()">Sign in</a>
             <a id="date"></a>
     </div>
