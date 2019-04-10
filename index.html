@@ -101,12 +101,15 @@
                     var date = new Date(data[u][t].time);
                     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
                     time = date.toString();
+                    var today = new Date();
                     var dd = date.getDate();
-                    var mm = date.getMonth()+1;
+                    var mm = date.getMonth();
                     var yyyy = date.getFullYear();
+                    var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
+var diffdate = new Date(diff);
                     
-                    
-                    time = (months[mm] + " " + dd+ ", "+yyyy).toString();
+                   // time = (months[mm] + " " + dd+ ", "+yyyy + diffdate.getHours() + "hours ago.").toString();
+                    time = ("Posted " + +diffdate.getDay() + " days, " + diffdate.getHours() + " hours, " + diffdate.getMinutes() + " minutes ago.").toString();
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
