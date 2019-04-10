@@ -38,7 +38,7 @@
                 // write data to document
                
                myphotodiv = document.getElementById("myphoto");
-               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
 
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
@@ -99,18 +99,14 @@
                 for (var t in data[u]) {
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
-                  
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
                     time = date.toString();
                     var dd = date.getDate();
                     var mm = date.getMonth()+1;
                     var yyyy = date.getFullYear();
-                    if (dd<10) {
-                        dd="0" + dd;
-                    }
-                    if(mm<10) {
-                        mm = "0" + mm;
-                    }
-                    time = (dd+'/'+mm+'/'+yyyy).toString();
+                    
+                    
+                    time = (months[mm] + " " + dd+ ", "+yyyy).toString();
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
