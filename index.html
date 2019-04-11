@@ -100,16 +100,46 @@
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
                     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-                    time = date.toString();
+                    var time = date.toString();
                     var today = new Date();
                     var dd = date.getDate();
                     var mm = date.getMonth();
                     var yyyy = date.getFullYear();
-                    var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
-var diffdate = new Date(diff);
                     
-                   // time = (months[mm] + " " + dd+ ", "+yyyy + diffdate.getHours() + "hours ago.").toString();
-                    time = ("Posted " + +diffdate.getDay() + " days, " + diffdate.getHours() + " hours, " + diffdate.getMinutes() + " minutes ago.").toString();
+                    var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
+                    console.log(time);
+    var diffdate = new Date(diff);
+    var minutes = Math.floor(diffdate / 60000);
+    var hours = Math.floor(minutes / 60);
+                    minutes = minutes % 60;
+    var days = Math.floor(hours / 24);
+                    hours = hours % 24;
+    var years = Math.floor(days / 365);
+                    days = days % 365;
+    var count = 0;
+    var time = "Posted ";
+                    console.log(time);
+    var names = [" years", " days", " hours", " minutes"];
+            var totals = [years,  days, hours, minutes];
+                    for(var i = 0; i < 4; i++) {
+                        if(totals[i]!= 0) {
+                            time = time + totals[i] + names[i];
+                            console.log(time);
+                        }
+                        if(i != 3 && totals[i]!= 0) {
+                            time = time + ", ";
+                        }
+                    }
+                    console.log(time);
+                    
+                        time += " ago.".toString();
+                    
+                    if(minutes == 0) {
+                        time = "Posted just now.";
+                    }
+                    
+                    
+//                    time = ("Posted " + +diffdate.getDay() + " days, " + diffdate.getHours() + " hours, " + diffdate.getMinutes() + " minutes ago.").toString();
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
