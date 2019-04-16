@@ -49,8 +49,9 @@
                       firebase.database().ref('/users').once('value').then(function(snapshot) { 
                         var userdata = (snapshot.val());
                         if (userdata != null) {
-                           dataarray = [data,userdata]
-                           console.log(dataarray)
+                           dataarray = [data,userdata];
+                           console.log(dataarray);
+                            dataarray.sort(function(a, b){return a-b});
                            updatetweets(dataarray); 
                         }
                       });
@@ -88,7 +89,11 @@
                 profile_picture : imageUrl
             });
         }
-        
+        function myFunction() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+            console.log("hi");
+;}
         function updatetweets(data) {
             //var mylist = "<ul>";
             var mytab = "<table>";
@@ -106,10 +111,10 @@
                     var dd = date.getDate();
                     var mm = date.getMonth();
                     var yyyy = date.getFullYear();
-                    time2 = ("Posted " + months[mm] + dd + " , " + yyyy + ".").toString();
+                    time2 = ("Posted " + months[mm] + " " + dd + ", " + yyyy + ".").toString();
                     
                     var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
-                    console.log(time);
+                    
     var diffdate = new Date(diff);
     var minutes = Math.floor(diffdate / 60000);
     var hours = Math.floor(minutes / 60);
@@ -120,19 +125,19 @@
                     days = days % 365;
     var count = 0;
     var time = "Posted ";
-                    console.log(time);
+                    
     var names = [" years", " days", " hours", " minutes"];
             var totals = [years,  days, hours, minutes];
                     for(var i = 0; i < 4; i++) {
                         if(totals[i]!= 0) {
                             time = time + totals[i] + names[i];
-                            console.log(time);
+                            
                         }
                         if(i != 3 && totals[i]!= 0) {
                             time = time + ", ";
                         }
                     }
-                    console.log(time);
+                   
                     
                         time += " ago.".toString();
                     
@@ -145,15 +150,16 @@
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
-                        
-                        mytab = mytab  + "<td class='popup'>" + time + "<span class='popuptext'>" + time2 + "</span><br><img src='" + data[u][t].img + "' width='300px'></td>";
+                        mytab = mytab  + "<td class='popup' onclick='myFunction()'> " + time + "<span class='popuptext' id='myPopup'>" + time2 + "</span></td>";
+                        mytab = mytab + "</tr><tr>";
+                        mytab = mytab + "<td><img src='" + data[u][t].img + "' width='300px'></td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
                     } else {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
-                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
-                        mytab = mytab + "<td class='popup'>" + time + "<span   class='popuptext' id='myPopup'>" + time2 + "</span></td>";
-                        
+                        mytab = mytab + "<td class='popup' onclick='myFunction()'> " + time + "<span   class='popuptext' id='myPopup'>" + time2 + "</span></td>";
+                        mytab = mytab + "</tr><tr>";
+                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
                         
                     } 
                     mytab = mytab + "</tr>";
@@ -346,7 +352,7 @@
 }
     .popup {
   position: relative;
-  display: block;
+  display: inline-block;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -356,7 +362,7 @@
 
 /* The actual popup */
 .popup .popuptext {
-  display:none;
+  visibility: hidden;
   width: 160px;
   background-color: deepskyblue;
   color: white;
@@ -383,11 +389,11 @@
 }
 
 
-.popup td: hover .popuptext {
-  
-    display:block;
-
-}
+        .popup .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s;
+        }
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
