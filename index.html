@@ -106,7 +106,7 @@
                     var dd = date.getDate();
                     var mm = date.getMonth();
                     var yyyy = date.getFullYear();
-                    
+                    time2 = ("Posted " + months[mm] + dd + " , " + yyyy + ".").toString();
                     
                     var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
                     console.log(time);
@@ -140,13 +140,14 @@
                         time = "Posted just now.";
                     }
                     
-                    time2 = ("Posted " + +diffdate.getDay() + " days, " + diffdate.getHours() + " hours, " + diffdate.getMinutes() + " minutes ago.").toString();
+                    
 
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
+                        
+                        mytab = mytab  + "<td class='popup'>" + time + "<span class='popuptext'>" + time2 + "</span><br><img src='" + data[u][t].img + "' width='300px'></td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
-                        mytab = mytab  + "<td class='popup'>" + time + "<span class='popuptext' id='myPopup'>" + time2 + "</span><br><img src='" + data[u][t].img + "' width='300px'></td>";
                     } else {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
@@ -299,6 +300,7 @@
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd}
+        
         .dropdown:hover .dropdown-content {
             display: block;
         }
@@ -342,7 +344,7 @@
 }
     .popup {
   position: relative;
-  display: inline-block;
+  display: block;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -352,10 +354,10 @@
 
 /* The actual popup */
 .popup .popuptext {
-  visibility: hidden;
+  display:none;
   width: 160px;
-  background-color: #555;
-  color: #fff;
+  background-color: deepskyblue;
+  color: white;
   text-align: center;
   border-radius: 6px;
   padding: 8px 0;
@@ -366,7 +368,7 @@
   margin-left: -80px;
 }
 
-/* Popup arrow */
+ /*Popup arrow */
 .popup .popuptext::after {
   content: "";
   position: absolute;
@@ -378,11 +380,11 @@
   border-color: #555 transparent transparent transparent;
 }
 
-/* Toggle this class - hide and show the popup */
-.popup: hover .popuptext {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
+
+.popup td: hover .popuptext {
+  
+    display:block;
+
 }
 
 /* Add animation (fade in the popup) */
