@@ -101,10 +101,12 @@
                     var date = new Date(data[u][t].time);
                     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
                     var time = date.toString();
+                    var time2;
                     var today = new Date();
                     var dd = date.getDate();
                     var mm = date.getMonth();
                     var yyyy = date.getFullYear();
+                    
                     
                     var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
                     console.log(time);
@@ -138,18 +140,18 @@
                         time = "Posted just now.";
                     }
                     
-                    
-//                    time = ("Posted " + +diffdate.getDay() + " days, " + diffdate.getHours() + " hours, " + diffdate.getMinutes() + " minutes ago.").toString();
+                    time2 = ("Posted " + +diffdate.getDay() + " days, " + diffdate.getHours() + " hours, " + diffdate.getMinutes() + " minutes ago.").toString();
+
                     if (data[u][t].img != "") {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
-                        mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
+                        mytab = mytab  + "<td class='popup'>" + time + "<span class='popuptext' id='myPopup'>" + time2 + "</span><br><img src='" + data[u][t].img + "' width='300px'></td>";
                     } else {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
-                        mytab = mytab + "<td>" + time + "</td>";
+                        mytab = mytab + "<td class='popup'>" + time + "<span   class='popuptext' id='myPopup'>" + time2 + "</span></td>";
                         
                         
                     } 
@@ -303,8 +305,96 @@
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
-        
-    
+        /* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 5px;
+    margin-top: 20px;
+ 
+    font-family: "Fredoka One";
+   
+}
+
+        .left {
+            width: 25%;
+            min-width: 250px;
+        }
+        .middle {
+            width: 50%;
+             border-style: solid;
+    border-color: lightsteelblue;
+    border-radius:5%;
+    border-width: 2px;
+        }
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 900px) {
+  .column {
+    width: 100%;
+  }
+}
+    .popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup: hover .popuptext {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
     </style>
     <body>
         <div class="topnav">    
@@ -326,15 +416,22 @@
          <a id="signin" onclick="signin()">Sign in</a>
    
     </div>
+        <div class="row">
+       <div class ="column left">
+           
         <form>
             Tweet:<br>
-            <textarea id="twit" type="text" name="thetweet" cols="100" rows="4"></textarea>
+            <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
         <button type="button" onclick="tweet()">Submit</button>
     <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+            </div>
+            <div class="column middle">
+            
         <div id="imgTest" style="display:none;"></div>
     <div id="mytweets"></div>
-
+                </div>
+ </div>
     
     </body>
 
