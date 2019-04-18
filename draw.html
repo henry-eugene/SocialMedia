@@ -154,12 +154,14 @@
 .show {display:block;}
         
        canvas{border-style: solid; border-color:grey;}
- b{
+ #download{
      position: absolute;
-    background: #69c;
-    color: #fff;
-    margin-top:5px;
+    background: deepskyblue;
+    color: white;
+    margin: 10 160;
     padding: 5px 5px;
+     
+     
 }
     </style>
     <body>
@@ -183,32 +185,42 @@
    
     </div>
         Paint by pressing your mouse and moving it. Download with the button below. <br>
+        <div class='container'>
         <canvas class="mycanvas" ></canvas>
-       
-   
-
-   
+            
+<label for="background-color">Choose a colour: </label>
+<input id="background-color" type="color" value="#ff0000" onchange="javascript:document.getElementById('chosen-color').value = document.getElementById('background-color').value;"/>
+                
+                <label for="chosen-color">You have chosen : </label>
+                <input id="chosen-color" type="text" readonly value="#ff0000" />
+               
         <br>
         
-    
+    <a id="download">Download Drawing</a>
+            </div>
     </body>
 
      <script>
+         
+         var newcolour = document.getElementById('chosen-color').value;
+
     var canvas = document.querySelector( 'canvas' ),
         c = canvas.getContext( '2d' ),
         mouseX = 0,
         mouseY = 0,
         width = 500,
         height = 500,
-        colour = 'blue',
+        colour = newcolour,
         mousedown = false;
         
         canvas.width = width;
         canvas.height = height;
         
         function draw() {
+            newcolour = document.getElementById('chosen-color').value;
+            c.colour = newcolour;
             if(mousedown) {
-                c.fillStyle = colour;
+                c.fillStyle = c.colour;
                 c.beginPath();
                 c.arc( mouseX, mouseY, 10, 0, Math.PI*2, true);
                 c.closePath;
@@ -234,7 +246,7 @@ canvas.addEventListener( 'mouseup', function( event ) {
     mousedown = false;
 }, false );
 
-var link = document.createElement('b');
+var link = document.getElementById('download');
     link.innerHTML = 'download image';
 link.addEventListener('click', function(ev) {
     link.href = canvas.toDataURL();
@@ -242,7 +254,7 @@ link.addEventListener('click', function(ev) {
 }, false);
 document.body.appendChild(link);
 
-    
+   
     
     </script>
 </html>
