@@ -225,18 +225,43 @@
     </script>
     <style>   
         
+        #form{
+            font-size: 30px;
+        }
+         .custom-file-upload {
+             display: inline-block;
+             border: 1px solid aqua; 
+             font-family: 'Nunito', sans-serif;             
+             border-radius: 10px;
+             padding: 6px 12px;
+             cursor: pointer;
+             width: 60px;
+             height: 30px;
+             font-size: 12px;
+             background-color: aqua;
+             text-align: center;
+             margin-left: 120px;
+            }
+        input[type="file"] {
+            display: none;
+        }
         #submit{
             border-radius: 10px;
-            height: 50px;
-        }
-        
-        #choosefile{
-            border-radius: 10px;
-            height: 50px;
+            border-color: aqua;
+            height: 45px;
+            width: 87px;
+            background-color: aqua;
+            font-family: 'Nunito', sans-serif;  
+            font-size: 12px;
+            margin-left: 120px;
+            margin-bottom: 10px;
         }
         
         #twit {
-           border-radius: 20px; 
+           border-radius: 10px; 
+           font-size: 20px;
+           width: 95%;
+           height: 20%;
         }
         
         body {
@@ -450,12 +475,12 @@ width: 90%;
         <div class="row">
        <div class ="column left">
            
-        <form>
+        <form id="form">
             Tweet:<br>
             <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
         <button type="button" onclick="tweet()" id="submit">Submit</button>
-    <br><button id= "choosefile"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></button>
+    <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label>
             </div>
             <div class="column middle">
             
