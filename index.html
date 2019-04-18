@@ -150,20 +150,16 @@
 
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''>"+users[u].username+ "</td>";   
-                        mytab = mytab  + "<td class='popup' onclick='myFunction(" +
-                            epoch + ")'> " + time + 
-                            "<span class='popuptext' id='myPopup " + 
-                            epoch +
-                            "'>" + time2 + "</span></td>";
+                        mytab = mytab  + "<td class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
                         mytab = mytab + "</tr><tr>";
                         mytab = mytab + "<td><img src='" + data[u][t].img + "' width='300px'></td>";
-                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                        mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
                     } else {
                          mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;vertical-align: middle;''>"+ users[u].username+ "</td>";
                         mytab = mytab  + "<td class='popup' onclick='myFunction(" + epoch + ")'> " + time + "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
                         mytab = mytab + "</tr><tr>";
                         mytab = mytab + "</tr><tr>";
-                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                         mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
                         
                     } 
                     mytab = mytab + "</tr>";
@@ -228,7 +224,7 @@
     
     </script>
     <style>   
-                
+        
         #submit{
             border-radius: 10px;
             height: 50px;
@@ -254,7 +250,7 @@
             color: white;
             font-size: 30px;
             padding: 13px;
-              font-family: 'Nunito', sans-serif;
+              font-family: 'Big John', sans-serif;
 
             
         }
@@ -267,7 +263,7 @@
             padding: 9px;
             max-height: 20px;
             z-index: 5;
-              font-family: 'Nunito', sans-serif;
+              font-family: 'Big John', sans-serif;
 
         }
        
@@ -327,7 +323,6 @@
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd}
-        
         .dropdown:hover .dropdown-content {
             display: block;
         }
@@ -426,6 +421,11 @@ width: 90%;
   from {opacity: 0;}
   to {opacity:1 ;}
 }
+        .post {
+            height: 100px;
+            min-height: 100px;
+            
+        }
     </style>
     <body>
         <div class="topnav">    
