@@ -150,7 +150,7 @@
 
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
-                        mytab = mytab + "<td>" + users[u].email + "</td>";
+                        mytab = mytab + "<td>" + users[u].username + "</td>";
                         mytab = mytab  + "<td class='popup' onclick='myFunction(" +
                             epoch + ")'> " + time + 
                             "<span class='popuptext' id='myPopup " + 
@@ -161,7 +161,7 @@
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
                     } else {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;''></td>";
-                        mytab = mytab + "<td>" + users[u].email + "</td>";
+                        mytab = mytab + "<td>" + users[u].username + "</td>";
                         mytab = mytab  + "<td class='popup' onclick='myFunction(" + epoch + ")'> " + time + "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
                         mytab = mytab + "</tr><tr>";
                         mytab = mytab + "</tr><tr>";
