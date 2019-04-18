@@ -195,13 +195,24 @@
                 <input id="chosen-color" type="text" readonly value="#ff0000" />
                
         <br>
+            <button onclick="erase();">Eraser</button>
+            <button onclick="drawing();">Draw</button>
+            <br>
         
     <a id="download">Download Drawing</a>
             </div>
     </body>
 
      <script>
-         
+         var candraw = true;
+       function  erase() {
+            candraw = false;
+             newcolour = '#ffffff';
+         }
+         function drawing() {
+             candraw = true;
+             newcolour = document.getElementById('chosen-color').value;
+         }
          var newcolour = document.getElementById('chosen-color').value;
 
     var canvas = document.querySelector( 'canvas' ),
@@ -217,8 +228,11 @@
         canvas.height = height;
         
         function draw() {
+            if(candraw) {
             newcolour = document.getElementById('chosen-color').value;
+                }
             c.colour = newcolour;
+                
             if(mousedown) {
                 c.fillStyle = c.colour;
                 c.beginPath();
@@ -226,6 +240,7 @@
                 c.closePath;
                 c.fill();
             }
+                
         }
         canvas.addEventListener( 'mousemove', function( event ) {
   if( event.offsetX ){
