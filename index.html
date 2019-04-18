@@ -227,7 +227,22 @@
     
     
     </script>
-    <style>
+    <style>   
+                
+        #submit{
+            border-radius: 10px;
+            height: 50px;
+        }
+        
+        #choosefile{
+            border-radius: 10px;
+            height: 50px;
+        }
+        
+        #twit {
+           border-radius: 20px; 
+        }
+        
         body {
            padding: 0px;
             margin: 0px;
@@ -439,8 +454,8 @@ width: 90%;
             Tweet:<br>
             <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
-        <button type="button" onclick="tweet()">Submit</button>
-    <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+        <button type="button" onclick="tweet()" id="submit">Submit</button>
+    <br><button id= "choosefile"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></button>
             </div>
             <div class="column middle">
             
