@@ -104,7 +104,7 @@
                 for (var t in data[u]) {
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
-                    var epoch = new Date(data[u][t]).getTime();
+                    var epoch = date.getTime();
                     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
                     var time = date.toString();
                     var time2;
