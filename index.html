@@ -235,8 +235,8 @@
              border-radius: 10px;
              padding: 6px 12px;
              cursor: pointer;
-             width: 60px;
-             height: 30px;
+             height: 45px;
+             width: 87px;
              font-size: 12px;
              background-color: deepskyblue;
              text-align: center;
@@ -454,20 +454,19 @@ width: 90%;
     </style>
     <body>
         <div class="topnav">    
-        <i class="fas fa-igloo"></i> Igloo  
-        <a class="active" href="index.html">Home</a>
+            <i class="fas fa-igloo"></i> Igloo  
+            <a class="active" href="index.html">Home</a>
             <span id="invis">
-            <span class="dropdown" >
-  <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
-  <span id="myDropdown" class="dropdown-content">
-    <a href="profile.html">My Igloo</a>
-    <a onclick="signout()" href="#">Sign Out</a>
-    <a href="settings.html">Settings</a>
-  </span>
-    
- </span>
+                <span class="dropdown" >
+                <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
+                <span id="myDropdown" class="dropdown-content">
+                    <a href="profile.html">My Igloo</a>
+                    <a onclick="signout()" href="signin.html">Sign Out</a>
+                    <a href="settings.html">Settings</a>
+                </span>
+            </span>
                
-</span>
+            </span>
             <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
          <a id="signin" onclick="signin()">Sign in</a>
    
@@ -477,19 +476,19 @@ width: 90%;
              <div class="slideshow-container">
                  <div class="mySlides fade">
                   <div class="numbertext">1 / 3</div>
-                  <img src="background.jpg" style="width:100%">
+                  <img src="background.jpg" height="550px" width="500px" style="width:100%">
                   <div class="text">Caption Text</div>
                 </div>
 
                 <div class="mySlides fade">
                   <div class="numbertext">2 / 3</div>
-                  <img src="background2.jpeg" style="width:100%">
+                  <img src="background2.jpeg" height="550px" width="500px" style="width:100%">
                   <div class="text">Caption Two</div>
                 </div>
 
                 <div class="mySlides fade">
                   <div class="numbertext">3 / 3</div>
-                  <img src="background.jpg" style="width:100%">
+                  <img src="background3.jpg" height="550px" width="500px" style="width:100%">
                   <div class="text">Caption Three</div>
                 </div>
 
@@ -503,42 +502,19 @@ width: 90%;
             
             <!-- slideshow style -->
             <style>
-                * {box-sizing:border-box}
+                 {box-sizing:border-box}
 
                 /* Slideshow container */
                 .slideshow-container {
                   max-width: 1000px;
                   position: relative;
                   margin: auto;
-                    margin-top: 50px;
+                    margin-top: 20px;
                 }
 
                 /* Hide the images by default */
                 .mySlides {
                   display: none;
-                }
-
-                /* Next & previous buttons */
-                .prev, .next {
-                  cursor: pointer;
-                  position: absolute;
-                  top: 50%;
-                  width: auto;
-                  margin-top: -22px;
-                  padding: 16px;
-                  color: white;
-                  font-weight: bold;
-                  font-size: 18px;
-                  transition: 0.6s ease;
-                  border-radius: 0 3px 3px 0;
-                  user-select: none;
-                }
-
-                /* Position the "next button" to the right */
-                .next {
-                  right: 0;
-                  border-radius: 3px 0 0 3px;
-                  margin-top: 10px;
                 }
 
                 /* On hover, add a black background color with a little bit see-through */
@@ -624,7 +600,7 @@ width: 90%;
        <div class ="column left">
            
         <form id="form">
-            Tweet:<br>
+            Post Something!<br>
             <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
         <button type="button" onclick="tweet()" id="submit">Submit</button>
