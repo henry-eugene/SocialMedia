@@ -128,11 +128,16 @@
     var time = "Posted ";
                     
     var names = [" years", " days", " hours", " minutes"];
+    var singlenames = [" year", " day", " hour", " minute"];
             var totals = [years,  days, hours, minutes];
                     for(var i = 0; i < 4; i++) {
                         if(totals[i]!= 0) {
-                            time = time + totals[i] + names[i];
-                            
+                            if(totals[i] == 1) {
+                                time = time + totals[i] + singlenames[i];
+                            }
+                            else {
+                                 time = time + totals[i] + names[i];
+                            }
                         }
                         if(i != 3 && totals[i]!= 0) {
                             time = time + ", ";
@@ -469,7 +474,7 @@ width: 90%;
                
 </span>
             <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
-         <a id="signin" onclick="signin()">Sign in</a>
+         <a id="signin" href="signin.html">Sign in</a>
    
     </div>
             
@@ -503,7 +508,7 @@ width: 90%;
             
             <!-- slideshow style -->
             <style>
-                * {box-sizing:border-box}
+                 
 
                 /* Slideshow container */
                 .slideshow-container {
