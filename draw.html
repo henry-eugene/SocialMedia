@@ -184,7 +184,7 @@
          <a id="signin" onclick="signin()">Sign in</a>
    
     </div>
-        Paint by pressing your mouse and moving it. Download with the button below. <br>
+        You can draw with your cursor below and download it to post it as an image. <br>
         <div class='container'>
         <canvas class="mycanvas" ></canvas>
             
@@ -204,6 +204,9 @@
     </body>
 
      <script>
+         function setup() {
+        frameRate(5);
+         }
          var candraw = true;
        function  erase() {
             candraw = false;
@@ -239,8 +242,7 @@
                 c.arc( mouseX, mouseY, 10, 0, Math.PI*2, true);
                 c.closePath;
                 c.fill();
-            }
-                
+            }    
         }
         canvas.addEventListener( 'mousemove', function( event ) {
   if( event.offsetX ){
@@ -262,7 +264,7 @@ canvas.addEventListener( 'mouseup', function( event ) {
 }, false );
 
 var link = document.getElementById('download');
-    link.innerHTML = 'download image';
+    link.innerHTML = 'Download Drawing';
 link.addEventListener('click', function(ev) {
     link.href = canvas.toDataURL();
     link.download = "mypainting.png";
