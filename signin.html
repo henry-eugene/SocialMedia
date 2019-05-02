@@ -33,10 +33,15 @@
   };
   firebase.initializeApp(config);
   
+      var blockedemails = ["odosa.obasuyi@ucc.on.ca", "eugene.ye@ucc.on.ca"];
+
     firebase.auth().onAuthStateChanged(function(user) {
             if (user && user.emailVerified) {
-               window.location.href="index.html";
-                
+                var arraycontainsemail = (blockedemails.indexOf("user.email") > -1);
+                if(!arraycontainsemail) {
+                    console.log("email not blocked");
+                    window.location.href="index.html";
+                }
             } else {
                 window.alert("Not Logged In");
                 }
@@ -53,7 +58,9 @@
                 profile_picture : imageUrl
             });
         }
+      
         function sendverification() {
+var user = firebase.auth().currentUser;
 
 user.sendEmailVerification().then(function() {
   // Email sent.
@@ -64,6 +71,7 @@ user.sendEmailVerification().then(function() {
        
         function createnewuser() {
             console.log("creating new user");
+           
             var email = document.getElementById('email_field').value;
             var password = document.getElementById('password_field').value;
             firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -73,6 +81,7 @@ user.sendEmailVerification().then(function() {
                 window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
   // ...
 });
+             window.alert("Check email for verification");
             sendverification();
         }
            function signingoogle() {
