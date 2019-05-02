@@ -13,7 +13,7 @@
 
     <button onclick="signin()" >Login to Account</button>
       <button onclick="signingoogle()"id="googlebutton">Sign in With Google</button>
-      
+      <button onclick="signout()">Sign Out</button>
   </div>
 
 
@@ -36,14 +36,26 @@
       var blockedemails = ["odosa.obasuyi@ucc.on.ca"];
 
     firebase.auth().onAuthStateChanged(function(user) {
-            if (user && user.emailVerified) {
-                var arraycontainsemail = (blockedemails.indexOf(user.email) > -1);
-                if(!arraycontainsemail) {
-                    console.log("email not blocked");
+        if(user == null) {
+            alert("Not logged in");
+            return;
+        } else {
+                userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
+                emailVerified = user.emailVerified;
+            var user = firebase.auth().currentUser;
+            if(!emailVerified) {
+            window.alert("Verify your email!");
+        }
+            if (user!= null && user.emailVerified) {
                     window.location.href="index.html";
+                 
                 }
-            } else {
-                }
+            }
+        
+            
             }); // end user null check
  
         
@@ -59,10 +71,10 @@
         }
       
         function sendverification() {
+            
 var user = firebase.auth().currentUser;
-
 user.sendEmailVerification().then(function() {
-  // Email sent.
+  console.log("email sent");
 }).catch(function(error) {
   // An error happened.
 });
@@ -80,8 +92,9 @@ user.sendEmailVerification().then(function() {
                 window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
   // ...
 });
-             window.alert("Check email for verification");
-            sendverification();
+           sendverification();
+            window.alert("Check email for verification");
+            
         }
            function signingoogle() {
                console.log(" Signing in with Google");
@@ -92,16 +105,16 @@ user.sendEmailVerification().then(function() {
            } 
         function signin() {
             console.log("Signing in");
-            var email = document.getElementById('email_field').value;
-            var password = document.getElementById('password_field').value;
-            firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+            var useremail = document.getElementById('email_field').value;
+            var userpassword = document.getElementById('password_field').value;
+            firebase.auth().signInWithEmailAndPassword(useremail, userpassword).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
                 window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
   // ...
 });
-            window.location.href="index.html";
+         //   window.location.href="index.html";
         }
         
 //        function signin() {
@@ -116,7 +129,7 @@ user.sendEmailVerification().then(function() {
         function signout() {
             console.log("Signing out");
             firebase.auth().signOut().then(function() {
-                            window.location.href("signin.html");
+                            window.location.replace("signin.html");
 
             });
         }
