@@ -227,7 +227,7 @@
             console.log("Signing in");
             var provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithRedirect(provider).then(function(result) { 
-                window.location.replace("fbtest.html");
+                window.location.replace("index.html");
             });
         }
         
@@ -515,7 +515,7 @@ width: 90%;
                
             </span>
             <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
-         <a id="signin" onclick="signin()">Sign in</a>
+         <a id="signin" href="signin.html">Sign in</a>
    
     </div>
             

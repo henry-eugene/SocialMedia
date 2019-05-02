@@ -5,23 +5,18 @@
 <body>
 
   <div id="login_div" class="main-div">
-      <h1 id = "h1"><i class="fas fa-igloo" id="igloo"></i> Igloo</h1>
-    <h3 id = "h3">Login</h3>
+      <h1><i class="fas fa-igloo"></i> Igloo</h1>
+    <h3>Login</h3>
     <input type="email" placeholder="Email..." id="email_field" />
     <input type="password" placeholder="Password..." id="password_field" />
-    <button onclick="createnewuser()"> Create A New Account!</button>
+    <button class="buttons" onclick="createnewuser()"> Create A New Account!</button>
 
-    <button onclick="signin()" >Login to Account</button>
+    <button class="buttons" onclick="signin()" >Login to Account</button>
+      <button onclick="signingoogle()" id="googlebutton">Sign in With Google</button>
       
   </div>
 
-<!--
-  <div id="user_div" class="loggedin-div">
-    <h3>Welcome User</h3>
-    <p id="user_para">Welcome to Firebase web login Example. You're currently logged in.</p>
-    <button onclick="logout()">Logout</button>
-  </div>
--->
+
 
 
 
@@ -71,7 +66,13 @@
   // ...
 });
         }
-            
+           function signingoogle() {
+               console.log(" Signing in with Google");
+               var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("signin.html");
+            });
+           } 
         function signin() {
             console.log("Signing in");
             var email = document.getElementById('email_field').value;
@@ -106,34 +107,35 @@
 
 <style>
     
-    #h1{
-        align-content: center;
-        padding-left: 550px;
-        padding-top: 100px;
-        padding-bottom: 50px;
+    i {
+        padding-right: 30px;
+        border-right: 2px solid deepskyblue;
+    }
+    h1{
+        text-align:center;
+       padding: 30px;
         font-size: 80px;
-        color: aliceblue;
-    }
-    .h1, igloo{
         color: deepskyblue;
+        margin: auto;
     }
+
     
-    #h3{
+    h3{
         font-size: 30px;
         text-align: center;
-        color: aliceblue;
+        color: deepskyblue;
     }
 
     body {
-  background: #fff;
+  background:#f9f9f9;
   padding: 0px;
   margin: 0px;
   font-family: 'Nunito', sans-serif;
-  font-size: 16px;
+  font-size: 50px;
 }
 
     #login_div {
-     background-image: url("background.jpg");
+   /* background-image: url("background.jpg"); */
 
     /* Full height */
     height: 100%; 
@@ -143,11 +145,11 @@
     background-repeat: no-repeat;
     background-size: cover;
     }   
-
+input
 input, button {
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
-
+  padding:15px;
 }
 
 .main-div, .loggedin-div {
@@ -167,29 +169,41 @@ input, button {
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
     width: 400px;
-    margin-left: 500px;
+    margin: auto;
 }
 
 .main-div input:focus {
   border: 1px solid #777;
 }
 
-.main-div button, .loggedin-div button {
-  background: deepskyblue;
-  color: #fff;
-  border: 1px solid deepskyblue;
-  border-radius: 5px;
-  padding: 15px;
+.buttons {
+  color: deepskyblue;
+  border: 2px solid deepskyblue;
+  border-radius: 2em;
   display: block;
   width: 100%;
-  transition: 0.3s;
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
     height: 50px;
     width: 400px;
-    margin-left: 500px;
+    margin: 10px auto;
     text-align: center;
+    cursor: pointer;
+  background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+    background-size: 300%;
+  background-position: 100%;
+
+  transition: background 450ms ease-in-out;
         }
+    
+    .buttons:hover {
+        background-position: 0;
+        color: white;
+    }
+    #googlebutton {
+        background-image:url('googleicon.jpg');
+        background-position: 10px;
+          background-repeat: no-repeat;
+          background-size: 20px;
+    }
         
 
 
