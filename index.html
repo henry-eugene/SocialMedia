@@ -97,7 +97,7 @@
         ;}
         function updatetweets(data) {
             //var mylist = "<ul>";
-            var mytab = "<table style='width: 100%;'>";
+            var mytab = "<table style='width: 100%;' id='myTable'>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
             
@@ -167,13 +167,12 @@
                     
 
                     if (data[u][t].img != "") {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username+ "</td>";   
-                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
-                        mytab = mytab + "</tr><tr>";
-                        mytab = mytab + "<td><img src='" + data[u][t].img + "' width='300px'></td>";
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username+ "<br>" + "<img src='" + data[u][t].img + "' width='300px'><td>;";   
                         mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
+                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
+                        
                     } else {
-                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;vertical-align: middle;'' >"+ " " + users[u].username+ "</td>";
+                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;vertical-align: middle;'' >"+ " " + users[u].username+ "<br>" + "</td>";
                         mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time + "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
                         mytab = mytab + "</tr><tr>";
                         mytab = mytab + "</tr><tr>";
@@ -373,6 +372,7 @@
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
+        
         /* Create three equal columns that floats next to each other */
 .column {
   float: left;
@@ -384,8 +384,8 @@
 }
 
         .left {
-            width: 25%;
-            min-width: 250px;
+            width: 22.5%;
+           
         }
         .middle {
             width: 50%;
@@ -394,13 +394,16 @@
             border-width: 2px;
             border-radius: 7px;
         }
+        .right {
+            width:22.5%;
+           
+        }
+        #search {
+            padding: 20px 0px;
+            border-radius: 1em;
+        }
 
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
+
 
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 1250px) {
@@ -636,7 +639,26 @@ width: 90%;
                     if (slideIndex > slides.length) {slideIndex = 1} 
                     slides[slideIndex-1].style.display = "block"; 
                     setTimeout(showSlides, 5000); // Change image every 2 seconds
-                }         
+                }    
+                function searchTweets(type) {
+                    var input, filter, ul, li, a, i, txtValue;
+                    input = document.getElementById("searchInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    column = parseInt(type, 10);
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td");
+                        if (td) {
+                            txtValue = td.textContent || td.innerText;
+                            if(txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
             </script>
            
             
@@ -651,11 +673,14 @@ width: 90%;
     <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label>
             </div>
             <div class="column middle">
-            
-        <div id="imgTest" style="display:none;"></div>
-                
     <div id="mytweets">Loading...<div id="loader"></div></div>
                 </div>
+            <div class="column right">
+            <input id="searchInput" type="text" id="search" placeholder="Search..." style="width:100%; font-family: 'Fredoka One';" onkeyup="searchTweets()">
+            <button id="username1" onclick="searchTweets('1')">Username</button>
+                <button id="content1" onclick="searchTweets('2')">Content</button>
+            
+            </div>
  </div>
     </body>
 
