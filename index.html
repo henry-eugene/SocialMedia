@@ -29,6 +29,7 @@
                 name = user.displayName;
                 imageUrl = user.photoURL;
                 email = user.email;
+                emailVerified = user.emailVerified;
                 signinbutton = document.getElementById("signin");
                 signinbutton.style.display="none";
                 myphotodiv = document.getElementById("invis");
@@ -671,6 +672,7 @@ width: 90%;
         </form> 
         <button type="button" onclick="tweet()" id="submit">Submit</button>
     <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label>
+           <div id="imgTest" style="display:none;"></div>
             </div>
             <div class="column middle">
     <div id="mytweets">Loading...<div id="loader"></div></div>
