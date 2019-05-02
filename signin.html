@@ -33,11 +33,11 @@
   };
   firebase.initializeApp(config);
   
-      var blockedemails = ["odosa.obasuyi@ucc.on.ca", "eugene.ye@ucc.on.ca"];
+      var blockedemails = ["odosa.obasuyi@ucc.on.ca"];
 
     firebase.auth().onAuthStateChanged(function(user) {
             if (user && user.emailVerified) {
-                var arraycontainsemail = (blockedemails.indexOf("user.email") > -1);
+                var arraycontainsemail = (blockedemails.indexOf(user.email) > -1);
                 if(!arraycontainsemail) {
                     console.log("email not blocked");
                     window.location.href="index.html";
@@ -101,7 +101,7 @@ user.sendEmailVerification().then(function() {
                 window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
   // ...
 });
-            window.location.href("index.html");
+            window.location.href="index.html";
         }
         
 //        function signin() {
