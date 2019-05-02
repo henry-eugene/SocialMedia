@@ -43,7 +43,6 @@
                     window.location.href="index.html";
                 }
             } else {
-                window.alert("Not Logged In");
                 }
             }); // end user null check
  
@@ -117,6 +116,8 @@ user.sendEmailVerification().then(function() {
         function signout() {
             console.log("Signing out");
             firebase.auth().signOut().then(function() {
+                            window.location.href("signin.html");
+
             });
         }
     </script>
@@ -146,11 +147,12 @@ user.sendEmailVerification().then(function() {
     }
 
     body {
-  background:#f9f9f9;
-  padding: 0px;
-  margin: 0px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 50px;
+      background:#f9f9f9;
+      padding: 0px;
+      margin: 0px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 50px;
+      background-image: url("background3.jpg")
 }
 
     #login_div {
