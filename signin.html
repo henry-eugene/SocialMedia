@@ -1,7 +1,7 @@
 
 <html>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    
+ <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>   
 <body>
 
   <div id="login_div" class="main-div">
@@ -9,12 +9,37 @@
     <h3>Login</h3>
     <input type="email" placeholder="Email..." id="email_field" />
     <input type="password" placeholder="Password..." id="password_field" />
-    <button onclick="createnewuser()"> Create A New Account!</button>
-
+    
     <button onclick="signin()" >Login to Account</button>
+      
       <button onclick="signingoogle()"id="googlebutton">Sign in With Google</button>
-      <button onclick="signout()">Sign Out</button>
+      <button id="modalBtn"> Create A New Account!</button>
+      <!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <!-- Modal content -->
+<div class="modal-content">
+  <div class="modal-header">
+    <span class="close">&times;</span>
+    Create a New Account!
   </div>
+  <div class="modal-body">
+      Email: <input type="email" placeholder="Enter Email" id="new_email_field" /><br>
+    Password: <input type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/><br>
+    Confirm Password: <input type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span id='message'></span><br>
+    <button id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
+  </div>
+</div>
+
+</div>
+      
+      
+  </div>
+    <div id="user_div" class="main-div">
+      <p id="user_para"></p>
+        <button onclick='sendverification()'>Verify Email</button>
+      </div>
 
 
 
@@ -33,76 +58,92 @@
   };
   firebase.initializeApp(config);
   
-      var blockedemails = ["odosa.obasuyi@ucc.on.ca"];
+      //var blockedemails = ["odosa.obasuyi@ucc.on.ca"];
 
-    firebase.auth().onAuthStateChanged(function(user) {
-        if(user == null) {
-            alert("Not logged in");
-            return;
-        } else {
-                userId = user.uid;
-                name = user.displayName;
-                imageUrl = user.photoURL;
-                email = user.email;
-                emailVerified = user.emailVerified;
-            var user = firebase.auth().currentUser;
+      
+      firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+      var user = firebase.auth().currentUser;
+      document.getElementById("user_div").style.display = "block";
+    document.getElementById("login_div").style.display = "none";
+    // User is signed in.
+      if(user != null) {
+          var emailVerified = user.emailVerified;
             if(!emailVerified) {
-            window.alert("Verify your email!");
+                 var email_id = user.email;
+      document.getElementById("user_para").innerHTML = "Welcome User : " + email_id + " Please verify your email to finish account creation.";
+            window.alert("User signed in, please verify your email!");
         }
-            if (user!= null && user.emailVerified) {
+            else {
                     window.location.href="index.html";
-                 
                 }
-            }
-        
-            
-            }); // end user null check
- 
-        
+      }
+               
+  } else {
+    // No user is signed in.
+      alert("Not logged in");
+      document.getElementById("user_div").style.display = "none";
+    document.getElementById("login_div").style.display = "block";
+         //   return;
+  }
+});
+
        
         
-        // write user data
-        function writeUserData(userId, name, email, imageUrl) {
-            firebase.database().ref('users/' + userId).set({
-                username: name,
-                email: email,
-                profile_picture : imageUrl
-            });
-        }
+     
       
         function sendverification() {
             
 var user = firebase.auth().currentUser;
+            
 user.sendEmailVerification().then(function() {
   console.log("email sent");
 }).catch(function(error) {
   // An error happened.
 });
+            alert("sendverification run " + user);
         }
        
+      function check() {
+          var userpassword = document.getElementById('new_password_field').value;
+            var checkpassword = document.getElementById('confirm_password_field').value;
+          if(userpassword != checkpassword) {
+              document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'not matching';
+              document.getElementById("createBtn").disable = true;
+          }
+          else {
+              document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'matching';
+               document.getElementsById("createBtn").disable = false;
+          }
+      }
         function createnewuser() {
-            console.log("creating new user");
            
-            var email = document.getElementById('email_field').value;
-            var password = document.getElementById('password_field').value;
-            firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+            var useremail = document.getElementById('new_email_field').value;
+            var userpassword = document.getElementById('new_password_field').value;
+           
+            firebase.auth().createUserWithEmailAndPassword(useremail, userpassword).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
+  // ...
                 window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
   // ...
 });
-           sendverification();
-            window.alert("Check email for verification");
-            
+            alert("Your account has been created");
+             alert(useremail + " " + userpassword);
         }
+      
+      
            function signingoogle() {
                console.log(" Signing in with Google");
                var provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithRedirect(provider).then(function(result) { 
-                window.location.replace("signin.html");
+                window.location.href="signin.html";
             });
            } 
+      
         function signin() {
             console.log("Signing in");
             var useremail = document.getElementById('email_field').value;
@@ -111,10 +152,10 @@ user.sendEmailVerification().then(function() {
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
-                window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
+  // ...
+                window.alert("Error: " + errorMessage + " (code: " + errorCode + ")"); 
   // ...
 });
-         //   window.location.href="index.html";
         }
         
 //        function signin() {
@@ -129,17 +170,44 @@ user.sendEmailVerification().then(function() {
         function signout() {
             console.log("Signing out");
             firebase.auth().signOut().then(function() {
-                            window.location.replace("signin.html");
+                            window.location.href="signin.html";
 
             });
         }
+      // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("modalBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
     </script>
     
     
  
 
 <style>
-    
+    *{
+        font-family:"Fredoka One";
+    }
     i {
         padding-right: 30px;
         border-right: 2px solid deepskyblue;
@@ -150,8 +218,14 @@ user.sendEmailVerification().then(function() {
         font-size: 80px;
         color: deepskyblue;
         margin: auto;
+        
     }
-
+    p {
+        font-size: 30px;
+        text-align: center;
+        color: deepskyblue;
+        background-color:white;
+    }
     
     h3{
         font-size: 30px;
@@ -190,7 +264,6 @@ user.sendEmailVerification().then(function() {
     background-repeat: no-repeat;
     background-size: cover;
     }   
-input
 input, button {
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
@@ -265,7 +338,65 @@ button {
         color: white;
     }
 
-        
+        /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Header */
+.modal-header {
+  padding:2px 16px;
+  background-color: deepskyblue;
+  color: white;
+    font-size: 35px;
+}
+
+
+
+/* Modal Content */
+.modal-content {
+    font-size: 20px;
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+    margin-top:5%;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 
     
