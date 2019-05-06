@@ -28,6 +28,9 @@
       Email: <input type="email" placeholder="Enter Email" id="new_email_field" /><br>
     Password: <input type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/><br>
     Confirm Password: <input type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span id='message'></span><br>
+      Username: <input type="text" placeholder="Your username" id="new_username_field" onkeyup='checkusername();'>
+      Profile Image: <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label>
+        <div id="chosenImg" style="display:none;"></div>
     <button id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
   </div>
 </div>
@@ -63,7 +66,12 @@
       
       firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+      
       var user = firebase.auth().currentUser;
+      userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
       document.getElementById("user_div").style.display = "block";
     document.getElementById("login_div").style.display = "none";
     // User is signed in.
@@ -88,8 +96,42 @@
   }
 });
 
-       
-        
+       function encodeImageFileAsURL() {
+
+            var filesSelected = document.getElementById("inputFileToLoad").files;
+            if (filesSelected.length > 0) {
+                var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //var newImage = document.createElement('img');
+                    //newImage.src = srcData;
+                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    document.getElementById("chosenImg").innerHTML = srcData;
+                    //document.getElementById("chosenImg").style.display = "block";
+                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
+                    //console.log(srcData);
+                }
+                fileReader.readAsDataURL(fileToLoad);
+            }
+        } // end function
+        function updateprofile() {
+            
+            var user = firebase.auth().currentUser;
+            var username = document.getElementById("new_username_field").value;
+            var profilepicture = document.getElementById("chosenImg").innerHTML;
+            firebase.database().ref('users/' + userId + "/").push({profile_picture: profilepicture});
+            firebase.database().ref('users/' + userId).update({
+                profile_picture2: profilepicture
+            });
+user.updateProfile({
+  displayName: username
+}).then(function() {
+  // Update successful.
+}).catch(function(error) {
+  // An error happened.
+});
+        }
      
       
         function sendverification() {
@@ -102,6 +144,7 @@ user.sendEmailVerification().then(function() {
   // An error happened.
 });
             alert("sendverification run " + user);
+            updateprofile();
         }
        
       function check() {
@@ -158,14 +201,6 @@ user.sendEmailVerification().then(function() {
 });
         }
         
-//        function signin() {
-//            console.log("Signing in");
-//            var provider = new firebase.auth.GoogleAuthProvider();
-//            firebase.auth().signInWithRedirect(provider).then(function(result) { 
-//                window.location.replace("fbtest.html");
-//            });
-//            window.location.href = 'index.html';
-//        }
         
         function signout() {
             console.log("Signing out");
