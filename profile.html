@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 <head>
     <title>Igloo</title>
     <meta charset="utf-8">
@@ -10,16 +11,25 @@
 
 <body id="top">
 
-    <div class="wrapper row1">
-         <header id="header" class="hoc clear">
-            <!-- ################################################################################################ -->
-            <div id="logo" class="fl_left">
-                <h1 class="SAID"><a href="../index.html">Igloo</a></h1>
-            </div>
-
-        </header>
-        
-          </div>
+<div class="topnav">    
+            <i class="fas fa-igloo"></i> Igloo  
+            <a class="active" href="index.html">Home</a>
+            <span id="invis">
+                <span class="dropdown" >
+                <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
+                <span id="myDropdown" class="dropdown-content">
+                    <a href="profile.html">My Igloo</a>
+                    <a onclick="signout()" href="signin.html">Sign Out</a>
+                    <a href="settings.html">Settings</a>
+                </span>
+            </span>
+               
+            </span>
+            <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
+         <a id="signin" href="signin.html">Sign in</a>
+   
+    </div>
+            
         <section id="welcome">
             <center><h1> Welcome, John Doe</h1></center>
         </section>
@@ -54,8 +64,113 @@
                     width: 60%;
                     
                 }
+                
+                #loader {
+                      position: relative;
+                      margin: 20px;
+                      z-index: 1;
+                      width: 50px;
+                      height: 50px;
+                      border: 12px solid #f3f3f3;
+                      border-radius: 50%;
+                      border-top: 12px solid deepskyblue;
+                      width: 80px;
+                      height: 80px;
+                      -webkit-animation: 2s linear infinite;
+                      animation: spin 2s linear infinite;
+                }
+                @-webkit-keyframes spin {
+                  0% { -webkit-transform: rotate(0deg); }
+                  100% { -webkit-transform: rotate(360deg); }
+                }
+                @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+                .topnav {
+            font-family: "Fredoka One";
+            overflow; hidden;
+            background-color:deepskyblue;
+            color: white;
+            font-size: 30px;
+            padding: 13px;
+              font-family: 'Big John', sans-serif;
+
+            
+        }
+        .topnav a {
+            color: white;
+            float: right;
+           text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 9px;
+            height:100%;
+            max-height: 20px;
+            z-index: 5;
+              font-family: 'Big John', sans-serif;
+
+        }
+           /* Dropdown Button */
+.dropbtn {
+  background-color: deepskyblue;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+
+}
+        
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: deepskyblue;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    float: right;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+    top: 51px;
+  background-color: #f1f1f1;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  float: none;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .topnav a:hover {
+            background-color:white;
+            color:deepskyblue;
+        }
+        .topnav a.active {
+            background-color: white;
+            color: deepskyblue;
+        }
             </style>
-            <img src="background.jpg">
+            <img id="myphoto">
         </div>
 
         <!-- / main body -->
@@ -93,4 +208,254 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+ <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBNSzFD9R_JP_UNlF7pbpOr3d6h0XXW7hg",
+    authDomain: "social-media-69e85.firebaseapp.com",
+    databaseURL: "https://social-media-69e85.firebaseio.com",
+    projectId: "social-media-69e85",
+    storageBucket: "social-media-69e85.appspot.com",
+    messagingSenderId: "837818397370"
+  };
+  firebase.initializeApp(config);
+ 
+    // Check to see if you are logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user == null) {
+                myphotodiv = document.getElementById("invis");
+                myphotodiv.style.display="none";
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.display="inline";
+                signinmessage = document.getElementById("mytweets");
+                signinmessage.innerHTML = "Login to see posts";
+                return;
+            } else {
+                user.providerData.forEach(function (profile) {
+    console.log("Sign-in provider: " + profile.providerId);
+    console.log("  Provider-specific UID: " + profile.uid);
+    console.log("  Name: " + profile.displayName);
+    console.log("  Email: " + profile.email);
+    console.log("  Photo URL: " + profile.photoURL);
+  });
+                userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
+                emailVerified = user.emailVerified;
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.display="none";
+                myphotodiv = document.getElementById("invis");
+                myphotodiv.style.display="inline";
+                    
+                // write user data to users
+                writeUserData(userId, name, email, imageUrl);
+                
+                // write data to document
+               
+               myphotodiv = document.getElementById("myphoto");
+               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+
+                firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else {
+                        
+                      firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata];
+                           console.log(dataarray);
+                           updatetweets(dataarray); 
+                        }
+                      });
+                      //console.log(data)
+                      //updatetweets(data);
+                    }
+                });
+            } // end user null check
+        }); // end check auth state
+        
+        function encodeImageFileAsURL() {
+
+            var filesSelected = document.getElementById("inputFileToLoad").files;
+            if (filesSelected.length > 0) {
+                var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //var newImage = document.createElement('img');
+                    //newImage.src = srcData;
+                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    document.getElementById("imgTest").innerHTML = srcData;
+                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
+                    console.log(srcData);
+                }
+                fileReader.readAsDataURL(fileToLoad);
+            }
+        } // end function
+        
+        // write user data
+        function writeUserData(userId, name, email, imageUrl) {
+            firebase.database().ref('users/' + userId).set({
+                username: name,
+                email: email,
+                profile_picture : imageUrl
+            });
+        }
+        function myFunction(n) {
+          var popup = document.getElementById("myPopup " + n);
+          popup.classList.toggle("show");
+            console.log("hi");
+        ;}
+        function updatetweets(data) {
+            //var mylist = "<ul>";
+            var mytab = "<table style='width: 100%;' id='myTable'>";
+            users = data[1]; // put on top, because changed data - not good coding change later
+            data = data[0];
+            
+            for (var u in data) {
+                for (var t in data[u]) {
+                    mytab = mytab + "<tr>";
+                    var date = new Date(data[u][t].time);
+                    var epoch = date.getTime();
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+                    var time = date.toString();
+                    var time2;
+                    var AM = "A.M";
+                    var today = new Date();
+                    var dd = date.getDate();
+                    var mm = date.getMonth();
+                    var yyyy = date.getFullYear();
+                    var h = date.getHours();
+                    var min = date.getMinutes();
+                    if(h > 12) {
+                        h = h - 12;
+                        AM = "P.M";
+                    }
+                    if(min < 10) {
+                        min = "0" + min;
+                    }
+                    time2 = ("Posted " + months[mm] + " " + dd + ", " + yyyy + " at " + h + ":" + min + " " + AM + ".").toString();
+                    
+                    var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
+                    
+    var diffdate = new Date(diff);
+    var minutes = Math.floor(diffdate / 60000);
+    var hours = Math.floor(minutes / 60);
+                    minutes = minutes % 60;
+    var days = Math.floor(hours / 24);
+                    hours = hours % 24;
+    var years = Math.floor(days / 365);
+                    days = days % 365;
+    var count = 0;
+    var time = "Posted ";
+                    
+    var names = [" years", " days", " hours", " minutes"];
+    var singlenames = [" year", " day", " hour", " minute"];
+            var totals = [years,  days, hours, minutes];
+                    for(var i = 0; i < 4; i++) {
+                        if(totals[i]!= 0) {
+                            if(totals[i] == 1) {
+                                time = time + totals[i] + singlenames[i];
+                                break;
+                            }
+                            else {
+                                 time = time + totals[i] + names[i];
+                                break;
+                            }
+                        }
+                        if(i != 3 && totals[i]!= 0) {
+                            time = time + ", ";
+                        }
+                    }
+                   
+                    
+                        time += " ago.".toString();
+                    
+                    if(minutes == 0 && hours == 0 && days == 0) {
+                        time = "Posted just now.";
+                    }
+                    
+                    
+
+                    if (data[u][t].img != "") {
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username+ "<br>" + "<img src='" + data[u][t].img + "' width='300px'><td>;";   
+                        mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
+                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
+                        
+                    } else {
+                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;vertical-align: middle;'' >"+ " " + users[u].username+ "<br>" + "</td>";
+                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time + "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
+                        mytab = mytab + "</tr><tr>";
+                        mytab = mytab + "</tr><tr>";
+                         mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
+                        
+                    } 
+                    mytab = mytab + "</tr>";
+                }   
+            }
+            //mylist = mylist + "</ul>";
+            mytab = mytab + "</table>"
+            var mytdiv = document.getElementById("mytweets");
+            //mytdiv.innerHTML = mylist;
+            mytdiv.innerHTML = mytab;
+        }
+        
+        // write tweets to firebase
+        function tweet() {
+            
+            var twitdoc = document.getElementById("twit");
+            var twitimg = document.getElementById("imgTest");
+            var nameValue = twitdoc.value;
+            var imgValue = twitimg.innerHTML;
+            var js_time = Date.now();
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            twitdoc.value = "";
+            console.log("tweet written")
+            
+            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else { 
+                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           updatetweets(dataarray); 
+                        }
+                      });
+                    }
+                });
+            
+            
+            
+            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
+            
+        }
+        
+        function signin() {
+            console.log("Signing in");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("index.html");
+            });
+        }
+        
+        function signout() {
+            console.log("Signing out");
+            document.location.reload()
+            firebase.auth().signOut().then(function() {
+            });
+        }
+    
+    
+    </script>
 </html>
