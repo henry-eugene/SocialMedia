@@ -174,19 +174,16 @@
                     }
                     
                     
+                    if(data[u][t].video != null) {
+                        mytab = mytab + "<td><span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe src=" + data[u][t].video + "></iframe>";   
+                        mytab = mytab + "<br><span class = 'post'>" + data[u][t].tweet + "</span></td>";
+                    }
+                   else if (data[u][t].img != "") {
+                        mytab = mytab + "<td><span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<img src='" + data[u][t].img + "' width='300px'>";   
+                        mytab = mytab + "<br><span class = 'post'>" + data[u][t].tweet + "</span></td>";
 
-                    if (data[u][t].img != "") {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username+ "<br>" + "<img src='" + data[u][t].img + "' width='300px'><td>;";   
-                        mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
-                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
-                        
                     } else {
-                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;vertical-align: middle;'' >"+ " " + users[u].username+ "<br>" + "</td>";
-                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time + "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
-                        mytab = mytab + "</tr><tr>";
-                        mytab = mytab + "</tr><tr>";
-                         mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
-                        
+                          mytab = mytab + "<td><span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><span class = 'post'>" + data[u][t].tweet + "</span></td>";
                     } 
                     mytab = mytab + "</tr>";
                 }   
@@ -203,10 +200,17 @@
             
             var twitdoc = document.getElementById("twit");
             var twitimg = document.getElementById("imgTest");
+            var twitvideo = document.getElementById("videolink");
+            
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
+            var videoValue = twitvideo.value;
+            if(imgValue != "" && videoValue != "") {
+                window.alert("cannot post both image and video");
+                return;
+            }
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue});
             twitdoc.value = "";
             console.log("tweet written")
             
@@ -387,7 +391,6 @@
   float: left;
   padding: 5px;
     margin-top: 20px;
- 
     font-family: "Fredoka One";
    
 }
@@ -397,11 +400,12 @@
            
         }
         .middle {
-            width: 50%;
+            width: 22.5%;
              border-style: solid;
-            border-color: lightsteelblue;
+            border-color: deepskyblue;
             border-width: 2px;
             border-radius: 7px;
+            margin-bottom: 10px;
         }
         .right {
             width:22.5%;
@@ -423,15 +427,14 @@ width: 90%;
   }
 }
     .popup {
+        color: darkgrey;
+        vertical-align: text-top;
   position: relative;
-  display: inline-block;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-   border: 10px;
-        margin: 10px;
 }
 
 /* The actual popup */
@@ -479,12 +482,20 @@ width: 90%;
   from {opacity: 0;}
   to {opacity:1 ;}
 }
+    
         .post {
-            height: 100px;
-            min-height: 100px;
+            width:200px;
+            min-width:100px;
             
         }
-        
+        .postinfo {
+            position: relative;
+            vertical-align: text-top;
+            padding:0;
+        }
+        td {
+            border-bottom: solid 3px deepskyblue;
+        }
         #loader {
               position: relative;
               margin: 20px;
@@ -511,7 +522,7 @@ width: 90%;
     <body>
         <div class="topnav">    
             <i class="fas fa-igloo"></i> Igloo  
-            <a class="active" href="index.html">Home</a>
+            <a class="active" href="index.html"><i class="fas fa-home"></i> Home</a>
             <span id="invis">
                 <span class="dropdown" >
                 <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
@@ -523,7 +534,7 @@ width: 90%;
             </span>
                
             </span>
-            <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
+            <a href="draw.html"><i class="fas fa-palette"></i> Draw</a>
          <a id="signin" href="signin.html">Sign in</a>
    
     </div>
@@ -679,7 +690,7 @@ width: 90%;
             <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
         <button type="button" onclick="tweet()" id="submit">Submit</button>
-    <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label>
+    <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label> Or Enter Video Link <input id = 'videolink' type="url" placeholder="Enter video link here...">
            <div id="imgTest" style="display:none;"></div>
             </div>
             <div class="column middle">
