@@ -31,7 +31,7 @@
     </div>
             
         <section id="welcome">
-            <center><h1> Welcome, John Doe</h1></center>
+            <center><h1> Welcome, Henry</h1></center>
         </section>
 
 <div class="wrapper row6">
@@ -41,12 +41,14 @@
             <center>
                 <div class="vl">
                     <h2> Full Name </h2>
-                    <p>John Edward Doe</p>
+                    <p id="name" ></p>
                     <h2>Address</h2>
                     <p>200 Lonsdale Road</p>
-                    <h2>Email Address</h2>
-                    <p>johndoe@gmail.com</p>
-
+                    <h2 id="">Email Address</h2>
+                    <p>henry.wang@ucc.on.ca</p>
+<script>
+document.getElementById("name").innerHTML = user.displayName;
+</script>
                 </div>
             </center>
         </div>
@@ -58,6 +60,7 @@
                     margin-left: auto;
                     margin-right: auto;
                     width: 60%;
+                    height: 100%;
                     
                 }
                 
@@ -115,6 +118,7 @@
   font-size: 16px;
   border: none;
   cursor: pointer;
+    width: 60px;
 
 }
         
