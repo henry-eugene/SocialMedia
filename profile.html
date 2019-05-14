@@ -11,36 +11,55 @@
 
 <body id="top">
 
-<div class="topnav">    
+ <div class="topnav">    
             <i class="fas fa-igloo"></i> Igloo  
-            <a class="active" href="index.html">Home</a>
+            <a class="active" href="index.html"><i class="fas fa-home"></i> Home</a>
             <span id="invis">
-                <span class="dropdown" >
+                <span class="dropdown1" >
                 <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
                 <span id="myDropdown" class="dropdown-content">
                     <a href="profile.html">My Igloo</a>
-                    <a onclick="signout()" href="signin.html">Sign Out</a>
-                    <a href="settings.html">Settings</a>
+                    <a href="profile.html">My Profile</a>
+                    <a href="signout()">Sign Out</a>
                 </span>
             </span>
                
             </span>
-            <a href="draw.html"><i class="fas fa-plus-circle"></i></a>
+            <a href="draw.html"><i class="fas fa-palette"></i> Draw</a>
          <a id="signin" href="signin.html">Sign in</a>
    
     </div>
             
     <style>
         .topnav {
-           font-family: "Fredoka One";
+            font-family: "Fredoka One";
             overflow; hidden;
             background-color:deepskyblue;
             color: white;
             font-size: 30px;
             padding: 13px;
               font-family: 'Big John', sans-serif;
+
+            
         }
-            /* Dropdown Button */
+        .topnav a {
+            color: white;
+            float: right;
+           text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 9px;
+            height:100%;
+            max-height: 20px;
+            z-index: 5;
+              font-family: 'Big John', sans-serif;
+
+        }
+       
+        
+
+       
+    /* Dropdown Button */
 .dropbtn {
   background-color: deepskyblue;
   color: white;
@@ -58,9 +77,8 @@
 }
 
 /* The container <div> - needed to position the dropdown content */
-.dropdown {
+.dropdown1 {
     float: right;
-  overflow: hidden;
   display: inline-block;
 }
 
@@ -68,11 +86,13 @@
 .dropdown-content {
   display: none;
   position: absolute;
-    top: 51px;
+    top: 9%;
+    margin: auto;
   background-color: #f1f1f1;
-  min-width: 80px;
+  min-width: 60px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
+    height: 100px;
 }
 
 /* Links inside the dropdown */
@@ -82,11 +102,12 @@
   text-decoration: none;
   display: block;
   float: none;
+    height: 50px;
 }
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd}
-        .dropdown:hover .dropdown-content {
+        .dropdown1:hover .dropdown-content {
             display: block;
         }
 
@@ -94,7 +115,7 @@
 .show {display:block;}
     </style>
         <section id="welcome">
-            <center><h1> Welcome, Henry</h1></center>
+            <center><h1 id ="fullname2"></h1></center>
         </section>
 
 <div class="wrapper row6">
@@ -104,20 +125,20 @@
             <center>
                 <div class="vl">
                     <h2> Full Name </h2>
-                    <p id="name"></p>
+                    <p id="fullname"></p>
                     <h2>Address</h2>
                     <p>200 Lonsdale Road</p>
                     <h2 id="">Email Address</h2>
-                    <p>henry.wang@ucc.on.ca</p>
-<script>
-document.getElementById("name").innerHTML = user.displayName;
-</script>
+                    <p id="email"></p>
+
                 </div>
             </center>
         </div>
-        <div class="content one_half">
-
-            <img id="myphoto">
+        <div>
+            <img id="profilepic">
+            <style>
+                
+            </style>
         </div>
 
         <!-- / main body -->
@@ -198,6 +219,15 @@ document.getElementById("name").innerHTML = user.displayName;
                 signinbutton.style.display="none";
                 myphotodiv = document.getElementById("invis");
                 myphotodiv.style.display="inline";
+                var shownname = document.getElementById("fullname"); 
+                shownname.innerHTML = name; 
+                var shownname = document.getElementById("fullname2"); 
+                shownname.innerHTML = "Welome, " + name; 
+                 var shownname = document.getElementById("email"); 
+                shownname.innerHTML = email; 
+                 var shownname = document.getElementById("profilepic"); 
+                shownname.innerHTML = imageUrl; 
+
                     
                 // write user data to users
                 writeUserData(userId, name, email, imageUrl);
@@ -206,46 +236,10 @@ document.getElementById("name").innerHTML = user.displayName;
                
                myphotodiv = document.getElementById("myphoto");
                myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
-
-                firebase.database().ref('/tweets').once('value').then(function(snapshot) {
-                    var data = (snapshot.val());
-                    if (data == null) {
-                      console.log("No data found at /tweets/" + userId);  
-                    } else {
-                        
-                      firebase.database().ref('/users').once('value').then(function(snapshot) { 
-                        var userdata = (snapshot.val());
-                        if (userdata != null) {
-                           dataarray = [data,userdata];
-                           console.log(dataarray);
-                           updatetweets(dataarray); 
-                        }
-                      });
-                      //console.log(data)
-                      //updatetweets(data);
-                    }
-                });
-            } // end user null check
+            }
         }); // end check auth state
         
-        function encodeImageFileAsURL() {
-
-            var filesSelected = document.getElementById("inputFileToLoad").files;
-            if (filesSelected.length > 0) {
-                var fileToLoad = filesSelected[0];
-                var fileReader = new FileReader();
-                fileReader.onload = function(fileLoadedEvent) {
-                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
-                    //var newImage = document.createElement('img');
-                    //newImage.src = srcData;
-                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
-                    document.getElementById("imgTest").innerHTML = srcData;
-                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
-                    console.log(srcData);
-                }
-                fileReader.readAsDataURL(fileToLoad);
-            }
-        } // end function
+        
         
         // write user data
         function writeUserData(userId, name, email, imageUrl) {
@@ -260,133 +254,7 @@ document.getElementById("name").innerHTML = user.displayName;
           popup.classList.toggle("show");
             console.log("hi");
         ;}
-        function updatetweets(data) {
-            //var mylist = "<ul>";
-            var mytab = "<table style='width: 100%;' id='myTable'>";
-            users = data[1]; // put on top, because changed data - not good coding change later
-            data = data[0];
-            
-            for (var u in data) {
-                for (var t in data[u]) {
-                    mytab = mytab + "<tr>";
-                    var date = new Date(data[u][t].time);
-                    var epoch = date.getTime();
-                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-                    var time = date.toString();
-                    var time2;
-                    var AM = "A.M";
-                    var today = new Date();
-                    var dd = date.getDate();
-                    var mm = date.getMonth();
-                    var yyyy = date.getFullYear();
-                    var h = date.getHours();
-                    var min = date.getMinutes();
-                    if(h > 12) {
-                        h = h - 12;
-                        AM = "P.M";
-                    }
-                    if(min < 10) {
-                        min = "0" + min;
-                    }
-                    time2 = ("Posted " + months[mm] + " " + dd + ", " + yyyy + " at " + h + ":" + min + " " + AM + ".").toString();
-                    
-                    var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
-                    
-    var diffdate = new Date(diff);
-    var minutes = Math.floor(diffdate / 60000);
-    var hours = Math.floor(minutes / 60);
-                    minutes = minutes % 60;
-    var days = Math.floor(hours / 24);
-                    hours = hours % 24;
-    var years = Math.floor(days / 365);
-                    days = days % 365;
-    var count = 0;
-    var time = "Posted ";
-                    
-    var names = [" years", " days", " hours", " minutes"];
-    var singlenames = [" year", " day", " hour", " minute"];
-            var totals = [years,  days, hours, minutes];
-                    for(var i = 0; i < 4; i++) {
-                        if(totals[i]!= 0) {
-                            if(totals[i] == 1) {
-                                time = time + totals[i] + singlenames[i];
-                                break;
-                            }
-                            else {
-                                 time = time + totals[i] + names[i];
-                                break;
-                            }
-                        }
-                        if(i != 3 && totals[i]!= 0) {
-                            time = time + ", ";
-                        }
-                    }
-                   
-                    
-                        time += " ago.".toString();
-                    
-                    if(minutes == 0 && hours == 0 && days == 0) {
-                        time = "Posted just now.";
-                    }
-                    
-                    
-
-                    if (data[u][t].img != "") {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username+ "<br>" + "<img src='" + data[u][t].img + "' width='300px'><td>;";   
-                        mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
-                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
-                        
-                    } else {
-                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%;vertical-align: middle;'' >"+ " " + users[u].username+ "<br>" + "</td>";
-                        mytab = mytab  + "<td class='popup' style='float:right;' onclick='myFunction(" + epoch + ")'> " + time + "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></td>";
-                        mytab = mytab + "</tr><tr>";
-                        mytab = mytab + "</tr><tr>";
-                         mytab = mytab + "<td class = 'post'>" + data[u][t].tweet + "</td>";
-                        
-                    } 
-                    mytab = mytab + "</tr>";
-                }   
-            }
-            //mylist = mylist + "</ul>";
-            mytab = mytab + "</table>"
-            var mytdiv = document.getElementById("mytweets");
-            //mytdiv.innerHTML = mylist;
-            mytdiv.innerHTML = mytab;
-        }
-        
-        // write tweets to firebase
-        function tweet() {
-            
-            var twitdoc = document.getElementById("twit");
-            var twitimg = document.getElementById("imgTest");
-            var nameValue = twitdoc.value;
-            var imgValue = twitimg.innerHTML;
-            var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
-            twitdoc.value = "";
-            console.log("tweet written")
-            
-            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
-                    var data = (snapshot.val());
-                    if (data == null) {
-                      console.log("No data found at /tweets/" + userId);  
-                    } else { 
-                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
-                        var userdata = (snapshot.val());
-                        if (userdata != null) {
-                           dataarray = [data,userdata]
-                           console.log(dataarray)
-                           updatetweets(dataarray); 
-                        }
-                      });
-                    }
-                });
-            
-            
-            
-            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
-            
-        }
+       
         
         function signin() {
             console.log("Signing in");
