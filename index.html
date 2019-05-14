@@ -441,9 +441,20 @@
         #search {
             padding: 20px 0px;
             border-radius: 1em;
+            
         }
 
-
+        #videolink {
+            border: 4px solid deepskyblue;
+            border-radius: 5px;
+            color: deepskyblue;
+            margin-left: 95px;
+        }
+        
+        #videol {
+            margin-left: 122px;
+            margin-bottom: -10px;
+        }
 
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 1250px) {
@@ -701,8 +712,13 @@ width: 90%;
             Post Something!<br>
             <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
+
         <button type="button" onclick="tweet()" class="mybutton" id="submit">Submit</button>
     <br><label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label><br> Or Enter Video Link <input id = 'videolink' type="url" placeholder="Enter video link here...">
+
+        <button type="button" onclick="tweet()" id="submit">Submit</button>
+    <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label> <br> <p id="videol">Video Link </p><br><input id = 'videolink' type="url" placeholder="Enter video link here...">
+
            <div id="imgTest" style="display:none;"></div>
             </div>
             <div class="column middle">
