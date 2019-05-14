@@ -29,7 +29,7 @@
     Password: <input type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/><br>
     Confirm Password: <input type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span id='message'></span><br>
       Username: <input type="text" placeholder="Your username" id="new_username_field" onkeyup='checkusername();'>
-      Profile Image: <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label>
+      Profile Image: <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></label>
         <div id="chosenImg" style="display:none;"></div>
     <button id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
   </div>
@@ -151,7 +151,7 @@ user.sendEmailVerification().then(function() {
             var checkpassword = document.getElementById('confirm_password_field').value;
           if(userpassword != checkpassword) {
               document.getElementById('message').style.color = 'red';
-    document.getElementById('message').innerHTML = 'not matching';
+    document.getElementById('message').innerHTML = 'passwords do not match';
               document.getElementById("createBtn").disable = true;
           }
           else {

@@ -211,6 +211,10 @@
                 window.alert("cannot post both image and video");
                 return;
             }
+            if(!videoValue.includes("youtube")) {
+                window.alert("not a valid video link");
+                return;
+            }
             var js_time = Date.now();
             var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue});
             twitdoc.value = "";
@@ -248,8 +252,8 @@
         
         function signout() {
             console.log("Signing out");
-            document.location.reload()
             firebase.auth().signOut().then(function() {
+                window.location.href="signin.html";
             });
         }
     function searchTweets() {
@@ -283,16 +287,16 @@
         }
          .mybutton {
              font-family:inherit;
-             height:50px;
+             height:30px;
   color: deepskyblue;
     font-size: 18px;
   border: 2px solid deepskyblue;
   border-radius: 2em;
   display: block;
-  width: 80%;
+  width: 50%;
     margin:auto;
     text-align: center;
-             vertical-align:middle;
+         vertical-align:middle;
     cursor: pointer;
   background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
     background-size: 300%;
@@ -345,7 +349,7 @@
             padding: 9px;
             height:100%;
             max-height: 20px;
-            z-index: 5;
+            z-index: 20;
               font-family: 'Big John', sans-serif;
 
         }
@@ -382,17 +386,18 @@
     float: right;
   overflow: hidden;
   display: inline-block;
+    z-index:20;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
-  position: absolute;
+  position: fixed;;
     top: 51px;
   background-color: #f1f1f1;
   min-width: 80px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  z-index:20;
 }
 
 /* Links inside the dropdown */
@@ -402,6 +407,8 @@
   text-decoration: none;
   display: block;
   float: none;
+    z-index:20;
+    cursor: pointer;
 }
 
 /* Change color of dropdown links on hover */
@@ -427,7 +434,7 @@
            
         }
         .middle {
-            width: 22.5%;
+            width: 35%;
              border-style: solid;
             border-color: deepskyblue;
             border-width: 2px;
@@ -445,10 +452,10 @@
         }
 
         #videolink {
-            border: 4px solid deepskyblue;
-            border-radius: 5px;
+            border: 2px solid deepskyblue;
+            border-radius: 1em;
             color: deepskyblue;
-            margin-left: 95px;
+            margin:auto;
         }
         
         #videol {
@@ -567,7 +574,7 @@ width: 90%;
                 <span id="myDropdown" class="dropdown-content">
                     <a href="profile.html">My Igloo</a>
                     <a href="profile.html">My Profile</a>
-                    <a href="signout()">Sign Out</a>
+                    <a onclick="signout()">Sign Out</a>
                 </span>
             </span>
                
@@ -712,12 +719,9 @@ width: 90%;
             Post Something!<br>
             <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
         </form> 
-
-        <button type="button" onclick="tweet()" class="mybutton" id="submit">Submit</button>
-    <br><label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label><br> Or Enter Video Link <input id = 'videolink' type="url" placeholder="Enter video link here...">
-
-        <button type="button" onclick="tweet()" id="submit">Submit</button>
-    <br><label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label> <br> <p id="videol">Video Link </p><br><input id = 'videolink' type="url" placeholder="Enter video link here...">
+<label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label><br><div style="width:100%; text-align:center;"> Or: &nbsp;<input id = 'videolink' type="url" placeholder="Enter video link here..."></div>
+           <br>
+           <button type="button" onclick="tweet()" class="mybutton" id="submit">Submit</button>
 
            <div id="imgTest" style="display:none;"></div>
             </div>
@@ -725,7 +729,7 @@ width: 90%;
     <div id="mytweets">Loading...<div id="loader"></div></div>
                 </div>
             <div class="column right">
-            <input id="searchInput" type="text" id="search" placeholder="Search..." style="width:100%; font-family: 'Fredoka One';" onkeyup="searchTweets()">
+            <input id="searchInput" type="text" id="search" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue; height: 20px" onkeyup="searchTweets()">
             
             </div>
  </div>
