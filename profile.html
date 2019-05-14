@@ -30,87 +30,17 @@
    
     </div>
             
-        <section id="welcome">
-            <center><h1> Welcome, Henry</h1></center>
-        </section>
-
-<div class="wrapper row6">
-    <main class="hoc container clear">
-        <!-- main body -->
-        <div class="first content one_half">
-            <center>
-                <div class="vl">
-                    <h2> Full Name </h2>
-                    <p id="name"></p>
-                    <h2>Address</h2>
-                    <p>200 Lonsdale Road</p>
-                    <h2 id="">Email Address</h2>
-                    <p>henry.wang@ucc.on.ca</p>
-<script>
-document.getElementById("name").innerHTML = user.displayName;
-</script>
-                </div>
-            </center>
-        </div>
-        <div class="content one_half">
-            <style>
-                img{
-                    border-radius: 50%;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto;
-                    width: 60%;
-                    height: 100%;
-                    
-                }
-                
-                #loader {
-                      position: relative;
-                      margin: 20px;
-                      z-index: 1;
-                      width: 50px;
-                      height: 50px;
-                      border: 12px solid #f3f3f3;
-                      border-radius: 50%;
-                      border-top: 12px solid deepskyblue;
-                      width: 80px;
-                      height: 80px;
-                      -webkit-animation: 2s linear infinite;
-                      animation: spin 2s linear infinite;
-                }
-                @-webkit-keyframes spin {
-                  0% { -webkit-transform: rotate(0deg); }
-                  100% { -webkit-transform: rotate(360deg); }
-                }
-                @keyframes spin {
-                  0% { transform: rotate(0deg); }
-                  100% { transform: rotate(360deg); }
-                }
-                .topnav {
-            font-family: "Fredoka One";
+    <style>
+        .topnav {
+           font-family: "Fredoka One";
             overflow; hidden;
             background-color:deepskyblue;
             color: white;
             font-size: 30px;
             padding: 13px;
               font-family: 'Big John', sans-serif;
-
-            
         }
-        .topnav a {
-            color: white;
-            float: right;
-           text-align: center;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 9px;
-            height:100%;
-            max-height: 20px;
-            z-index: 5;
-              font-family: 'Big John', sans-serif;
-
-        }
-           /* Dropdown Button */
+            /* Dropdown Button */
 .dropbtn {
   background-color: deepskyblue;
   color: white;
@@ -118,7 +48,6 @@ document.getElementById("name").innerHTML = user.displayName;
   font-size: 16px;
   border: none;
   cursor: pointer;
-    width: 60px;
 
 }
         
@@ -160,12 +89,34 @@ document.getElementById("name").innerHTML = user.displayName;
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        
-        .topnav a:hover {
-            background-color:white;
-            color:deepskyblue;
-        }
-            </style>
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+    </style>
+        <section id="welcome">
+            <center><h1> Welcome, Henry</h1></center>
+        </section>
+
+<div class="wrapper row6">
+    <main class="hoc container clear">
+        <!-- main body -->
+        <div class="first content one_half">
+            <center>
+                <div class="vl">
+                    <h2> Full Name </h2>
+                    <p id="name"></p>
+                    <h2>Address</h2>
+                    <p>200 Lonsdale Road</p>
+                    <h2 id="">Email Address</h2>
+                    <p>henry.wang@ucc.on.ca</p>
+<script>
+document.getElementById("name").innerHTML = user.displayName;
+</script>
+                </div>
+            </center>
+        </div>
+        <div class="content one_half">
+
             <img id="myphoto">
         </div>
 
