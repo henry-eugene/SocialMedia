@@ -175,7 +175,9 @@
                     
                     
                     if(data[u][t].video != null) {
-                        mytab = mytab + "<td><span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe src=" + data[u][t].video + "></iframe>";   
+                       var videolink = data[u][t].video.toString();
+                        var changedlink = videolink.replace("watch?v=", "embed/");
+                        mytab = mytab + "<td><span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
                         mytab = mytab + "<br><span class = 'post'>" + data[u][t].tweet + "</span></td>";
                     }
                    else if (data[u][t].img != "") {
