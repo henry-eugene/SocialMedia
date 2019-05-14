@@ -250,7 +250,29 @@
             firebase.auth().signOut().then(function() {
             });
         }
-    
+    function searchTweets(type) {
+                    var input, filter, ul, li, a, i, txtValue;
+                    input = document.getElementById("searchInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    column = parseInt(type, 10);
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[column];
+                        console.log("1");
+                        if (td) {
+                              console.log("2");
+                            txtValue = td.textContent || td.innerText;
+                            if(txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                                console.log("set visible");
+                            } else {
+                                tr[i].style.display = "none";
+                                console.log("set invisible");
+                            }
+                        }
+                    }
+                }
     
     </script>
     <style>   
@@ -659,26 +681,9 @@ width: 90%;
                     if (slideIndex > slides.length) {slideIndex = 1} 
                     slides[slideIndex-1].style.display = "block"; 
                     setTimeout(showSlides, 5000); // Change image every 2 seconds
-                }    
-                function searchTweets(type) {
-                    var input, filter, ul, li, a, i, txtValue;
-                    input = document.getElementById("searchInput");
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById("myTable");
-                    tr = table.getElementsByTagName("tr");
-                    column = parseInt(type, 10);
-                    for (i = 0; i < tr.length; i++) {
-                        td = tr[i].getElementsByTagName("td");
-                        if (td) {
-                            txtValue = td.textContent || td.innerText;
-                            if(txtValue.toUpperCase().indexOf(filter) > -1) {
-                                tr[i].style.display = "";
-                            } else {
-                                tr[i].style.display = "none";
-                            }
-                        }
-                    }
-                }
+                }   
+              
+                
             </script>
            
             
@@ -697,7 +702,7 @@ width: 90%;
     <div id="mytweets">Loading...<div id="loader"></div></div>
                 </div>
             <div class="column right">
-            <input id="searchInput" type="text" id="search" placeholder="Search..." style="width:100%; font-family: 'Fredoka One';" onkeyup="searchTweets()">
+            <input id="searchInput" type="text" id="search" placeholder="Search..." style="width:100%; font-family: 'Fredoka One';" onkeyup="searchTweets('1')">
             <button id="username1" onclick="searchTweets('1')">Username</button>
                 <button id="content1" onclick="searchTweets('2')">Content</button>
             
