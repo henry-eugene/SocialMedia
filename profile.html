@@ -113,6 +113,15 @@
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
+        
+        #profilepic {
+            margin-left: 210px;
+            margin-top: 50px;
+            padding-top: 50px;
+            height: 50%;
+            width: 50%;
+        }
+        
     </style>
         <section id="welcome">
             <center><h1 id ="fullname2"></h1></center>
@@ -126,8 +135,10 @@
                 <div class="vl">
                     <h2> Full Name </h2>
                     <p id="fullname"></p>
-                    <h2>Address</h2>
-                    <p>200 Lonsdale Road</p>
+                    <h2>Bio</h2>
+                    <p id="bio"></p>
+                    <textarea id="changebio" placeholder="Type in here!";></textarea>
+                    
                     <h2 id="">Email Address</h2>
                     <p id="email"></p>
 
@@ -135,7 +146,7 @@
             </center>
         </div>
         <div>
-            <img id="profilepic">
+            <span id="profilepic"></span>
 
         </div>
 
@@ -235,6 +246,9 @@
                myphotodiv = document.getElementById("myphoto");
                myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
             }
+            
+                myphotodiv = document.getElementById("profilepic");
+                myphotodiv.innerHTML = "<img src='" + imageUrl +"''/>"
         }); // end check auth state
         
         
