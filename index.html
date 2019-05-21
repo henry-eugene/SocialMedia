@@ -18,12 +18,16 @@
     // Check to see if you are logged in
         firebase.auth().onAuthStateChanged(function(user) {
             if (user == null) {
-                myphotodiv = document.getElementById("invis");
-                myphotodiv.style.display="none";
-                signinbutton = document.getElementById("signin");
-                signinbutton.style.display="inline";
-                signinmessage = document.getElementById("mytweets");
-                signinmessage.innerHTML = "Login to see posts";
+                changevisibility = document.getElementById("invis");
+                changevisibility.style.display="none";
+               changevisibility = document.getElementById("signin");
+               changevisibility.style.display="inline";
+                changevisibility = document.getElementById("mytweets");
+             changevisibility.innerHTML = "Login to see posts";
+                changevisibility = document.getElementById("leftcolumn");
+               changevisibility.style.display="none";
+               changevisibility = document.getElementById("rightcolumn");
+                changevisibility.style.display="none";
                 return;
             } else {
                 user.providerData.forEach(function (profile) {
@@ -174,22 +178,24 @@
                     if(minutes == 0 && hours == 0 && days == 0) {
                         time = "Posted just now.";
                     }
-                    
+                   
                      
                     if(data[u][t].video != null) {
                        var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
                         mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe width='400px' height='250px'allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
-                        mytab = mytab + "<br><span class = 'post'>" + data[u][t].tweet + "<br></span><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes</td>";
+                        mytab = mytab + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
                     }
                    else if (data[u][t].img != "") {
                         mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<img src='" + data[u][t].img + "' width='300px'>";   
-                       mytab = mytab + "<br><span class = 'post'>" + data[u][t].tweet + "<br></span><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes</td>";
+                       mytab = mytab + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
 
                     } else {
-                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><span class = 'post'>" + data[u][t].tweet + "<br></span><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes</td>";
+                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "<br></span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
                     } 
                     mytab = mytab + "</tr>";
+                   
+                    
                 }   
             }
             //mylist = mylist + "</ul>";
@@ -198,11 +204,28 @@
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
         }
-
+//    function keepbluebutton(id) {
+//        var liketest = id;
+//         var info = liketest.split(" ");
+//         firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
+//             var userswholiked = snapshot.val();
+//             if(userswholiked != null) {
+//                 var bluebutton = document.getElementById(info[1] + " " + info[0]);
+//                 bluebutton.style.backgroundColor="deepskyblue";
+//             }
+//         });
+//    }
+//    function editpost() {
+//        var d = document.getElementById("myelement"); 
+//        d.contentEditable = "true";
+//    }
     function likeTweet(id) {
              var liketest = id;
            var info = liketest.split(" ");
-         firebase.database().ref('tweets/' + info[1] + "/" + info[0]).once('value', function(snapshot) {
+        firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
+               var userswholiked = snapshot.val();
+           if(userswholiked == null) {
+                firebase.database().ref('tweets/' + info[1] + "/" + info[0]).once('value', function(snapshot) {
              var tweetinfo = snapshot.val();
              var newlikes = tweetinfo.likes;
              newlikes++;
@@ -211,8 +234,27 @@
         var likespan = document.getElementById(likeid);
         likespan.innerHTML = newlikes;
            });
+        firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
+               var userswholiked = snapshot.val();
+               if(userswholiked.userliked) {
+                   var changebuttoncolour = document.getElementById(id);
+        changebuttoncolour.style.backgroundColor="deepskyblue";
+               }
+           });
         
+        firebase.database().ref('likes/' + info[0] + "/" + userId).update({userliked:true});
+           }
+               else {
+                   alert("Already liked this tweet");
+                    return;
+                 
+               }
+             
+           });
+
+       
     }
+    
         // write tweets to firebase
         function tweet() {
             
@@ -232,7 +274,7 @@
                 return;
             }
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue});
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue, likedusers: ""});
             twitdoc.value = "";
             console.log("tweet written")
             
@@ -741,7 +783,7 @@ width: 90%;
            
             
         <div class="row">
-       <div class ="column left">
+       <div class ="column left" id='leftcolumn'>
            
         <form id="form">
             Post Something!<br>
@@ -756,7 +798,7 @@ width: 90%;
             <div class="column middle">
     <div id="mytweets">Loading...<div id="loader"></div></div>
                 </div>
-            <div class="column right">
+            <div class="column right" id ='rightcolumn'>
             <input id="searchInput" type="text" id="search" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()">
             
             </div>
