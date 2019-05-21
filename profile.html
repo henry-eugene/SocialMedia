@@ -115,11 +115,9 @@
 .show {display:block;}
         
         #profilepic {
-            margin-left: 210px;
-            margin-top: 50px;
-            padding-top: 50px;
-            height: 50%;
-            width: 50%;
+              height: 100px;
+              width: 100px;
+             margin-left: 290px;
         }
         
     </style>
@@ -135,10 +133,10 @@
                 <div class="vl">
                     <h2> Full Name </h2>
                     <p id="fullname"></p>
-                    <h2>Bio</h2>
+                    <h2>Bio</h2><br>
                     <p id="bio"></p>
                     <textarea id="changebio" placeholder="Type in here!";></textarea>
-                    
+                    <br><button onclick="tweet()">Change your bio!</button>     
                     <h2 id="">Email Address</h2>
                     <p id="email"></p>
 
@@ -223,15 +221,18 @@
                 name = user.displayName;
                 imageUrl = user.photoURL;
                 email = user.email;
-                emailVerified = user.emailVerified;
                 signinbutton = document.getElementById("signin");
                 signinbutton.style.display="none";
                 myphotodiv = document.getElementById("invis");
                 myphotodiv.style.display="inline";
+                firebase.database().ref('/users/' + userId).once('value', function(snapshot) {
+                                                               var bioid = document.getElementById('bio').innerHTML;
+                bioid = snapshot.val();
+                                                               });
                 var shownname = document.getElementById("fullname"); 
                 shownname.innerHTML = name; 
                 var shownname = document.getElementById("fullname2"); 
-                shownname.innerHTML = "Welome, " + name; 
+                shownname.innerHTML = "Welcome, " + name; 
                  var shownname = document.getElementById("email"); 
                 shownname.innerHTML = email; 
                  var shownname = document.getElementById("profilepic"); 
@@ -282,7 +283,12 @@
             firebase.auth().signOut().then(function() {
             });
         }
-    
+     function tweet() {
+            var twitbio = document.getElementById("changebio").value;
+            var bio = document.getElementById("bio");
+            bio.innerHTML = twitbio;
+            var bioid = firebase.database().ref('users/' + userId).update({biography:twitbio});
+        }
     
     </script>
 </html>
