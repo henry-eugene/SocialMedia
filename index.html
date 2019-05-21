@@ -103,10 +103,10 @@
           var popup = document.getElementById("myPopup " + n);
           popup.classList.toggle("show");
             console.log("hi");
-        ;}
+        }
         function updatetweets(data) {
             //var mylist = "<ul>";
-            var mytab = "<table style='width: 100%;' id='myTable'>";
+            var mytab = "<span id='noresults' style='display: none;'>No results for search</span><table style='width: 100%;' id='myTable'>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
             
@@ -177,7 +177,7 @@
                     if(data[u][t].video != null) {
                        var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
-                        mytab = mytab + "<td> "+ "<small style='display:none;'>" + users[u].username + "</small>" + "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
+                        mytab = mytab + "<td> "+ "<small style='display:none;'>" + users[u].username + "</small>" + "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe width='400px' height='250px'allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
                         mytab = mytab + "<br><span class = 'post'>" + data[u][t].tweet + "</span><button onclick='likeTweet()'><i class='far fa-thumbs-up'></i></button></td>";
                     }
                    else if (data[u][t].img != "") {
@@ -259,6 +259,7 @@
     function searchTweets() {
                     var input, filter, table, tr, td, txtValue;
                     input = document.getElementById("searchInput");
+                    var counter = 0;
                     filter = input.value.toUpperCase();
                     table = document.getElementById("myTable");
                     tr = table.getElementsByTagName("tr");
@@ -268,12 +269,22 @@
                             txtValue = td.textContent || td.innerText;
                             if(txtValue.toUpperCase().indexOf(filter) > -1) {
                                 tr[i].style.display = "";
+                                counter++;
                             } else {
                                 tr[i].style.display = "none";
                             }
                         }
                     }
-                }
+        if (counter == 0) {
+                var noresult = document.getElementById("noresults");
+            noresults.style.display = "";
+            }
+    else {
+        var noresult = document.getElementById("noresults");
+            noresults.style.display = "none";
+    }
+        
+    }
     
     function likeTweet() {
         var input = $(this.closest)
@@ -738,7 +749,7 @@ width: 90%;
     <div id="mytweets">Loading...<div id="loader"></div></div>
                 </div>
             <div class="column right">
-            <input id="searchInput" type="text" id="search" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue; height: 20px" onkeyup="searchTweets()">
+            <input id="searchInput" type="text" id="search" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()">
             
             </div>
  </div>
