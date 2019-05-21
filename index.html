@@ -206,7 +206,6 @@
              var tweetinfo = snapshot.val();
              var newlikes = tweetinfo.likes;
              newlikes++;
-             alert(newlikes);
                  firebase.database().ref('tweets/' + info[1] + "/" + info[0]).update({likes: newlikes});
            });
     }
