@@ -3,9 +3,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 <head>
     <title>Igloo</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="layout.css" rel="stylesheet" type="text/css" media="all">
+    
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 </head>
 
@@ -15,7 +13,7 @@
             <i class="fas fa-igloo"></i> Igloo  
             <a class="active" href="index.html"><i class="fas fa-home"></i> Home</a>
             <span id="invis">
-                <span class="dropdown1" >
+                <span class="dropdown" >
                 <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
                 <span id="myDropdown" class="dropdown-content">
                     <a href="profile.html">My Igloo</a>
@@ -30,16 +28,20 @@
    
     </div>
             
-    <style>
+     <style>
+        body {
+           padding: 0px;
+            margin: auto;
+            font-family: "Fredoka One";
+        }
         .topnav {
             font-family: "Fredoka One";
-            overflow; hidden;
+            overflow: hidden;
             background-color:deepskyblue;
             color: white;
             font-size: 30px;
             padding: 13px;
-              font-family: 'Big John', sans-serif;
-
+            
             
         }
         .topnav a {
@@ -48,16 +50,20 @@
            text-align: center;
             text-decoration: none;
             font-size: 18px;
+            font-family: "Fredoka One";
             padding: 9px;
-            height:100%;
-            max-height: 20px;
             z-index: 5;
-              font-family: 'Big John', sans-serif;
-
         }
        
         
-
+        .topnav a:hover {
+            background-color:white;
+            color:deepskyblue;
+        }
+        .topnav a.active {
+            background-color: white;
+            color: deepskyblue;
+        }
        
     /* Dropdown Button */
 .dropbtn {
@@ -77,8 +83,9 @@
 }
 
 /* The container <div> - needed to position the dropdown content */
-.dropdown1 {
+.dropdown {
     float: right;
+  overflow: hidden;
   display: inline-block;
 }
 
@@ -86,13 +93,11 @@
 .dropdown-content {
   display: none;
   position: absolute;
-    top: 9%;
-    margin: auto;
+    top: 51px;
   background-color: #f1f1f1;
-  min-width: 60px;
+  min-width: 80px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
-    height: 100px;
 }
 
 /* Links inside the dropdown */
@@ -102,12 +107,11 @@
   text-decoration: none;
   display: block;
   float: none;
-    height: 50px;
 }
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd}
-        .dropdown1:hover .dropdown-content {
+        .dropdown:hover .dropdown-content {
             display: block;
         }
 
@@ -115,74 +119,52 @@
 .show {display:block;}
         
         #profilepic {
-              height: 100px;
-              width: 100px;
-             margin-left: 290px;
+              margin:auto;
         }
-        
+         .column {
+             width:30%;
+             padding:5% 10%;
+             padding-right:0%;
+             margin:none;
+             float:left;
+        height:100%;
+            
+         }  
+         .right {
+             margin:1%;
+              border-left: solid 2px deepskyblue;
+         }
     </style>
-        <section id="welcome">
-            <center><h1 id ="fullname2"></h1></center>
-        </section>
+       
 
-<div class="wrapper row6">
-    <main class="hoc container clear">
-        <!-- main body -->
-        <div class="first content one_half">
-            <center>
+<div class="row">
+    <div class="column">
+         <section id="welcome">
+ <h1 id ="fullname2"></h1><br>
+              <span id="profilepic"></span>
+        </section>
+    </div>
+        <div class="column right">
+        
                 <div class="vl">
                     <h2> Full Name </h2>
                     <p id="fullname"></p>
-                    <h2>Bio</h2><br>
+                    <h2>Bio</h2>
                     <p id="bio"></p>
                     <textarea id="changebio" placeholder="Type in here!";></textarea>
-                    <br><button onclick="tweet()">Change your bio!</button>     
+                    <br><button onclick="changeBio()">Change your bio!</button>     
                     <h2 id="">Email Address</h2>
                     <p id="email"></p>
 
                 </div>
-            </center>
-        </div>
-        <div>
-            <span id="profilepic"></span>
-
+ 
+            </div>
         </div>
 
-        <!-- / main body -->
-        <div class="clear"></div>
-    </main>
-</div>
 
-<div class="wrapper overlay bgded" style="background-image:url('http://geographical.co.uk/media/k2/items/cache/ffc9a76e4f88b66c863df72bab4ef694_XL.jpg');">
 
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
+       
 
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<a id="backtotop" href="#top"><i class="fa fa-chevron-up"></i></a>
-<!-- JAVASCRIPTS -->
-<script src="layout/scripts/jquery.min.js"></script>
-<script src="layout/scripts/jquery.backtotop.js"></script>
-<script src="layout/scripts/jquery.mobilemenu.js"></script>
-</body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
  <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
@@ -206,8 +188,6 @@
                 myphotodiv.style.display="none";
                 signinbutton = document.getElementById("signin");
                 signinbutton.style.display="inline";
-                signinmessage = document.getElementById("mytweets");
-                signinmessage.innerHTML = "Login to see posts";
                 return;
             } else {
                 user.providerData.forEach(function (profile) {
@@ -226,9 +206,17 @@
                 myphotodiv = document.getElementById("invis");
                 myphotodiv.style.display="inline";
                 firebase.database().ref('/users/' + userId).once('value', function(snapshot) {
-                                                               var bioid = document.getElementById('bio').innerHTML;
-                bioid = snapshot.val();
-                                                               });
+                    var userdata = (snapshot.val());
+                    dataarray = [userdata]
+                    users = dataarray[0];
+                     var bioid = document.getElementById('bio');
+                    console.log(users);
+                   
+                bioid.innerHTML = users.biography;
+                });
+                    
+               
+                                                        
                 var shownname = document.getElementById("fullname"); 
                 shownname.innerHTML = name; 
                 var shownname = document.getElementById("fullname2"); 
@@ -239,8 +227,7 @@
                 shownname.innerHTML = "<img src = '" + imageUrl +"/>"; 
 
                     
-                // write user data to users
-                writeUserData(userId, name, email, imageUrl);
+                
                 
                 // write data to document
                
@@ -253,28 +240,8 @@
         }); // end check auth state
         
         
-        
-        // write user data
-        function writeUserData(userId, name, email, imageUrl) {
-            firebase.database().ref('users/' + userId).set({
-                username: name,
-                email: email,
-                profile_picture : imageUrl
-            });
-        }
-        function myFunction(n) {
-          var popup = document.getElementById("myPopup " + n);
-          popup.classList.toggle("show");
-            console.log("hi");
-        ;}
-       
-        
         function signin() {
-            console.log("Signing in");
-            var provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithRedirect(provider).then(function(result) { 
-                window.location.replace("index.html");
-            });
+            window.location.href="signin.html";
         }
         
         function signout() {
@@ -283,7 +250,7 @@
             firebase.auth().signOut().then(function() {
             });
         }
-     function tweet() {
+     function changeBio() {
             var twitbio = document.getElementById("changebio").value;
             var bio = document.getElementById("bio");
             bio.innerHTML = twitbio;
