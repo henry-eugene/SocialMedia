@@ -14,8 +14,8 @@
     
     <button onclick="signin()" >Login to Account</button>
       
-      
-      <div class="modal">
+      <div class="form_div">
+      <div class="modal" id="modalclose">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
@@ -23,46 +23,26 @@
       <button class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-   <span style='font-size: 18px;'>Email: </span> <input class="input is-info" type="email" placeholder="Enter Email" id="new_email_field" /><br>
-    <span style='font-size: 18px;'>Password:  </span><input class="input is-success" type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/><br>
-    <span style='font-size: 18px;'>Confirm Password: </span> <input class="input is-success" type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span id='message'></span><br>
-    <span style='font-size: 18px;'>Username: </span>   <input class="input is-success" type="text" placeholder="Your username" id="new_username_field" onkeyup='checkusername();'>
+   <span style='font-size: 18px;'>Email: </span> <input class="input is-info" type="email" placeholder="Enter Email" id="new_email_field" />
+        <span style='font-size: 18px;'>Username: </span>   <input class="input is-info" type="text" placeholder="Your username" id="new_username_field"> <span style='font-size: 14px; display:none;' id="invalidusername" ></span> 
+    <span style='font-size: 18px;'>Password:  </span><input class="password input is-success" type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/>
+    <span style='font-size: 18px;'>Confirm Password: </span> <input class="password input is-success" type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span style='font-size: 14px; display:none;' id="passwordmatch">Passwords do not match.</span> 
+    
      <span style='font-size: 18px;'>Profile Image: </span>  <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></label>
         <div id="chosenImg" style="display:none;"></div>
-    <button class="button" disabled="true" id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
+    
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success">Save changes</button>
-      <button class="button">Cancel</button>
+      <button class="button is-success" disabled="true" id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
+      <button class="button" id="closemodalBtn">Cancel</button>
     </footer>
   </div>
 </div>
-      
+     </div> 
       
       <button onclick="signingoogle()"id="googlebutton">Login With Google</button>
       <button id="modalBtn"> Create A New Account!</button>
-      <!-- The Modal -->
-<div id="myModal" class="modalRemoveThisTextLater">
 
-  <!-- Modal content -->
-  <!-- Modal content -->
-<div class="modal-content">
-  <div class="modal-header">
-    <span class="close">&times;</span>
-    Create a New Account!
-  </div>
-  <div class="modal-body">
-      Email: <input type="email" placeholder="Enter Email" id="new_email_field" /><br>
-    Password: <input type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/><br>
-    Confirm Password: <input type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span id='message'></span><br>
-      Username: <input type="text" placeholder="Your username" id="new_username_field" onkeyup='checkusername();'>
-      Profile Image: <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></label>
-        <div id="chosenImg" style="display:none;"></div>
-    <button class="button" disabled="true" id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
-  </div>
-</div>
-
-</div>
       
       
   </div>
@@ -144,14 +124,14 @@
         function updateprofile() {
             
             var user = firebase.auth().currentUser;
-            var username = document.getElementById("new_username_field").value;
+            var nameuser = document.getElementById("new_username_field").value;
             var profilepicture = document.getElementById("chosenImg").innerHTML;
+            console.log(profilepicture);
              firebase.database().ref('users/' + userId).update({
-                profile_picture: profilepicture
-            });
+                profile_picture: profilepicture, username: nameuser});
            
 user.updateProfile({
-  displayName: username
+  displayName: nameuser
 }).then(function() {
   // Update successful.
 }).catch(function(error) {
@@ -177,13 +157,19 @@ user.sendEmailVerification().then(function() {
           var userpassword = document.getElementById('new_password_field').value;
             var checkpassword = document.getElementById('confirm_password_field').value;
           if(userpassword != checkpassword) {
-              document.getElementById('message').style.color = 'red';
-    document.getElementById('message').innerHTML = 'passwords do not match';
+              var passinputs = document.getElementsByClassName('password');
+              for(var i = 0; i < passinputs.length; i++) {
+                 passinputs[i].className = passinputs[i].className.replace("is-success", "is-danger"); 
+              }
+              document.getElementById('passwordmatch').style.display = "block";
              disableBtn();
           }
           else {
-              document.getElementById('message').style.color = 'green';
-    document.getElementById('message').innerHTML = 'matching';
+              var passinputs = document.getElementsByClassName('password');
+              for(var i = 0; i < passinputs.length; i++) {
+                 passinputs[i].className = passinputs[i].className.replace("is-danger", "is-success"); 
+              }
+                document.getElementById('passwordmatch').style.display = "none";
                enableBtn();
           }
       }
@@ -246,8 +232,8 @@ function enableBtn() {
 
 
 // Get the button that opens the modal
-      var modalContainer = document.getElementById("login_div");
-      var modal = modalContainer.getElementsByClassName("modal");
+       
+      var modal = document.getElementsByClassName("modal");
 var btn = document.getElementById("modalBtn");
 
 // Get the <span> element that closes the modal
@@ -255,19 +241,24 @@ var span = document.getElementsByClassName("delete")[0];
 
 // When the user clicks on the button, open the modal 
 btn.onclick = function() {
-  modal.style.display = "block";
+   modal[0].className = modal[0].className.replace("modal", "modal is-active");
 }
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
-  modal.style.display = "none";
+  modal[0].className = modal[0].className.replace("is-active", "");
 }
 
 // When the user clicks anywhere outside of the modal, close it
+ var closemodal = document.getElementsByClassName("modal-background");
 window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+  if (event.target == closemodal[0]) {
+    modal[0].className = modal[0].className.replace("is-active", "");
   }
+}
+var modalcloseBtn = document.getElementById("closemodalBtn");
+      modalcloseBtn.onclick = function() {
+  modal[0].className = modal[0].className.replace("is-active", "");
 }
     </script>
     
@@ -391,7 +382,8 @@ button {
         color: white;
     }
     .button:disabled {
-    color:darkgrey;
+    color:white;
+        background-color:grey;
         background-image: none;
         cursor:not-allowed;
 }
@@ -458,23 +450,12 @@ button {
   to {top: 0; opacity: 1}
 }
 
-/* The Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-
+    .form_div input, span{
+        margin:10px;
+    }
     
+   
     </style>
     
     
