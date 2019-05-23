@@ -269,7 +269,7 @@
                 window.alert("cannot post both image and video");
                 return;
             }
-            if(!videoValue.includes("youtube")) {
+            if(!videoValue.includes("youtube") && videoValue != "") {
                 window.alert("not a valid video link");
                 return;
             }
