@@ -2,6 +2,8 @@
 <html>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
  <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    
 <body>
 
   <div id="login_div" class="main-div">
@@ -12,10 +14,35 @@
     
     <button onclick="signin()" >Login to Account</button>
       
+      
+      <div class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p style='background-color:transparent;' class="modal-card-title">Create a New Account!</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+   <span style='font-size: 18px;'>Email: </span> <input class="input is-info" type="email" placeholder="Enter Email" id="new_email_field" /><br>
+    <span style='font-size: 18px;'>Password:  </span><input class="input is-success" type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/><br>
+    <span style='font-size: 18px;'>Confirm Password: </span> <input class="input is-success" type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span id='message'></span><br>
+    <span style='font-size: 18px;'>Username: </span>   <input class="input is-success" type="text" placeholder="Your username" id="new_username_field" onkeyup='checkusername();'>
+     <span style='font-size: 18px;'>Profile Image: </span>  <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></label>
+        <div id="chosenImg" style="display:none;"></div>
+    <button class="button" disabled="true" id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button">Cancel</button>
+    </footer>
+  </div>
+</div>
+      
+      
       <button onclick="signingoogle()"id="googlebutton">Login With Google</button>
       <button id="modalBtn"> Create A New Account!</button>
       <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="myModal" class="modalRemoveThisTextLater">
 
   <!-- Modal content -->
   <!-- Modal content -->
@@ -216,13 +243,15 @@ function enableBtn() {
             });
         }
       // Get the modal
-var modal = document.getElementById('myModal');
+
 
 // Get the button that opens the modal
+      var modalContainer = document.getElementById("login_div");
+      var modal = modalContainer.getElementsByClassName("modal");
 var btn = document.getElementById("modalBtn");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementsByClassName("delete")[0];
 
 // When the user clicks on the button, open the modal 
 btn.onclick = function() {

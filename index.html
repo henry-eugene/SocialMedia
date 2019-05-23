@@ -59,6 +59,7 @@
                     var data = (snapshot.val());
                     if (data == null) {
                       console.log("No data found at /tweets/" + userId);  
+                        document.getElementById("mytweets").innerHTML = "No tweets yet. Be the first one by posting a message using the form.";
                     } else {
                         
                       firebase.database().ref('/users').once('value').then(function(snapshot) { 
@@ -159,11 +160,11 @@
                     for(var i = 0; i < 4; i++) {
                         if(totals[i]!= 0) {
                             if(totals[i] == 1) {
-                                time = time + totals[i] + singlenames[i];
+                                time+= totals[i] + singlenames[i];
                                 break;
                             }
                             else {
-                                 time = time + totals[i] + names[i];
+                                 time+= totals[i] + names[i];
                                 break;
                             }
                         }
@@ -180,14 +181,16 @@
                     }
                    
                      
-                    if(data[u][t].video != null) {
+                    if(data[u][t].video != "" && data[u][t].video != null) {
                        var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
-                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<iframe width='400px' height='250px'allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
+                        changedlink = changedlink.replace(/&t=.*$/i, "");
+                        changedlink = changedlink.replace(/&ab.*$/i, "");
+                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
                         mytab = mytab + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
                     }
                    else if (data[u][t].img != "") {
-                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<img src='" + data[u][t].img + "' width='300px'>";   
+                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
                        mytab = mytab + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
 
                     } else {
@@ -274,7 +277,7 @@
                 return;
             }
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue, likedusers: ""});
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue, likes:0});
             twitdoc.value = "";
             console.log("tweet written")
             
