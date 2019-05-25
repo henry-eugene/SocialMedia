@@ -1,3 +1,4 @@
+
 <html>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
@@ -98,7 +99,7 @@
         
         // write user data
         function writeUserData(userId, name, email, imageUrl) {
-            firebase.database().ref('users/' + userId).set({
+            firebase.database().ref('users/' + userId).update({
                 username: name,
                 email: email,
                 profile_picture : imageUrl
@@ -114,11 +115,11 @@
             var mytab = "<span id='noresults' style='display: none;'>No results for search</span><table style='width: 100%;' id='myTable'>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
-            
+            var editcounter = 0;
             for (var u in data) {
                 
                 for (var t in data[u]) {
-               
+                editcounter++;
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
                     var epoch = date.getTime();
@@ -179,7 +180,10 @@
                     if(minutes == 0 && hours == 0 && days == 0) {
                         time = "Posted just now.";
                     }
-                   
+                    var canEdit = false;
+                   if(userId == u) {
+                       canEdit = true;
+                   }
                      
                     if(data[u][t].video != "" && data[u][t].video != null) {
                        var videolink = data[u][t].video.toString();
@@ -187,15 +191,22 @@
                         changedlink = changedlink.replace(/&t=.*$/i, "");
                         changedlink = changedlink.replace(/&ab.*$/i, "");
                         mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
-                        mytab = mytab + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
+                        mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
+                        
+
                     }
                    else if (data[u][t].img != "") {
                         mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
-                       mytab = mytab + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
+                       mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } else {
-                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + t + "'>" + data[u][t].tweet + "<br></span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br><button onclick='editpost()'>Edit</button></td>";
+                       
+                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
+
                     } 
+                    if(canEdit) {
+                         mytab +="<button id='edit" + editcounter + "' onclick='editpost(" + editcounter + ")'>Edit</button><button style='display:none;' id='submit" + editcounter + "' onclick=submitedit(" + editcounter + ",&apos;" + u + "&apos;,&apos;" + t + "&apos;)>Submit</button> </td>";
+                        }
                     mytab = mytab + "</tr>";
                    
                     
@@ -218,10 +229,36 @@
 //             }
 //         });
 //    }
-//    function editpost() {
-//        var d = document.getElementById("myelement"); 
-//        d.contentEditable = "true";
-//    }
+    function editpost(counter) {
+        var d = document.getElementById(counter);  
+        d.contentEditable = "true";
+        d.style.display = "inline-block";
+        d.style.overflow = "auto";
+        d.style.width= "300px";
+        d.style.height = "100px";
+        d.style.backgroundColor = "#E5E5E5";
+        d.style.border = "solid 1px deepskyblue";
+        var editbuttonid = "edit" + counter;
+        var editbutton = document.getElementById(editbuttonid);
+        editbutton.style.display = "none";
+        var submitbuttonid = "submit" + counter;
+         var submitbutton = document.getElementById(submitbuttonid);
+        submitbutton.style.display = "block";
+        
+    }
+    function submitedit(counter,a,b) {
+        alert(counter + a + b);
+        var d = document.getElementById(counter);
+        var newtweet = d.innerHTML;
+        alert(newtweet);
+        firebase.database().ref('tweets/' + a + "/" + b).update({tweet: newtweet});
+         d.contentEditable = "false";
+         d.style.width = "200px";
+         d.style.height = "auto";
+        d.style.backgroundColor= "transparent";
+        d.style.border = "none";
+  
+    }
     function likeTweet(id) {
              var liketest = id;
            var info = liketest.split(" ");
@@ -297,7 +334,9 @@
                     }
                 });
             
-            
+            twitdoc.value = "";
+            twitimg.innerHTML = "";
+            twitvideo.value = "";
             
             // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
             
@@ -617,6 +656,7 @@ width: 90%;
         .post {
             width:200px;
             min-width:100px;
+            word-break:break-all;
             
         }
         .postinfo {

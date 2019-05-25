@@ -141,6 +141,40 @@
              margin:1%;
               border-left: solid 2px deepskyblue;
          }
+         button {
+  color: deepskyblue;
+    font-size: 18px;
+  border: 2px solid deepskyblue;
+  border-radius: 2em;
+  display: block;
+  width: 200px;
+font-family:inherit;
+             float: left;
+    margin: 10px auto;
+    text-align: center;
+    cursor: pointer;
+  background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+    background-size: 300%;
+  background-position: 100%;
+  transition: background 450ms ease-in-out;
+        }
+    
+    button:hover {
+         background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+    background-size: 300%;
+  background-position: 100%;
+  transition: background 450ms ease-in-out;
+        background-color:deepskyblue;
+        background-position: 0;
+        color: white;
+    }
+         @media screen and (max-width: 950px) {
+  .column {
+width: 90%;
+      
+      float: none;
+  }
+}
     </style>
        
 
@@ -159,8 +193,8 @@
                     <h2>Bio</h2>
                     <p id="bio"></p>
                     <textarea id="changebio" placeholder="Type in here!";></textarea>
-                    <br><button onclick="changeBio()">Change your bio!</button>     
-                    <h2 id="">Email Address</h2>
+                    <br><button onclick="changeBio()">Change your bio!</button>   <br>  
+<br>                    <h2 id="">Email Address</h2>
                     <p id="email"></p>
 
                 </div>
@@ -216,13 +250,20 @@
                     var userdata = (snapshot.val());
                     dataarray = [userdata]
                     users = dataarray[0];
-                     var bioid = document.getElementById('bio');
+                     
                     console.log(users);
-                   
-                bioid.innerHTML = user.biography;
+                     var bioid = document.getElementById('bio');
+                    if(userdata.biography == null) {
+                        bioid.innerHTML = "No bio yet.";
+                    }
+                   else {
+                         bioid.innerHTML = userdata.biography;
+              
+                   }
+                
                 });
                     
-               
+              
                                                         
                 var shownname = document.getElementById("fullname"); 
                 shownname.innerHTML = name; 
@@ -262,7 +303,9 @@
             var bio = document.getElementById("bio");
             bio.innerHTML = twitbio;
             var bioid = firebase.database().ref('users/' + userId).update({biography:twitbio});
+         twitbio.value = "";
         }
     
     </script>
+    </body>
 </html>
