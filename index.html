@@ -31,8 +31,11 @@
                 changevisibility.style.display="none";
                 return;
             } else {
+                
+                var provider;
                 user.providerData.forEach(function (profile) {
     console.log("Sign-in provider: " + profile.providerId);
+                    provider = profile.providerId;
     console.log("  Provider-specific UID: " + profile.uid);
     console.log("  Name: " + profile.displayName);
     console.log("  Email: " + profile.email);
@@ -43,6 +46,9 @@
                 imageUrl = user.photoURL;
                 email = user.email;
                 emailVerified = user.emailVerified;
+                if(!emailVerified && provider != "google.com") {
+                    window.location.replace("signin.html");
+                }
                 signinbutton = document.getElementById("signin");
                 signinbutton.style.display="none";
                 myphotodiv = document.getElementById("invis");
@@ -52,25 +58,55 @@
                 writeUserData(userId, name, email, imageUrl);
                 
                 // write data to document
-               
-               myphotodiv = document.getElementById("myphoto");
-               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+                var profilepic = "";
+               firebase.database().ref('users/' + userId).once('value', function(snapshot) {
+                  
+                if(snapshot.val().profile_picture == null) {
+                        profilepic = snapshot.val().profile_picture2;
+                    
+               } else {
+                   profilepic = imageUrl;
+               }
+                    myphotodiv = document.getElementById("myphoto");
+               myphotodiv.innerHTML = "<img height='28px' width='28px' src='" + profilepic + "'style='max-width:50px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
 
+                        });
+                firebase.database().ref("followrequests/" + userId).once('value', function(snapshot) {
+                    var requestlist = snapshot.val();
+                    console.log(requestlist);
+                    if(requestlist == null) {
+                        document.getElementById('followrequests').innerHTML += "Nobody. Go make some friends!";
+                    }
+                    else {
+                        for (var u in requestlist) {
+                        document.getElementById('followrequests').innerHTML += "<span id='follow" + u +"'><br><br>" + requestlist[u].username + " <button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br></span>";
+                    }
+                    }
+                    
+                });
+              
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
                     if (data == null) {
                       console.log("No data found at /tweets/" + userId);  
                         document.getElementById("mytweets").innerHTML = "No tweets yet. Be the first one by posting a message using the form.";
                     } else {
-                        
-                      firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        firebase.database().ref('/following').once('value').then(function(snapshot) { 
+                        var followdata = (snapshot.val());
+                           
+                        if (followdata != null) {
+                            firebase.database().ref('/users').once('value').then(function(snapshot) { 
                         var userdata = (snapshot.val());
                         if (userdata != null) {
-                           dataarray = [data,userdata];
+                           dataarray = [data,userdata,followdata];
                            console.log(dataarray);
                            updatetweets(dataarray); 
                         }
                       });
+                        }
+                      });
+                        
+                     
                       //console.log(data)
                       //updatetweets(data);
                     }
@@ -113,8 +149,11 @@
         function updatetweets(data) {
             //var mylist = "<ul>";
             var mytab = "<span id='noresults' style='display: none;'>No results for search</span><table style='width: 100%;' id='myTable'>";
+            var followings = data[2];
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
+            
+            console.log(followings);
             var editcounter = 0;
             for (var u in data) {
                 
@@ -184,29 +223,50 @@
                    if(userId == u) {
                        canEdit = true;
                    }
-                     
+                    var canFollow = false;
+                    var alreadyFollowing = false;
+                    if(followings[userId] != null) {
+                         if(followings[userId][u] != null) {
+                     alreadyFollowing  = true;
+                    }
+                    }
+                   
+                    if(userId != u && !alreadyFollowing) {
+                        
+                        canFollow = true;
+                    }
+                    var profilepic = "";
+                     if(users[u].profile_picture == null) {
+                             profilepic = users[u].profile_picture2;
+                     }
+                     else {
+                         profilepic = users[u].profile_picture;
+                     }
                     if(data[u][t].video != "" && data[u][t].video != null) {
                        var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
                         changedlink = changedlink.replace(/&t=.*$/i, "");
                         changedlink = changedlink.replace(/&ab.*$/i, "");
-                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
+                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
                         mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
                         
 
                     }
                    else if (data[u][t].img != "") {
-                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
+                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
                        mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } else {
                        
-                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + users[u].profile_picture + "' width='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
+                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } 
                     if(canEdit) {
                          mytab +="<button id='edit" + editcounter + "' onclick='editpost(" + editcounter + ")'>Edit</button><button style='display:none;' id='submit" + editcounter + "' onclick=submitedit(" + editcounter + ",&apos;" + u + "&apos;,&apos;" + t + "&apos;)>Submit</button> </td>";
                         }
+                    if(canFollow) {
+                        mytab += "<button id='follow' onclick='requestfollowUser(&apos;" + u + "&apos;)'>Follow </button>"
+                    }
                     mytab = mytab + "</tr>";
                    
                     
@@ -236,7 +296,7 @@
         d.style.overflow = "auto";
         d.style.width= "300px";
         d.style.height = "100px";
-        d.style.backgroundColor = "#E5E5E5";
+        d.style.backgroundColor = "#F1F1F1";
         d.style.border = "solid 1px deepskyblue";
         var editbuttonid = "edit" + counter;
         var editbutton = document.getElementById(editbuttonid);
@@ -258,6 +318,15 @@
         d.style.backgroundColor= "transparent";
         d.style.border = "none";
   
+    }
+    function requestfollowUser(u) {
+        firebase.database().ref('followrequests/' + u + "/" + userId).update({followrequested:true, username: name});
+    }
+    function acceptFollow(u) {
+        firebase.database().ref('following/' + u + "/" + userId).update({following:true});
+        firebase.database().ref('followrequests/' + userId + "/" + u).remove();
+        var removespan = "follow" + u;
+        document.getElementById(removespan).style.display= "none";
     }
     function likeTweet(id) {
              var liketest = id;
@@ -392,6 +461,7 @@
         
         #form{
             font-size: 30px;
+            margin-top: 10px;
         }
         
         input[type="file"] {
@@ -559,7 +629,7 @@
            
         }
         .middle {
-            width: 35%;
+            width: 50%;
              border-style: solid;
             border-color: deepskyblue;
             border-width: 2px;
@@ -570,7 +640,7 @@
             width:22.5%;
            
         }
-        #search {
+        #searchInput {
             padding: 20px 0px;
             border-radius: 1em;
             
@@ -856,8 +926,8 @@ width: 90%;
     <div id="mytweets">Loading...<div id="loader"></div></div>
                 </div>
             <div class="column right" id ='rightcolumn'>
-            <input id="searchInput" type="text" id="search" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()">
-            
+            <input id="searchInput" type="text" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()"><br>
+            <div id="followrequests">You have follow requests from: </div>
             </div>
  </div>
     </body>

@@ -8,9 +8,9 @@
 
   <div id="login_div" class="main-div">
       <h1><i class="fas fa-igloo"></i> Igloo</h1>
-    <h3>Login</h3>
-    <input type="email" placeholder="Email..." id="email_field" />
-    <input type="password" placeholder="Password..." id="password_field" />
+    <h3 style="color: white;">Login</h3>
+    <input class="input is-info" style="margin:5px auto;" type="email" placeholder="Email..." id="email_field" />
+    <input class="input is-info" type="password" placeholder="Password..." id="password_field" />
     
     <button onclick="signin()" >Login to Account</button>
       
@@ -30,11 +30,12 @@
     
      <span style='font-size: 18px;'>Profile Image: </span>  <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></label>
         <div id="chosenImg" style="display:none;"></div>
+        <div id="chosenName" style="display:none;"></div>
     
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" disabled="true" id="createBtn" onclick="createnewuser()"> Create A New Account!</button>
-      <button class="button" id="closemodalBtn">Cancel</button>
+      <button class="button is-success" disabled="true" id="createBtn" style ="padding:5px; width:40%" onclick="createnewuser()"> Create A New Account!</button>
+      <button class="button" style="width:40%;" id="closemodalBtn">Cancel</button>
     </footer>
   </div>
 </div>
@@ -49,6 +50,7 @@
     <div id="user_div" class="main-div">
       <p id="user_para"></p>
         <button onclick='sendverification()'>Send Verification Email</button>
+        <button onclick="signout()" >Logout</button>
       </div>
 
 
@@ -72,9 +74,15 @@
 
       
       firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-      
-      var user = firebase.auth().currentUser;
+  if (user == null) {
+      document.getElementById("user_div").style.display = "none";
+    document.getElementById("login_div").style.display = "block";
+          return;
+    
+               
+  } else {
+   
+        var user = firebase.auth().currentUser;
       userId = user.uid;
                 name = user.displayName;
                 imageUrl = user.photoURL;
@@ -84,21 +92,28 @@
     // User is signed in.
       if(user != null) {
           var emailVerified = user.emailVerified;
+          var name;
             if(!emailVerified) {
-                 var email_id = user.email;
-      document.getElementById("user_para").innerHTML = "Welcome User : " + email_id + " Please verify your email to finish account creation.";
+             
+        
+                var currentdate = new Date().getHours();
+                var greeting = "";
+              if(currentdate < 12) {
+                  greeting = "Good morning";
+              }
+                if(currentdate >= 12 && currentdate <= 16) {
+                    greeting = "Good afternoon";
+                }
+                else {
+                    greeting = "Good evening";
+                }
+      document.getElementById("user_para").innerHTML = greeting + ", please verify your email to finish account creation.";
             window.alert("User signed in, please verify your email!");
         }
             else {
                     window.location.href="index.html";
                 }
       }
-               
-  } else {
-    // No user is signed in.
-      document.getElementById("user_div").style.display = "none";
-    document.getElementById("login_div").style.display = "block";
-         //   return;
   }
 });
 
@@ -124,14 +139,15 @@
         function updateprofile() {
             
             var user = firebase.auth().currentUser;
-            var nameuser = document.getElementById("new_username_field").value;
+            var nameuser = document.getElementById("chosenName").innerHTML;
+            var emailuser = document.getElementById("new_email_field").value;
             var profilepicture = document.getElementById("chosenImg").innerHTML;
             console.log(profilepicture);
              firebase.database().ref('users/' + userId).update({
-                profile_picture: profilepicture, username: nameuser});
+                profile_picture2: profilepicture, username: nameuser, email: emailuser});
            
 user.updateProfile({
-  displayName: nameuser
+  displayName: nameuser, imageUrl: profilepicture
 }).then(function() {
   // Update successful.
 }).catch(function(error) {
@@ -150,6 +166,7 @@ user.sendEmailVerification().then(function() {
   // An error happened.
 });
             alert("sendverification run " + user);
+            
             updateprofile();
         }
        
@@ -184,7 +201,8 @@ function enableBtn() {
            
             var useremail = document.getElementById('new_email_field').value;
             var userpassword = document.getElementById('new_password_field').value;
-           
+           var username = document.getElementById('new_username_field').value;
+            document.getElementById('chosenName').innerHTML = username;
             firebase.auth().createUserWithEmailAndPassword(useremail, userpassword).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
@@ -193,6 +211,7 @@ function enableBtn() {
                 window.alert("Error : " + errorMessage + " (code " + errorCode + ")"); 
   // ...
 });
+          
             alert("Your account has been created");
              alert(useremail + " " + userpassword);
         }
@@ -298,7 +317,7 @@ var modalcloseBtn = document.getElementById("closemodalBtn");
       background:#f9f9f9;
       padding: 0px;
       margin: 0px;
-      font-family: 'Nunito', sans-serif;
+     
       font-size: 50px;
         
       /* The image used */
@@ -326,8 +345,9 @@ var modalcloseBtn = document.getElementById("closemodalBtn");
     background-size: cover;
     }   
 input, button {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
+   font-family: "Fredoka One";
+    font-weight: lighter;
+  
   padding:15px;
 }
 
@@ -356,6 +376,8 @@ input, button {
 }
 
 button {
+    font-family: "Fredoka One";
+    font-weight: lighter;
   color: deepskyblue;
     font-size: 18px;
   border: 2px solid deepskyblue;
@@ -392,7 +414,7 @@ button {
         background:url('http://www.stickpng.com/assets/images/5847f9cbcef1014c0b5e48c8.png') no-repeat;
         background-color: white;
         background-position: 15px;
-        background-size: 30px;
+        background-size: 8%;
     }
     
     #googlebutton:hover {

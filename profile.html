@@ -175,6 +175,9 @@ width: 90%;
       float: none;
   }
 }
+         h1 {
+             text-align: center;
+         }
     </style>
        
 
@@ -201,7 +204,16 @@ width: 90%;
  
             </div>
         </div>
+    <br>
+    <div style='font-size:25px;margin-top:90px;' id='following'>
+    Following:<br><br>
+    </div>
+    <br>
+     <div style='font-size:25px;' id='followers'>
+    Followers: <br><br>
+    </div>
 
+    
 
 
        
@@ -229,6 +241,7 @@ width: 90%;
                 myphotodiv.style.display="none";
                 signinbutton = document.getElementById("signin");
                 signinbutton.style.display="inline";
+                window.location.href='signin.html';
                 return;
             } else {
                 user.providerData.forEach(function (profile) {
@@ -246,22 +259,76 @@ width: 90%;
                 signinbutton.style.display="none";
                 myphotodiv = document.getElementById("invis");
                 myphotodiv.style.display="inline";
-                firebase.database().ref('/users/' + userId).once('value', function(snapshot) {
-                    var userdata = (snapshot.val());
-                    dataarray = [userdata]
-                    users = dataarray[0];
-                     
-                    console.log(users);
-                     var bioid = document.getElementById('bio');
-                    if(userdata.biography == null) {
+                followingdiv = document.getElementById("following");
+                followersdiv = document.getElementById("followers");
+                firebase.database().ref('following/' + userId).once('value', function(snapshot) {
+                    var followdata = snapshot.val();
+                  if(followdata == null) {
+                      followingdiv.innerHTML += "<span style='font-size:14px'> Nobody. Go make some friends!</span>";
+                  } else {
+                      for (var u in followdata) {
+                        
+                        firebase.database().ref('users/' + u).once('value', function(snapshot) {
+                      
+                            
+                             var profilepicture;
+                     if(snapshot.val().profile_picture == null) {
+                       profilepicture = (snapshot.val().profile_picture2);
+                    
+               } else {
+                   profilepicture = snapshot.val().profile_picture;
+               }
+                            followingdiv.innerHTML += "<span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><br>";
+                        });
+                    }
+                  }
+                    
+                });
+                firebase.database().ref('following/').once('value', function(snapshot) {
+                    var followeddata = snapshot.val();
+                    for (var u in followeddata) {
+                        if(followeddata[u][userId]) {
+                            firebase.database().ref('users/' + u).once('value', function(snapshot) {
+                         var profilepicture;
+                     if(snapshot.val().profile_picture == null) {
+                       profilepicture = (snapshot.val().profile_picture2);
+                    
+               } else {
+                   profilepicture = snapshot.val().profile_picture;
+               }
+                            followersdiv.innerHTML += "<span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><br>";
+                        
+                        });
+                        }
+                    }
+                });
+                firebase.database().ref('users/' + userId).once('value', function(snapshot) {
+                    var bioid = document.getElementById('bio');
+                    if(snapshot.val().biography == null) {
                         bioid.innerHTML = "No bio yet.";
                     }
                    else {
-                         bioid.innerHTML = userdata.biography;
-              
+                         bioid.innerHTML = snapshot.val().biography;
                    }
-                
+                    var profilepicture;
+                     if(snapshot.val().profile_picture == null) {
+                       profilepicture = (snapshot.val().profile_picture2);
+                    
+               } else {
+                   profilepicture = imageUrl;
+               }
+                    
+                    var shownname = document.getElementById("profilepic"); 
+                shownname.innerHTML = "<img width='100%' src = '" + profilepicture + "' style='border-radius: 50%; display:inline-block;'/>"; 
+                    myphotodiv = document.getElementById("myphoto");
+               myphotodiv.innerHTML = "<img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
                 });
+                   
+                     
+               
+                     
+                
+                }
                     
               
                                                         
@@ -271,22 +338,17 @@ width: 90%;
                 shownname.innerHTML = "Welcome, " + name; 
                  var shownname = document.getElementById("email"); 
                 shownname.innerHTML = email; 
-                 var shownname = document.getElementById("profilepic"); 
-                shownname.innerHTML = "<img src = '" + imageUrl +"/>"; 
+                 
 
                     
                 
                 
                 // write data to document
                
-               myphotodiv = document.getElementById("myphoto");
-               myphotodiv.innerHTML = "<img src='" + imageUrl + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
-            }
+               
+            });
             
-                myphotodiv = document.getElementById("profilepic");
-                myphotodiv.innerHTML = "<img src='" + imageUrl +"''/>"
-        }); // end check auth state
-        
+               
         
         function signin() {
             window.location.href="signin.html";
@@ -294,9 +356,10 @@ width: 90%;
         
         function signout() {
             console.log("Signing out");
-            document.location.reload()
+            
             firebase.auth().signOut().then(function() {
             });
+            window.location.href="signin.html";
         }
      function changeBio() {
             var twitbio = document.getElementById("changebio").value;
