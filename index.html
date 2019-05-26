@@ -272,7 +272,7 @@
                         mytab +="<button id='edit" + editcounter + "' onclick='editpost(" + editcounter + ")'>Edit</button><button style='display:none;' id='submit" + editcounter + "' onclick=submitedit(" + editcounter + ",&apos;" + u + "&apos;,&apos;" + t + "&apos;)>Submit</button> </td>";
                     }
                     if(canFollow) {
-                        mytab += "<button id='follow' onclick='requestfollowUser(&apos;" + u + "&apos;)'>Follow </button>"
+                        mytab += "<button onclick='requestfollowUser(&apos;" + u + "&apos;)'>Follow </button>"
                     }
                     mytab = mytab + "</tr>";
 
@@ -285,17 +285,7 @@
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
         }
-        //    function keepbluebutton(id) {
-        //        var liketest = id;
-        //         var info = liketest.split(" ");
-        //         firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
-        //             var userswholiked = snapshot.val();
-        //             if(userswholiked != null) {
-        //                 var bluebutton = document.getElementById(info[1] + " " + info[0]);
-        //                 bluebutton.style.backgroundColor="deepskyblue";
-        //             }
-        //         });
-        //    }
+    
 
         function sorttable(tweetdata) {
             var table, rows, switching, i, x, y, a, b, c, d, likebutton, shouldSwitch;
@@ -345,6 +335,7 @@
                 if(tweetdata[d[0]][userId]) {
                     if(tweetdata[d[0]][userId].userliked)
                         likebutton.style.backgroundColor = "deepskyblue";
+                    likebutton.style.color="white";
                     console.log(i + " " + likebutton.style.backgroundColor);
                 } 
 
@@ -383,6 +374,11 @@
             d.style.height = "auto";
             d.style.backgroundColor= "transparent";
             d.style.border = "none";
+            d.style.display = "";
+             var editbutton = document.getElementById(editbuttonid);
+            editbutton.style.display = "block";
+            var submitbutton = document.getElementById(submitbuttonid);
+            submitbutton.style.display = "none";
 
         }
         function requestfollowUser(u) {
@@ -414,6 +410,7 @@
                         if(userswholiked.userliked) {
                             var changebuttoncolour = document.getElementById(id);
                             changebuttoncolour.style.backgroundColor="deepskyblue";
+                            changebuttoncolour.style.color="white";
                         }
                     });
 
@@ -532,6 +529,35 @@
 
         input[type="file"] {
             display: none;
+        }
+        button {
+            font-family:inherit;
+            height:20px;
+            color: deepskyblue;
+            font-size: 14px;
+            border: 2px solid deepskyblue;
+            border-radius: 2em;
+            display: inline-block;
+            width: 70px;
+            margin:2px;
+            text-align: center;
+            vertical-align:middle;
+            cursor: pointer;
+            background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+            background-size: 300%;
+            background-position: 100%;
+            transition: background 450ms ease-in-out;
+            font-family: "Fredoka One";
+        }
+        button:hover {
+            background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+            background-size: 300%;
+            background-position: 100%;
+            transition: background 450ms ease-in-out;
+            background-color:deepskyblue;
+            background-position: 0;
+            color: white;
+            font-family: "Fredoka One";
         }
         .mybutton {
             font-family:inherit;
