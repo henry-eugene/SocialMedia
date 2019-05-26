@@ -172,9 +172,11 @@
                     var yyyy = date.getFullYear();
                     var h = date.getHours();
                     var min = date.getMinutes();
+                    if(h >= 12) {
+                        AM = "P.M";
+                    }
                     if(h > 12) {
                         h = h - 12;
-                        AM = "P.M";
                     }
                     if(min < 10) {
                         min = "0" + min;
@@ -236,6 +238,7 @@
                         canFollow = true;
                     }
                     var profilepic = "";
+                   
                      if(users[u].profile_picture == null) {
                              profilepic = users[u].profile_picture2;
                      }
@@ -759,6 +762,39 @@ width: 90%;
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
+       #roll {
+
+
+color: #ffffff;
+position: relative;
+font-weight:bold;
+font-size:20px;
+animation:roll 10s linear infinite;
+-webkit-animation:roll 10s ease-in-out infinite alternate;
+border-radius:5px;
+-webkit-border-radius:5px;
+}
+
+@keyframes roll
+{
+0% {transform: rotate(450deg);left:0%;}
+20% {transform: rotate(900deg);left:10%;}
+40% {transform: rotate(1350deg);left:20%;}
+60% {transform: rotate(1800deg);left:30%;}
+80% {transform: rotate(2250deg);left:40%;}
+100% {transform: rotate(2700deg);left:50%;}
+}
+
+@-webkit-keyframes roll
+{
+0% {-webkit-transform: rotate(450deg);left:0%;}
+20% {-webkit-transform: rotate(900deg);left:10%;}
+40% {-webkit-transform: rotate(1350deg);left:20%;}
+60% {-webkit-transform: rotate(1800deg);left:30%;}
+80% {-webkit-transform: rotate(2250deg);left:40%;}
+100% {-webkit-transform: rotate(2700deg);left:50%;}
+}
+
     </style>
     <body>
         <div class="topnav">    
@@ -923,7 +959,7 @@ width: 90%;
            <div id="imgTest" style="display:none;"></div>
             </div>
             <div class="column middle">
-    <div id="mytweets">Loading...<div id="loader"></div></div>
+    <div id="mytweets">Loading...<img id='roll' height='35px' src="snowball.png"><div id="loader"></div></div>
                 </div>
             <div class="column right" id ='rightcolumn'>
             <input id="searchInput" type="text" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()"><br>
