@@ -672,15 +672,15 @@ width: 90%;
         </div>
                 <!-- Slideshow -->
              <div class="slideshow-container">
-                 <div class="mySlides fade">
+                 <div class="Henry fade">
                   <img src="9a762790-24a8-4ebe-be3e-e0d7ba2591a5.JPG" height="100%" width="100%">
                 </div>
 
-                <div class="mySlides fade">
+                <div class="Henry fade">
                   <img src="9ecd5dfe-ddf9-493c-98c9-536b0996101e.JPG" height="100%" width="100%">
                 </div>
 
-                <div class="mySlides fade">
+                <div class="Henry fade">
                   <img src="IMG_3214.jpg" height="100%" width="100%">
                  
                  </div>
@@ -689,34 +689,48 @@ width: 90%;
                  </div>
                 </div>
                <div class="slideshow-container2">
-                <div class="mySlides2 fade">
-                  <img src="IMG_3005.jpg" height="500px" width="400px">
+                <div class="Eugene fade">
+                  <img src="IMG_5335.jpg" height="500px" width="400px">
                 </div>
-
+                   <div class="Eugene fade">
+                  <img src="0.jpeg" height="500px" width="400px">
+                </div>
                    <div id="about2">
                  <h1>Eugene Ye</h1>
                  </div>
                 </div>
+            <div id="text">
+            <h1> Our Website </h1>
+                <p>This website was made in March of 2019 for Mr. Hoel's computer science class to learn about the fundamentals of website making. The two creators were Henry Wang and Eugene Ye who wanted to make a new discussion. </p>
+            </div>
 
             
             <!-- slideshow style -->
             <style>
+                #text {
+                    text-align: center;
+                    color: black;
+                    margin-top: 100px;
+                    font-family: "Fredoka One";
+                }
                 
 
                 /* Slideshow container */
 
-                #about {
-                    margin-left: 160px;
+                #about h1{
+                    margin-left: 100px;
+                    font-family: "Fredoka One";
                 }
                 #about2 {
-                    margin-left: 190px;
+                    margin-left: 150px;
+                    font-family: "Fredoka One";
                 }
                 .slideshow-container {
-                  max-width: 500px;
+                  max-width: 400px;
                     max-height: 500px;
                     float: left;
                     margin-left: 100px;
-                    margin-top: 30px
+                    margin-bottom: 300px
 
                     
                 }
@@ -725,14 +739,14 @@ width: 90%;
                 max-height: 500px;
                     float:right ;
                 margin-right: 100px;
-                    margin-top: 30px
+                    margin-bottom: 300px
 
                 }
                 /* Hide the images by default */
-                .mySlides {
+                .Henry {
                   display: none;
                 }
-                .mySlides2 {
+                .Eugene {
                   display: none;
                 }
 
@@ -811,27 +825,27 @@ width: 90%;
                 showSlides2();
 
                 function showSlides() {
-                    var i;
-                    var slides = document.getElementsByClassName("mySlides");
-                    for (i = 0; i < slides.length; i++) {
+                      var i;
+                      var slides = document.getElementsByClassName("Henry");
+                      for (i = 0; i < slides.length; i++) {
                         slides[i].style.display = "none"; 
-                        }
-                    slideIndex++;
-                    if (slideIndex > slides.length) {slideIndex = 1} 
-                    slides[slideIndex-1].style.display = "block"; 
-                    setTimeout(showSlides, 5000); // Change image every 2 seconds
-                }   
+                      }
+                      slideIndex++;
+                      if (slideIndex > slides.length) {slideIndex = 1} 
+                      slides[slideIndex-1].style.display = "block"; 
+                      setTimeout(showSlides, 2000); // Change image every 2 seconds
+                    }   
                 function showSlides2() {
-                    var i;
-                    var slides = document.getElementsByClassName("mySlides2");
-                    for (i = 0; i < slides.length; i++) {
+                      var i;
+                      var slides = document.getElementsByClassName("Eugene");
+                      for (i = 0; i < slides.length; i++) {
                         slides[i].style.display = "none"; 
-                        }
-                    slideIndex++;
-                    if (slideIndex > slides.length) {slideIndex = 1} 
-                    slides[slideIndex-1].style.display = "block"; 
-                    setTimeout(showSlides2, 5000); // Change image every 2 seconds
-                }   
+                      }
+                      slideIndex++;
+                      if (slideIndex > slides.length) {slideIndex = 1} 
+                      slides[slideIndex-1].style.display = "block"; 
+                      setTimeout(showSlides, 2000); // Change image every 2 seconds
+                    }
               
                 
             </script>
