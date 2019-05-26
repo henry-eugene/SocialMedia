@@ -1,46 +1,46 @@
 
 <html>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBNSzFD9R_JP_UNlF7pbpOr3d6h0XXW7hg",
-    authDomain: "social-media-69e85.firebaseapp.com",
-    databaseURL: "https://social-media-69e85.firebaseio.com",
-    projectId: "social-media-69e85",
-    storageBucket: "social-media-69e85.appspot.com",
-    messagingSenderId: "837818397370"
-  };
-  firebase.initializeApp(config);
- 
-    // Check to see if you are logged in
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBNSzFD9R_JP_UNlF7pbpOr3d6h0XXW7hg",
+            authDomain: "social-media-69e85.firebaseapp.com",
+            databaseURL: "https://social-media-69e85.firebaseio.com",
+            projectId: "social-media-69e85",
+            storageBucket: "social-media-69e85.appspot.com",
+            messagingSenderId: "837818397370"
+        };
+        firebase.initializeApp(config);
+
+        // Check to see if you are logged in
         firebase.auth().onAuthStateChanged(function(user) {
             if (user == null) {
                 changevisibility = document.getElementById("invis");
                 changevisibility.style.display="none";
-               changevisibility = document.getElementById("signin");
-               changevisibility.style.display="inline";
+                changevisibility = document.getElementById("signin");
+                changevisibility.style.display="inline";
                 changevisibility = document.getElementById("mytweets");
-             changevisibility.innerHTML = "Login to see posts";
+                changevisibility.innerHTML = "Login to see posts";
                 changevisibility = document.getElementById("leftcolumn");
-               changevisibility.style.display="none";
-               changevisibility = document.getElementById("rightcolumn");
+                changevisibility.style.display="none";
+                changevisibility = document.getElementById("rightcolumn");
                 changevisibility.style.display="none";
                 return;
             } else {
-                
+
                 var provider;
                 user.providerData.forEach(function (profile) {
-    console.log("Sign-in provider: " + profile.providerId);
+                    console.log("Sign-in provider: " + profile.providerId);
                     provider = profile.providerId;
-    console.log("  Provider-specific UID: " + profile.uid);
-    console.log("  Name: " + profile.displayName);
-    console.log("  Email: " + profile.email);
-    console.log("  Photo URL: " + profile.photoURL);
-  });
+                    console.log("  Provider-specific UID: " + profile.uid);
+                    console.log("  Name: " + profile.displayName);
+                    console.log("  Email: " + profile.email);
+                    console.log("  Photo URL: " + profile.photoURL);
+                });
                 userId = user.uid;
                 name = user.displayName;
                 imageUrl = user.photoURL;
@@ -53,67 +53,71 @@
                 signinbutton.style.display="none";
                 myphotodiv = document.getElementById("invis");
                 myphotodiv.style.display="inline";
-                    
+
                 // write user data to users
                 writeUserData(userId, name, email, imageUrl);
-                
+
                 // write data to document
                 var profilepic = "";
-               firebase.database().ref('users/' + userId).once('value', function(snapshot) {
-                  
-                if(snapshot.val().profile_picture == null) {
-                        profilepic = snapshot.val().profile_picture2;
-                    
-               } else {
-                   profilepic = imageUrl;
-               }
-                    myphotodiv = document.getElementById("myphoto");
-               myphotodiv.innerHTML = "<img height='28px' width='28px' src='" + profilepic + "'style='max-width:50px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+                firebase.database().ref('users/' + userId).once('value', function(snapshot) {
 
-                        });
+                    if(snapshot.val().profile_picture == null) {
+                        profilepic = snapshot.val().profile_picture2;
+
+                    } else {
+                        profilepic = imageUrl;
+                    }
+                    myphotodiv = document.getElementById("myphoto");
+                    myphotodiv.innerHTML = "<img height='28px' width='28px' src='" + profilepic + "'style='max-width:50px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+
+                });
                 firebase.database().ref("followrequests/" + userId).once('value', function(snapshot) {
                     var requestlist = snapshot.val();
                     console.log(requestlist);
                     if(requestlist == null) {
-                        document.getElementById('followrequests').innerHTML += "Nobody. Go make some friends!";
+                        document.getElementById('followrequests').innerHTML += "Nobody.<br><br> Go make some more friends!";
                     }
                     else {
                         for (var u in requestlist) {
-                        document.getElementById('followrequests').innerHTML += "<span id='follow" + u +"'><br><br>" + requestlist[u].username + " <button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br></span>";
+                            document.getElementById('followrequests').innerHTML += "<span id='follow" + u +"'><br><br>" + requestlist[u].username + " <button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br></span>";
+                        }
                     }
-                    }
-                    
+
                 });
-              
+
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
                     if (data == null) {
-                      console.log("No data found at /tweets/" + userId);  
+                        console.log("No data found at /tweets/" + userId);  
                         document.getElementById("mytweets").innerHTML = "No tweets yet. Be the first one by posting a message using the form.";
                     } else {
                         firebase.database().ref('/following').once('value').then(function(snapshot) { 
-                        var followdata = (snapshot.val());
-                           
-                        if (followdata != null) {
-                            firebase.database().ref('/users').once('value').then(function(snapshot) { 
-                        var userdata = (snapshot.val());
-                        if (userdata != null) {
-                           dataarray = [data,userdata,followdata];
-                           console.log(dataarray);
-                           updatetweets(dataarray); 
-                        }
-                      });
-                        }
-                      });
-                        
-                     
-                      //console.log(data)
-                      //updatetweets(data);
+                            var followdata = (snapshot.val());
+
+                            if (followdata != null) {
+                                firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                                    var userdata = (snapshot.val());
+                                    if (userdata != null) {
+                                        dataarray = [data,userdata,followdata];
+                                        console.log(dataarray);
+                                        updatetweets(dataarray); 
+                                        firebase.database().ref('likes/').once('value').then(function(snapshot) {
+                                            sorttable(snapshot.val()); 
+                                        });
+
+                                    }
+                                });
+                            }
+                        });
+
+
+                        //console.log(data)
+                        //updatetweets(data);
                     }
                 });
             } // end user null check
         }); // end check auth state
-        
+
         function encodeImageFileAsURL() {
 
             var filesSelected = document.getElementById("inputFileToLoad").files;
@@ -132,7 +136,7 @@
                 fileReader.readAsDataURL(fileToLoad);
             }
         } // end function
-        
+
         // write user data
         function writeUserData(userId, name, email, imageUrl) {
             firebase.database().ref('users/' + userId).update({
@@ -142,8 +146,8 @@
             });
         }
         function myFunction(n) {
-          var popup = document.getElementById("myPopup " + n);
-          popup.classList.toggle("show");
+            var popup = document.getElementById("myPopup " + n);
+            popup.classList.toggle("show");
             console.log("hi");
         }
         function updatetweets(data) {
@@ -152,13 +156,13 @@
             var followings = data[2];
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
-            
+
             console.log(followings);
             var editcounter = 0;
             for (var u in data) {
-                
+
                 for (var t in data[u]) {
-                editcounter++;
+                    editcounter++;
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
                     var epoch = date.getTime();
@@ -182,23 +186,23 @@
                         min = "0" + min;
                     }
                     time2 = ("Posted " + months[mm] + " " + dd + ", " + yyyy + " at " + h + ":" + min + " " + AM + ".").toString();
-                    
+
                     var diff =  today.getTime() - date.getTime(); // this is a time in milliseconds
-                    
-    var diffdate = new Date(diff);
-    var minutes = Math.floor(diffdate / 60000);
-    var hours = Math.floor(minutes / 60);
+
+                    var diffdate = new Date(diff);
+                    var minutes = Math.floor(diffdate / 60000);
+                    var hours = Math.floor(minutes / 60);
                     minutes = minutes % 60;
-    var days = Math.floor(hours / 24);
+                    var days = Math.floor(hours / 24);
                     hours = hours % 24;
-    var years = Math.floor(days / 365);
+                    var years = Math.floor(days / 365);
                     days = days % 365;
-    var count = 0;
-    var time = "Posted ";
-                    
-    var names = [" years", " days", " hours", " minutes"];
-    var singlenames = [" year", " day", " hour", " minute"];
-            var totals = [years,  days, hours, minutes];
+                    var count = 0;
+                    var time = "Posted ";
+
+                    var names = [" years", " days", " hours", " minutes"];
+                    var singlenames = [" year", " day", " hour", " minute"];
+                    var totals = [years,  days, hours, minutes];
                     for(var i = 0; i < 4; i++) {
                         if(totals[i]!= 0) {
                             if(totals[i] == 1) {
@@ -206,7 +210,7 @@
                                 break;
                             }
                             else {
-                                 time+= totals[i] + names[i];
+                                time+= totals[i] + names[i];
                                 break;
                             }
                         }
@@ -214,65 +218,65 @@
                             time = time + ", ";
                         }
                     }
-                   
-                    
-                        time += " ago.".toString();
-                    
+
+
+                    time += " ago.".toString();
+
                     if(minutes == 0 && hours == 0 && days == 0) {
                         time = "Posted just now.";
                     }
                     var canEdit = false;
-                   if(userId == u) {
-                       canEdit = true;
-                   }
+                    if(userId == u) {
+                        canEdit = true;
+                    }
                     var canFollow = false;
                     var alreadyFollowing = false;
                     if(followings[userId]) {
-                         if(followings[userId][u]) {
-                     alreadyFollowing  = true;
+                        if(followings[userId][u]) {
+                            alreadyFollowing  = true;
+                        }
                     }
-                    }
-                   
+
                     if(userId != u && !alreadyFollowing) {
-                        
+
                         canFollow = true;
                     }
                     var profilepic = "";
-                   
-                     if(users[u].profile_picture == null) {
-                             profilepic = users[u].profile_picture2;
-                     }
-                     else {
-                         profilepic = users[u].profile_picture;
-                     }
+
+                    if(users[u].profile_picture == null) {
+                        profilepic = users[u].profile_picture2;
+                    }
+                    else {
+                        profilepic = users[u].profile_picture;
+                    }
                     if(data[u][t].video != "" && data[u][t].video != null) {
-                       var videolink = data[u][t].video.toString();
+                        var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
                         changedlink = changedlink.replace(/&t=.*$/i, "");
                         changedlink = changedlink.replace(/&ab.*$/i, "");
-                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
                         mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
-                        
+
 
                     }
-                   else if (data[u][t].img != "") {
-                        mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
-                       mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
+                    else if (data[u][t].img != "") {
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
+                        mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } else {
-                       
-                          mytab = mytab + "<td> "+ "<span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
+
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } 
                     if(canEdit) {
-                         mytab +="<button id='edit" + editcounter + "' onclick='editpost(" + editcounter + ")'>Edit</button><button style='display:none;' id='submit" + editcounter + "' onclick=submitedit(" + editcounter + ",&apos;" + u + "&apos;,&apos;" + t + "&apos;)>Submit</button> </td>";
-                        }
+                        mytab +="<button id='edit" + editcounter + "' onclick='editpost(" + editcounter + ")'>Edit</button><button style='display:none;' id='submit" + editcounter + "' onclick=submitedit(" + editcounter + ",&apos;" + u + "&apos;,&apos;" + t + "&apos;)>Submit</button> </td>";
+                    }
                     if(canFollow) {
                         mytab += "<button id='follow' onclick='requestfollowUser(&apos;" + u + "&apos;)'>Follow </button>"
                     }
                     mytab = mytab + "</tr>";
-                   
-                    
+
+
                 }   
             }
             //mylist = mylist + "</ul>";
@@ -281,99 +285,158 @@
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
         }
-//    function keepbluebutton(id) {
-//        var liketest = id;
-//         var info = liketest.split(" ");
-//         firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
-//             var userswholiked = snapshot.val();
-//             if(userswholiked != null) {
-//                 var bluebutton = document.getElementById(info[1] + " " + info[0]);
-//                 bluebutton.style.backgroundColor="deepskyblue";
-//             }
-//         });
-//    }
-    function editpost(counter) {
-        var d = document.getElementById(counter);  
-        d.contentEditable = "true";
-        d.style.display = "inline-block";
-        d.style.overflow = "auto";
-        d.style.width= "300px";
-        d.style.height = "100px";
-        d.style.backgroundColor = "#F1F1F1";
-        d.style.border = "solid 1px deepskyblue";
-        var editbuttonid = "edit" + counter;
-        var editbutton = document.getElementById(editbuttonid);
-        editbutton.style.display = "none";
-        var submitbuttonid = "submit" + counter;
-         var submitbutton = document.getElementById(submitbuttonid);
-        submitbutton.style.display = "block";
-        
-    }
-    function submitedit(counter,a,b) {
-        alert(counter + a + b);
-        var d = document.getElementById(counter);
-        var newtweet = d.innerHTML;
-        alert(newtweet);
-        firebase.database().ref('tweets/' + a + "/" + b).update({tweet: newtweet});
-         d.contentEditable = "false";
-         d.style.width = "200px";
-         d.style.height = "auto";
-        d.style.backgroundColor= "transparent";
-        d.style.border = "none";
-  
-    }
-    function requestfollowUser(u) {
-        firebase.database().ref('followrequests/' + u + "/" + userId).update({followrequested:true, username: name});
-    }
-    function acceptFollow(u) {
-        firebase.database().ref('following/' + u + "/" + userId).update({following:true});
-        firebase.database().ref('followrequests/' + userId + "/" + u).remove();
-        var removespan = "follow" + u;
-        document.getElementById(removespan).style.display= "none";
-    }
-    function likeTweet(id) {
-             var liketest = id;
-           var info = liketest.split(" ");
-        firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
-               var userswholiked = snapshot.val();
-           if(userswholiked == null) {
-                firebase.database().ref('tweets/' + info[1] + "/" + info[0]).once('value', function(snapshot) {
-             var tweetinfo = snapshot.val();
-             var newlikes = tweetinfo.likes;
-             newlikes++;
-                 firebase.database().ref('tweets/' + info[1] + "/" + info[0]).update({likes: newlikes});
-             var likeid = "likes " + info[0];
-        var likespan = document.getElementById(likeid);
-        likespan.innerHTML = newlikes;
-           });
-        firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
-               var userswholiked = snapshot.val();
-               if(userswholiked.userliked) {
-                   var changebuttoncolour = document.getElementById(id);
-        changebuttoncolour.style.backgroundColor="deepskyblue";
-               }
-           });
-        
-        firebase.database().ref('likes/' + info[0] + "/" + userId).update({userliked:true});
-           }
-               else {
-                   alert("Already liked this tweet");
-                    return;
-                 
-               }
-             
-           });
+        //    function keepbluebutton(id) {
+        //        var liketest = id;
+        //         var info = liketest.split(" ");
+        //         firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
+        //             var userswholiked = snapshot.val();
+        //             if(userswholiked != null) {
+        //                 var bluebutton = document.getElementById(info[1] + " " + info[0]);
+        //                 bluebutton.style.backgroundColor="deepskyblue";
+        //             }
+        //         });
+        //    }
 
-       
-    }
-    
+        function sorttable(tweetdata) {
+            var table, rows, switching, i, x, y, a, b, c, d, likebutton, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+            while (switching) {
+
+                switching = false;
+                rows = table.rows;
+
+
+                for (i = 0; i < (rows.length - 1); i++) {
+
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("td")[0];
+
+                    y = rows[i + 1].getElementsByTagName("td")[0];
+                    a = x.getElementsByClassName("epochsort")[0].innerHTML;
+
+                    b = y.getElementsByClassName("epochsort")[0].innerHTML;
+
+                    // Check if the two rows should switch place:
+                    if (a < b) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+
+            }
+
+            for (i = 0; i < (rows.length); i++) {
+                x = rows[i].getElementsByTagName("td")[0];
+                likebutton = x.getElementsByTagName("button")[0];
+
+                c = likebutton.id;
+                d= c.split(" ");
+
+                if(tweetdata[d[0]][userId]) {
+                    if(tweetdata[d[0]][userId].userliked)
+                        likebutton.style.backgroundColor = "deepskyblue";
+                    console.log(i + " " + likebutton.style.backgroundColor);
+                } 
+
+
+                else {
+                    console.log(i + " else " + likebutton.style.backgroundColor);
+                }
+
+            }
+        }
+        function editpost(counter) {
+            var d = document.getElementById(counter);  
+            d.contentEditable = "true";
+            d.style.display = "inline-block";
+            d.style.overflow = "auto";
+            d.style.width= "300px";
+            d.style.height = "100px";
+            d.style.backgroundColor = "#F1F1F1";
+            d.style.border = "solid 1px deepskyblue";
+            var editbuttonid = "edit" + counter;
+            var editbutton = document.getElementById(editbuttonid);
+            editbutton.style.display = "none";
+            var submitbuttonid = "submit" + counter;
+            var submitbutton = document.getElementById(submitbuttonid);
+            submitbutton.style.display = "block";
+
+        }
+        function submitedit(counter,a,b) {
+            alert(counter + a + b);
+            var d = document.getElementById(counter);
+            var newtweet = d.innerHTML;
+            alert(newtweet);
+            firebase.database().ref('tweets/' + a + "/" + b).update({tweet: newtweet});
+            d.contentEditable = "false";
+            d.style.width = "200px";
+            d.style.height = "auto";
+            d.style.backgroundColor= "transparent";
+            d.style.border = "none";
+
+        }
+        function requestfollowUser(u) {
+            firebase.database().ref('followrequests/' + u + "/" + userId).update({followrequested:true, username: name});
+        }
+        function acceptFollow(u) {
+            firebase.database().ref('following/' + u + "/" + userId).update({following:true});
+            firebase.database().ref('followrequests/' + userId + "/" + u).remove();
+            var removespan = "follow" + u;
+            document.getElementById(removespan).style.display= "none";
+        }
+        function likeTweet(id) {
+            var liketest = id;
+            var info = liketest.split(" ");
+            firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
+                var userswholiked = snapshot.val();
+                if(userswholiked == null) {
+                    firebase.database().ref('tweets/' + info[1] + "/" + info[0]).once('value', function(snapshot) {
+                        var tweetinfo = snapshot.val();
+                        var newlikes = tweetinfo.likes;
+                        newlikes++;
+                        firebase.database().ref('tweets/' + info[1] + "/" + info[0]).update({likes: newlikes});
+                        var likeid = "likes " + info[0];
+                        var likespan = document.getElementById(likeid);
+                        likespan.innerHTML = newlikes;
+                    });
+                    firebase.database().ref('likes/' + info[0] + "/" + userId).once('value', function(snapshot) {
+                        var userswholiked = snapshot.val();
+                        if(userswholiked.userliked) {
+                            var changebuttoncolour = document.getElementById(id);
+                            changebuttoncolour.style.backgroundColor="deepskyblue";
+                        }
+                    });
+
+                    firebase.database().ref('likes/' + info[0] + "/" + userId).update({userliked:true});
+                }
+                else {
+                    alert("Already liked this tweet");
+                    return;
+
+                }
+
+            });
+
+
+        }
+
         // write tweets to firebase
         function tweet() {
-            
+
             var twitdoc = document.getElementById("twit");
             var twitimg = document.getElementById("imgTest");
             var twitvideo = document.getElementById("videolink");
-            
+
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
             var videoValue = twitvideo.value;
@@ -389,31 +452,31 @@
             var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue, likes:0});
             twitdoc.value = "";
             console.log("tweet written")
-            
+
             firebase.database().ref('/tweets').once('value').then(function(snapshot) {
-                    var data = (snapshot.val());
-                    if (data == null) {
-                      console.log("No data found at /tweets/" + userId);  
-                    } else { 
-                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                var data = (snapshot.val());
+                if (data == null) {
+                    console.log("No data found at /tweets/" + userId);  
+                } else { 
+                    firebase.database().ref('/users').once('value').then(function(snapshot) { 
                         var userdata = (snapshot.val());
                         if (userdata != null) {
-                           dataarray = [data,userdata]
-                           console.log(dataarray)
-                           updatetweets(dataarray); 
+                            dataarray = [data,userdata]
+                            console.log(dataarray)
+                            updatetweets(dataarray); 
                         }
-                      });
-                    }
-                });
-            
+                    });
+                }
+            });
+
             twitdoc.value = "";
             twitimg.innerHTML = "";
             twitvideo.value = "";
-            
+
             // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
-            
+
         }
-        
+
         function signin() {
             console.log("Signing in");
             var provider = new firebase.auth.GoogleAuthProvider();
@@ -421,97 +484,97 @@
                 window.location.replace("index.html");
             });
         }
-        
+
         function signout() {
             console.log("Signing out");
             firebase.auth().signOut().then(function() {
                 window.location.href="signin.html";
             });
         }
-    function searchTweets() {
-                    var input, filter, table, tr, td, txtValue;
-                    input = document.getElementById("searchInput");
-                    var counter = 0;
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById("myTable");
-                    tr = table.getElementsByTagName("tr");
-                    for (i = 0; i < tr.length; i++) {
-                        td = tr[i].getElementsByTagName("td")[0];
-                        if (td) {
-                            txtValue = td.textContent || td.innerText;
-                            if(txtValue.toUpperCase().indexOf(filter) > -1) {
-                                tr[i].style.display = "";
-                                counter++;
-                            } else {
-                                tr[i].style.display = "none";
-                            }
-                        }
+        function searchTweets() {
+            var input, filter, table, tr, td, txtValue;
+            input = document.getElementById("searchInput");
+            var counter = 0;
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if(txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        counter++;
+                    } else {
+                        tr[i].style.display = "none";
                     }
-        if (counter == 0) {
-                var noresult = document.getElementById("noresults");
-            noresults.style.display = "";
+                }
             }
-    else {
-        var noresult = document.getElementById("noresults");
-            noresults.style.display = "none";
-    }
-        
-    }
-    
-    
+            if (counter == 0) {
+                var noresult = document.getElementById("noresults");
+                noresults.style.display = "";
+            }
+            else {
+                var noresult = document.getElementById("noresults");
+                noresults.style.display = "none";
+            }
+
+        }
+
+
     </script>
     <style>   
-        
+
         #form{
             font-size: 30px;
             margin-top: 10px;
         }
-        
+
         input[type="file"] {
             display: none;
         }
-         .mybutton {
-             font-family:inherit;
-             height:30px;
-  color: deepskyblue;
-    font-size: 18px;
-  border: 2px solid deepskyblue;
-  border-radius: 2em;
-  display: block;
-  width: 50%;
-    margin:auto;
-    text-align: center;
-         vertical-align:middle;
-    cursor: pointer;
-  background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
-    background-size: 300%;
-  background-position: 100%;
-  transition: background 450ms ease-in-out;
-                         font-family: "Fredoka One";
+        .mybutton {
+            font-family:inherit;
+            height:30px;
+            color: deepskyblue;
+            font-size: 18px;
+            border: 2px solid deepskyblue;
+            border-radius: 2em;
+            display: block;
+            width: 50%;
+            margin:auto;
+            text-align: center;
+            vertical-align:middle;
+            cursor: pointer;
+            background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+            background-size: 300%;
+            background-position: 100%;
+            transition: background 450ms ease-in-out;
+            font-family: "Fredoka One";
 
         }
-    
-    .mybutton:hover {
-         background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
-    background-size: 300%;
-  background-position: 100%;
-  transition: background 450ms ease-in-out;
-        background-color:deepskyblue;
-        background-position: 0;
-        color: white;
-                    font-family: "Fredoka One";
 
-    }
-        
+        .mybutton:hover {
+            background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+            background-size: 300%;
+            background-position: 100%;
+            transition: background 450ms ease-in-out;
+            background-color:deepskyblue;
+            background-position: 0;
+            color: white;
+            font-family: "Fredoka One";
+
+        }
+
         #twit {
-           border-radius: 10px; 
-           font-size: 20px;
-           width: 95%;
-           height: 20%;
+            border-radius: 10px; 
+            font-size: 20px;
+            width: 95%;
+            height: 20%;
         }
-        
+
         body {
-           padding: 0px;
+            padding: 0px;
             margin: 0px;
         }
         .topnav {
@@ -526,13 +589,13 @@
             font-size: 30px;
             padding: 13px;
             font-family: "Fredoka One";
-            
-            
+
+
         }
         .topnav a {
             color: white;
             float: right;
-           text-align: center;
+            text-align: center;
             text-decoration: none;
             font-size: 18px;
             padding: 9px;
@@ -542,8 +605,8 @@
             font-family: "Fredoka One";
 
         }
-       
-        
+
+
         .topnav a:hover {
             background-color:white;
             color:deepskyblue;
@@ -553,87 +616,87 @@
             color: deepskyblue;
             margin-right:10px;
         }
-       
-    /* Dropdown Button */
-.dropbtn {
-  background-color: deepskyblue;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-                font-family: "Fredoka One";
+
+        /* Dropdown Button */
+        .dropbtn {
+            background-color: deepskyblue;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            font-family: "Fredoka One";
 
 
-}
-        
+        }
 
-/* Dropdown button on hover & focus */
-.dropbtn:hover, .dropbtn:focus {
-  background-color: deepskyblue;
-}
 
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-    float: right;
-  overflow: hidden;
-  display: inline-block;
-    z-index:20;
-                font-family: "Fredoka One";
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: deepskyblue;
+        }
 
-}
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            float: right;
+            overflow: hidden;
+            display: inline-block;
+            z-index:20;
+            font-family: "Fredoka One";
 
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-  display: none;
-  position: fixed;;
-    top: 51px;
-  background-color: #f1f1f1;
-  min-width: 80px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index:20;
-                font-family: "Fredoka One";
+        }
 
-}
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: fixed;;
+            top: 51px;
+            background-color: #f1f1f1;
+            min-width: 80px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index:20;
+            font-family: "Fredoka One";
 
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  float: none;
-    z-index:20;
-    cursor: pointer;
-                font-family: "Fredoka One";
+        }
 
-}
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            float: none;
+            z-index:20;
+            cursor: pointer;
+            font-family: "Fredoka One";
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd}
         .dropdown:hover .dropdown-content {
             display: block;
         }
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
-        
+        /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+        .show {display:block;}
+
         /* Create three equal columns that floats next to each other */
-.column {
-  float: left;
-  padding: 5px;
-    margin-top: 20px;
-    font-family: "Fredoka One";
-   
-}
+        .column {
+            float: left;
+            padding: 5px;
+            margin-top: 20px;
+            font-family: "Fredoka One";
+
+        }
 
         .left {
             width: 22.5%;
-           
+
         }
         .middle {
             width: 50%;
-             border-style: solid;
+            border-style: solid;
             border-color: deepskyblue;
             border-width: 2px;
             border-radius: 7px;
@@ -641,12 +704,18 @@
         }
         .right {
             width:22.5%;
-           
+
         }
         #searchInput {
-            padding: 20px 0px;
+            padding: 5px 0px;
             border-radius: 1em;
-            
+
+            background-image: url('searchicon.png'); /* Add a search icon to input */
+            background-position: 5px 10px; /* Position the search icon */
+            background-repeat: no-repeat; /* Do not repeat the icon image */
+            background-size: 15px 15px;
+            font-size: 16px; /* Increase font-size */
+            padding-left:30px; /* Add some padding */
         }
 
         #videolink {
@@ -655,58 +724,58 @@
             color: deepskyblue;
             margin:auto;
         }
-        
+
         #videol {
             margin-left: 122px;
             margin-bottom: -10px;
         }
 
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 1250px) {
-  .column {
-width: 90%;
-      margin: 0 auto;
-      float: none;
-  }
-}
-    .popup {
-        color:dimgrey;
-        vertical-align: text-top;
-  position: relative;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+        /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+        @media screen and (max-width: 1250px) {
+            .column {
+                width: 90%;
+                margin: 0 auto;
+                float: none;
+            }
+        }
+        .popup {
+            color:dimgrey;
+            vertical-align: text-top;
+            position: relative;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
-/* The actual popup */
-.popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: deepskyblue;
-  color: white;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
+        /* The actual popup */
+        .popup .popuptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: deepskyblue;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
 
- /*Popup arrow */ 
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: deepskyblue transparent transparent transparent;
-}
+        /*Popup arrow */ 
+        .popup .popuptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: deepskyblue transparent transparent transparent;
+        }
 
 
         .popup .show {
@@ -715,22 +784,22 @@ width: 90%;
             animation: fadeIn 1s;
         }
 
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;} 
-  to {opacity: 1;}
-}
+        /* Add animation (fade in the popup) */
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0;} 
+            to {opacity: 1;}
+        }
 
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
-}
-    
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity:1 ;}
+        }
+
         .post {
             width:200px;
             min-width:100px;
             word-break:break-all;
-            
+
         }
         .postinfo {
             position: relative;
@@ -741,59 +810,59 @@ width: 90%;
             border-bottom: solid 3px deepskyblue;
         }
         #loader {
-              position: relative;
-              margin: 20px;
-              z-index: 1;
-              width: 50px;
-              height: 50px;
-              border: 12px solid #f3f3f3;
-              border-radius: 50%;
-              border-top: 12px solid deepskyblue;
-              width: 80px;
-              height: 80px;
-              -webkit-animation: 2s linear infinite;
-              animation: spin 2s linear infinite;
+            position: relative;
+            margin: 20px;
+            z-index: 1;
+            width: 50px;
+            height: 50px;
+            border: 12px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 12px solid deepskyblue;
+            width: 80px;
+            height: 80px;
+            -webkit-animation: 2s linear infinite;
+            animation: spin 2s linear infinite;
         }
         @-webkit-keyframes spin {
-          0% { -webkit-transform: rotate(0deg); }
-          100% { -webkit-transform: rotate(360deg); }
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
         }
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-       #roll {
+        #roll {
 
 
-color: #ffffff;
-position: relative;
-font-weight:bold;
-font-size:20px;
-animation:roll 10s linear infinite;
--webkit-animation:roll 10s ease-in-out infinite alternate;
-border-radius:5px;
--webkit-border-radius:5px;
-}
+            color: #ffffff;
+            position: relative;
+            font-weight:bold;
+            font-size:20px;
+            animation:roll 10s linear infinite;
+            -webkit-animation:roll 10s ease-in-out infinite alternate;
+            border-radius:5px;
+            -webkit-border-radius:5px;
+        }
 
-@keyframes roll
-{
-0% {transform: rotate(450deg);left:0%;}
-20% {transform: rotate(900deg);left:10%;}
-40% {transform: rotate(1350deg);left:20%;}
-60% {transform: rotate(1800deg);left:30%;}
-80% {transform: rotate(2250deg);left:40%;}
-100% {transform: rotate(2700deg);left:50%;}
-}
+        @keyframes roll
+        {
+            0% {transform: rotate(450deg);left:0%;}
+            20% {transform: rotate(900deg);left:10%;}
+            40% {transform: rotate(1350deg);left:20%;}
+            60% {transform: rotate(1800deg);left:30%;}
+            80% {transform: rotate(2250deg);left:40%;}
+            100% {transform: rotate(2700deg);left:50%;}
+        }
 
-@-webkit-keyframes roll
-{
-0% {-webkit-transform: rotate(450deg);left:0%;}
-20% {-webkit-transform: rotate(900deg);left:10%;}
-40% {-webkit-transform: rotate(1350deg);left:20%;}
-60% {-webkit-transform: rotate(1800deg);left:30%;}
-80% {-webkit-transform: rotate(2250deg);left:40%;}
-100% {-webkit-transform: rotate(2700deg);left:50%;}
-}
+        @-webkit-keyframes roll
+        {
+            0% {-webkit-transform: rotate(450deg);left:0%;}
+            20% {-webkit-transform: rotate(900deg);left:10%;}
+            40% {-webkit-transform: rotate(1350deg);left:20%;}
+            60% {-webkit-transform: rotate(1800deg);left:30%;}
+            80% {-webkit-transform: rotate(2250deg);left:40%;}
+            100% {-webkit-transform: rotate(2700deg);left:50%;}
+        }
 
     </style>
     <body>
@@ -802,171 +871,171 @@ border-radius:5px;
             <a class="active" href="index.html"><i class="fas fa-home"></i> Home</a>
             <span id="invis">
                 <span class="dropdown" >
-                <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
-                <span id="myDropdown" class="dropdown-content">
-                    <a href="igloo.html">My Igloo</a>
-                    <a href="profile.html">My Profile</a>
-                    <a href="about.html">About</a>
-                    <a onclick="signout()">Sign Out</a>
+                    <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
+                    <span id="myDropdown" class="dropdown-content">
+                        <a href="igloo.html">My Igloo</a>
+                        <a href="profile.html">My Profile</a>
+                        <a href="about.html">About</a>
+                        <a onclick="signout()">Sign Out</a>
+                    </span>
                 </span>
-            </span>
-               
+
             </span>
             <a href="draw.html"><i class="fas fa-palette"></i> Draw</a>
-         <a id="signin" href="signin.html">Sign in</a>
-   
-    </div>
-            
+            <a id="signin" href="signin.html">Sign in</a>
+
+        </div>
+
         <!-- Slideshow -->
-             <div class="slideshow-container">
-                 <div class="mySlides fade">
-                  <div class="numbertext">1 / 3</div>
-                  <img src="background.jpg" height="550px" width="500px" style="width:100%">
-                  <div class="text">Soothing Sunset</div>
-                </div>
-
-                <div class="mySlides fade">
-                  <div class="numbertext">2 / 3</div>
-                  <img src="background2.jpeg" height="550px" width="500px" style="width:100%">
-                  <div class="text">Icy Iceburg</div>
-                </div>
-
-                <div class="mySlides fade">
-                  <div class="numbertext">3 / 3</div>
-                  <img src="background3.jpg" height="550px" width="500px" style="width:100%">
-                  <div class="text">Glancing Glaze</div>
-                </div>
-
-                </div>
-                <br>
-                <div style="text-align:center">
-                  <span class="dot"></span> 
-                  <span class="dot"></span> 
-                  <span class="dot"></span> 
+        <div class="slideshow-container">
+            <div class="mySlides fade">
+                <div class="numbertext">1 / 3</div>
+                <img src="background.jpg" height="550px" width="500px" style="width:100%">
+                <div class="text">Soothing Sunset</div>
             </div>
-            
-            <!-- slideshow style -->
-            <style>
+
+            <div class="mySlides fade">
+                <div class="numbertext">2 / 3</div>
+                <img src="background2.jpeg" height="550px" width="500px" style="width:100%">
+                <div class="text">Icy Iceburg</div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="numbertext">3 / 3</div>
+                <img src="background3.jpg" height="550px" width="500px" style="width:100%">
+                <div class="text">Glancing Glaze</div>
+            </div>
+
+        </div>
+        <br>
+        <div style="text-align:center">
+            <span class="dot"></span> 
+            <span class="dot"></span> 
+            <span class="dot"></span> 
+        </div>
+
+        <!-- slideshow style -->
+        <style>
 
 
-                /* Slideshow container */
-                .slideshow-container {
-                  max-width: 1000px;
-                  position: relative;
-                  margin: auto;
-                    margin-top: 20px;
-                    top: 7%;
+            /* Slideshow container */
+            .slideshow-container {
+                max-width: 1000px;
+                position: relative;
+                margin: auto;
+                margin-top: 20px;
+                top: 7%;
+            }
+
+            /* Hide the images by default */
+            .mySlides {
+                display: none;
+            }
+
+            /* On hover, add a black background color with a little bit see-through */
+            .prev:hover, .next:hover {
+                background-color: rgba(0,0,0,0.8);
+            }
+
+            /* Caption text */
+            .text {
+                color: #f2f2f2;
+                font-size: 15px;
+                padding: 8px 12px;
+                position: absolute;
+                bottom: 8px;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Number text (1/3 etc) */
+            .numbertext {
+                color: #f2f2f2;
+                font-size: 12px;
+                padding: 8px 12px;
+                position: absolute;
+                top: 0;
+            }
+            /* dsa
+            /* The dots/bullets/indicators */
+            .dot {
+                cursor: pointer;
+                height: 15px;
+                width: 15px;
+                margin: 0 2px;
+                background-color: #bbb;
+                border-radius: 50%;
+                display: inline-block;
+                transition: background-color 0.6s ease;
+            }
+
+            .active, .dot:hover {
+                background-color: #717171;
+            }
+
+            /* Fading animation */
+            .fade {
+                -webkit-animation-name: fade;
+                -webkit-animation-duration: 1.5s;
+                animation-name: fade;
+                animation-duration: 1.5s;
+            }
+
+            @-webkit-keyframes fade {
+                from {opacity: .4} 
+                to {opacity: 1}
+            }
+
+            @keyframes fade {
+                from {opacity: .4} 
+                to {opacity: 1}
+            }
+
+        </style>
+
+        <!-- Javascript of Slideshow -->
+        <script>
+            var slideIndex = 0;
+            showSlides();
+
+            function showSlides() {
+                var i;
+                var slides = document.getElementsByClassName("mySlides");
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none"; 
                 }
+                slideIndex++;
+                if (slideIndex > slides.length) {slideIndex = 1} 
+                slides[slideIndex-1].style.display = "block"; 
+                setTimeout(showSlides, 5000); // Change image every 2 seconds
+            }   
 
-                /* Hide the images by default */
-                .mySlides {
-                  display: none;
-                }
 
-                /* On hover, add a black background color with a little bit see-through */
-                .prev:hover, .next:hover {
-                  background-color: rgba(0,0,0,0.8);
-                }
+        </script>
 
-                /* Caption text */
-                .text {
-                  color: #f2f2f2;
-                  font-size: 15px;
-                  padding: 8px 12px;
-                  position: absolute;
-                  bottom: 8px;
-                  width: 100%;
-                  text-align: center;
-                }
 
-                /* Number text (1/3 etc) */
-                .numbertext {
-                  color: #f2f2f2;
-                  font-size: 12px;
-                  padding: 8px 12px;
-                  position: absolute;
-                  top: 0;
-                }
-/* dsa
-                /* The dots/bullets/indicators */
-                .dot {
-                  cursor: pointer;
-                  height: 15px;
-                  width: 15px;
-                  margin: 0 2px;
-                  background-color: #bbb;
-                  border-radius: 50%;
-                  display: inline-block;
-                  transition: background-color 0.6s ease;
-                }
-
-                .active, .dot:hover {
-                  background-color: #717171;
-                }
-
-                /* Fading animation */
-                .fade {
-                  -webkit-animation-name: fade;
-                  -webkit-animation-duration: 1.5s;
-                  animation-name: fade;
-                  animation-duration: 1.5s;
-                }
-
-                @-webkit-keyframes fade {
-                  from {opacity: .4} 
-                  to {opacity: 1}
-                }
-
-                @keyframes fade {
-                  from {opacity: .4} 
-                  to {opacity: 1}
-                }
-            
-            </style>
-            
-            <!-- Javascript of Slideshow -->
-            <script>
-             var slideIndex = 0;
-                showSlides();
-
-                function showSlides() {
-                    var i;
-                    var slides = document.getElementsByClassName("mySlides");
-                    for (i = 0; i < slides.length; i++) {
-                        slides[i].style.display = "none"; 
-                        }
-                    slideIndex++;
-                    if (slideIndex > slides.length) {slideIndex = 1} 
-                    slides[slideIndex-1].style.display = "block"; 
-                    setTimeout(showSlides, 5000); // Change image every 2 seconds
-                }   
-              
-                
-            </script>
-           
-            
         <div class="row">
-       <div class ="column left" id='leftcolumn'>
-           
-        <form id="form">
-            Post Something!<br>
-            <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
-        </form> 
-<label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label><br><div style="width:100%; text-align:center;"> Or: &nbsp;<input id = 'videolink' type="url" placeholder="Enter video link here..."></div>
-           <br>
-           <button type="button" onclick="tweet()" class="mybutton" id="submit">Submit</button>
+            <div class ="column left" id='leftcolumn'>
 
-           <div id="imgTest" style="display:none;"></div>
+                <form id="form">
+                    Post Something!<br>
+                    <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
+                </form> 
+                <label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label><br><div style="width:100%; text-align:center;"> Or: &nbsp;<input id = 'videolink' type="url" placeholder="Enter video link here..."></div>
+                <br>
+                <button type="button" onclick="tweet()" class="mybutton" id="submit">Submit</button>
+
+                <div id="imgTest" style="display:none;"></div>
             </div>
             <div class="column middle">
-    <div id="mytweets">Loading...<img id='roll' height='35px' src="snowball.png"><div id="loader"></div></div>
-                </div>
-            <div class="column right" id ='rightcolumn'>
-            <input id="searchInput" type="text" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()"><br>
-            <div id="followrequests">You have follow requests from: </div>
+                <div id="mytweets">Loading...<img id='roll' height='35px' src="snowball.png"><div id="loader"></div></div>
             </div>
- </div>
+            <div class="column right" id ='rightcolumn'>
+                <input id="searchInput" type="text" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()"><div style="color:deepskyblue; font-size: 25px;margin-top: 50px;">Follow Requests:</div> <br>
+                <div id="followrequests">You have follow requests from: </div>
+            </div>
+        </div>
     </body>
 
-    
+
 </html>
