@@ -79,10 +79,20 @@
                     }
                     else {
                         for (var u in requestlist) {
-                            document.getElementById('followrequests').innerHTML += "<span id='follow" + u +"'><br><br>" + requestlist[u].username + " <button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br></span>";
-                        }
+                            firebase.database().ref('users/' + u).once('value', function(snapshot) {
+                             var profilepicture;
+                     if(snapshot.val().profile_picture == null) {
+                       profilepicture = (snapshot.val().profile_picture2);
+                    
+               } else {
+                   profilepicture = snapshot.val().profile_picture;
+               }
+                                
+                                
+                            document.getElementById('followrequests').innerHTML += "<span id='follow" + u + "'><span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br><br></span>";
+                        });
                     }
-
+                        }
                 });
 
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
@@ -102,7 +112,7 @@
                                         console.log(dataarray);
                                         updatetweets(dataarray); 
                                         firebase.database().ref('likes/').once('value').then(function(snapshot) {
-                                            sorttable(snapshot.val()); 
+                                            sorttable(snapshot.val(),"Newest"); 
                                         });
 
                                     }
@@ -252,7 +262,7 @@
                     if(data[u][t].tweet.includes("<br>")) {
                         console.log(data[u][t].tweet);
                         data[u][t].tweet = data[u][t].tweet.replace(/<br>/g, "");
-                          console.log(data[u][t].tweet);
+                        console.log(data[u][t].tweet);
                     }
                     if(data[u][t].video != "" && data[u][t].video != null) {
                         var videolink = data[u][t].video.toString();
@@ -290,9 +300,18 @@
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
         }
-    
 
-        function sorttable(tweetdata) {
+        function sorttableby() {
+            var element = document.getElementById("sortselect");
+            var sortby = element.options[element.selectedIndex].value;
+            console.log(sortby);
+            firebase.database().ref('likes/').once('value').then(function(snapshot) {
+                sorttable(snapshot.val(),sortby); 
+            });
+
+        }
+        function sorttable(tweetdata, sortby) {
+
             var table, rows, switching, i, x, y, a, b, c, d, likebutton, shouldSwitch;
             table = document.getElementById("myTable");
             switching = true;
@@ -305,21 +324,44 @@
                 for (i = 0; i < (rows.length - 1); i++) {
 
                     shouldSwitch = false;
-                    /* Get the two elements you want to compare,
-      one from current row and one from the next: */
-                    x = rows[i].getElementsByTagName("td")[0];
-
-                    y = rows[i + 1].getElementsByTagName("td")[0];
-                    a = x.getElementsByClassName("epochsort")[0].innerHTML;
-
-                    b = y.getElementsByClassName("epochsort")[0].innerHTML;
-
-                    // Check if the two rows should switch place:
-                    if (a < b) {
-                        // If so, mark as a switch and break the loop:
-                        shouldSwitch = true;
-                        break;
+                     x = rows[i].getElementsByTagName("td")[0];
+                        y = rows[i + 1].getElementsByTagName("td")[0];
+                    if(sortby == "Newest") {
+                        a = x.getElementsByClassName("epochsort")[0].innerHTML;
+                        b = y.getElementsByClassName("epochsort")[0].innerHTML;
+                        if (a < b) {
+                            shouldSwitch = true;
+                            break;
+                        }
                     }
+                    else if(sortby == "Oldest") {  
+                        a = x.getElementsByClassName("epochsort")[0].innerHTML;
+                        b = y.getElementsByClassName("epochsort")[0].innerHTML;
+                        if (a > b) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }  
+                    else if(sortby == "Most Likes") {
+                        a = x.getElementsByTagName("span")[5].innerHTML;  
+                        b = y.getElementsByTagName("span")[5].innerHTML;
+                      
+                        if (a < b) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    else if(sortby == "Least Likes") {
+                        a = x.getElementsByTagName("span")[5].innerHTML;  
+                        b = y.getElementsByTagName("span")[5].innerHTML;
+                       
+                        if (a > b) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    
+
                 }
                 if (shouldSwitch) {
                     /* If a switch has been marked, make the switch
@@ -341,11 +383,21 @@
                     if(tweetdata[d[0]][userId].userliked)
                         likebutton.style.backgroundColor = "deepskyblue";
                     likebutton.style.color="white";
-                    
+
                 } 
 
             }
         }
+        document.addEventListener('input', function (event) {
+
+	// Only run on our select menu
+	if (event.target.id !== 'sortselect') {
+        return;
+    } 
+
+	sorttableby();
+
+}, false);
         function editpost(counter) {
             var d = document.getElementById(counter);  
             d.contentEditable = "true";
@@ -375,7 +427,7 @@
             d.style.backgroundColor= "transparent";
             d.style.border = "none";
             d.style.display = "";
-             var editbutton = document.getElementById(editbuttonid);
+            var editbutton = document.getElementById(editbuttonid);
             editbutton.style.display = "block";
             var submitbutton = document.getElementById(submitbuttonid);
             submitbutton.style.display = "none";
@@ -383,6 +435,7 @@
         }
         function requestfollowUser(u) {
             firebase.database().ref('followrequests/' + u + "/" + userId).update({followrequested:true, username: name});
+            window.alert("Your follow request has been sent.");
         }
         function acceptFollow(u) {
             firebase.database().ref('following/' + u + "/" + userId).update({following:true});
@@ -532,13 +585,13 @@
         }
         button {
             font-family:inherit;
-            height:20px;
+            
             color: deepskyblue;
             font-size: 14px;
             border: 2px solid deepskyblue;
             border-radius: 2em;
             display: inline-block;
-            width: 70px;
+           
             margin:2px;
             text-align: center;
             vertical-align:middle;
@@ -1054,11 +1107,20 @@
                 <div id="imgTest" style="display:none;"></div>
             </div>
             <div class="column middle">
-                <div id="mytweets">Loading...<img id='roll' height='35px' src="snowball.png"><div id="loader"></div></div>
+                <div id="mytweets">Loading...<img id='roll' height='35px' src="snowball.png"></div>
             </div>
             <div class="column right" id ='rightcolumn'>
-                <input id="searchInput" type="text" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()"><div style="color:deepskyblue; font-size: 25px;margin-top: 50px;">Follow Requests:</div> <br>
-                <div id="followrequests">You have follow requests from: </div>
+                <input id="searchInput" type="text" rows="3" placeholder="Search for anything..." style="width:100%; font-family: 'Fredoka One'; border: solid 2px deepskyblue;" onkeyup="searchTweets()">
+
+                <h3> Sort posts: <select id='sortselect'>
+                    <option value="Newest">Newest</option>
+                    <option value="Oldest">Oldest</option>
+                    <option value="Most Likes">Most Likes</option>
+                    <option value="Least Likes">Least Likes</option>
+                    </select></h3>
+
+                <div style="color:deepskyblue; font-size: 25px;margin-top: 50px;">Follow Requests:</div> <br>
+                <div id="followrequests">You have follow requests from:<br><br> </div>
             </div>
         </div>
     </body>

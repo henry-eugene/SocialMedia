@@ -2,377 +2,482 @@
 <html>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-<head>
-    <title>Igloo</title>
-    
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-</head>
+    <head>
+        <title>Igloo</title>
 
-<body id="top">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    </head>
 
- <div class="topnav">    
+    <body id="top">
+
+        <div class="topnav">    
             <i class="fas fa-igloo"></i> Igloo  
             <a class="active" href="index.html"><i class="fas fa-home"></i> Home</a>
             <span id="invis">
                 <span class="dropdown" >
-                <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
-                <span id="myDropdown" class="dropdown-content">
-                    <a href="igloo.html">My Igloo</a>
-                    <a href="profile.html">My Profile</a>
-                    <a href="about.html">About</a>                   
-                    <a onclick="signout()">Sign Out</a>
+                    <a style="height:100px:" class="dropbtn" ><span id="myphoto" ></span> <i style="position:relative; bottom: 10px;" class="fa fa-caret-down"></i></a>
+                    <span id="myDropdown" class="dropdown-content">
+                        <a href="igloo.html">My Igloo</a>
+                        <a href="profile.html">My Profile</a>
+                        <a href="about.html">About</a>                   
+                        <a onclick="signout()">Sign Out</a>
+                    </span>
                 </span>
-            </span>
-               
+
             </span>
             <a href="draw.html"><i class="fas fa-palette"></i> Draw</a>
-         <a id="signin" href="signin.html">Sign in</a>
-   
-    </div>
-        
-    
-    
-     <style>
-        body {
-           padding: 0px;
-            margin: auto;
-            font-family: "Fredoka One";
-        }
-        .topnav {
-            font-family: "Fredoka One";
-            overflow: hidden;
-            background-color:deepskyblue;
-            color: white;
-            font-size: 30px;
-            padding: 13px;
-            
-            
-        }
-        .topnav a {
-            color: white;
-            float: right;
-           text-align: center;
-            text-decoration: none;
-            font-size: 18px;
-            font-family: "Fredoka One";
-            padding: 9px;
-            z-index: 5;
-        }
-       
-        
-        .topnav a:hover {
-            background-color:white;
-            color:deepskyblue;
-        }
-        .topnav a.active {
-            background-color: white;
-            color: deepskyblue;
-        }
-       
-  /* Dropdown Button */
-.dropbtn {
-  background-color: deepskyblue;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
+            <a id="signin" href="signin.html">Sign in</a>
 
-}
-        
+        </div>
 
-/* Dropdown button on hover & focus */
-.dropbtn:hover, .dropbtn:focus {
-  background-color: deepskyblue;
-}
 
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-    float: right;
-  overflow: hidden;
-  display: inline-block;
-    z-index:20;
-}
 
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-  display: none;
-  position: fixed;;
-    top: 51px;
-  background-color: #f1f1f1;
-  min-width: 80px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index:20;
-}
+        <style>
+            body {
+                padding: 0px;
+                margin: auto;
+                font-family: "Fredoka One";
+            }
+            .topnav {
+                position: fixed;
+                top: 0;
+                width: 99%;
+                z-index: 10;
+                font-family: "Fredoka One";
+                overflow: hidden;
+                background-color:deepskyblue;
+                color: white;
+                font-size: 30px;
+                padding: 13px;
+                font-family: "Fredoka One";
 
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  float: none;
-    z-index:20;
-    cursor: pointer;
-}
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+            }
+            .topnav a {
+                color: white;
+                float: right;
+                text-align: center;
+                text-decoration: none;
+                font-size: 18px;
+                padding: 9px;
+                height:100%;
+                max-height: 20px;
+                z-index: 20;
+                font-family: "Fredoka One";
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
-        
-        #profilepic {
-              margin:auto;
-        }
-         .column {
-             width:30%;
-             padding:5% 10%;
-             padding-right:0%;
-             margin:none;
-             float:left;
-        height:100%;
-            
-         }  
-         .right {
-             margin:1%;
-              border-left: solid 2px deepskyblue;
-         }
-         button {
-  color: deepskyblue;
-    font-size: 18px;
-  border: 2px solid deepskyblue;
-  border-radius: 2em;
-  display: block;
-  width: 200px;
-font-family:inherit;
-             float: left;
-    margin: 10px auto;
-    text-align: center;
-    cursor: pointer;
-  background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
-    background-size: 300%;
-  background-position: 100%;
-  transition: background 450ms ease-in-out;
-        }
-    
-    button:hover {
-         background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
-    background-size: 300%;
-  background-position: 100%;
-  transition: background 450ms ease-in-out;
-        background-color:deepskyblue;
-        background-position: 0;
-        color: white;
-    }
-         @media screen and (max-width: 950px) {
-  .column {
-width: 90%;
-      
-      float: none;
-  }
-}
-         h1 {
-             text-align: center;
-         }
-         
-         .profilearea {
-             color:#404040;
-         }
-    </style>
-       
-<div class = "profilearea">
-<div class="row">
-    <div class="column">
-         <section id="welcome">
- <h1 id ="fullname2"></h1><br>
-              <span id="profilepic"></span>
-        </section>
-    </div>
-        <div class="column right">
-        
-                <div class="vl">
-                    <h2> Full Name </h2>
-                    <p id="fullname"></p>
-                    <h2>Bio</h2>
-                    <p id="bio"></p>
-                    <textarea id="changebio" placeholder="Type in here!";></textarea>
-                    <br><button onclick="changeBio()">Change your bio!</button>   <br>  
-<br>                    <h2 id="">Email Address</h2>
-                    <p id="email"></p>
+            }
+
+
+            .topnav a:hover {
+                background-color:white;
+                color:deepskyblue;
+            }
+            .topnav a.active {
+                background-color: white;
+                color: deepskyblue;
+                margin-right:10px;
+            }
+
+            /* Dropdown Button */
+            .dropbtn {
+                background-color: deepskyblue;
+                color: white;
+                padding: 16px;
+                font-size: 16px;
+                border: none;
+                cursor: pointer;
+                font-family: "Fredoka One";
+
+
+            }
+
+
+            /* Dropdown button on hover & focus */
+            .dropbtn:hover, .dropbtn:focus {
+                background-color: deepskyblue;
+            }
+
+            /* The container <div> - needed to position the dropdown content */
+            .dropdown {
+                float: right;
+                overflow: hidden;
+                display: inline-block;
+                z-index:20;
+                font-family: "Fredoka One";
+
+            }
+
+            /* Dropdown Content (Hidden by Default) */
+            .dropdown-content {
+                display: none;
+                position: fixed;;
+                top: 51px;
+                background-color: #f1f1f1;
+                min-width: 80px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index:20;
+                font-family: "Fredoka One";
+
+            }
+
+            /* Links inside the dropdown */
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                float: none;
+                z-index:20;
+                cursor: pointer;
+                font-family: "Fredoka One";
+
+            }
+
+            /* Change color of dropdown links on hover */
+            .dropdown-content a:hover {background-color: #ddd}
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+            .show {display:block;}
+
+            #profilepic {
+                margin:auto;
+            }
+            .row {
+                margin-top:8%;
+            }
+            .column {
+              
+                width:30%;
+                padding:0% 8%;
+                padding-right:0%;
+                margin:none;
+                float:left;
+                height:100%;
+
+            }  
+            .right {
+                
+                padding:0% auto;
+                border-left: solid 2px deepskyblue;
+            }
+            button {
+                color: deepskyblue;
+                font-size: 18px;
+                border: 2px solid deepskyblue;
+                border-radius: 2em;
+                display: block;
+                width: 200px;
+                font-family:inherit;
+                float: left;
+                margin: 5px auto;
+                text-align: center;
+                cursor: pointer;
+                background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+                background-size: 300%;
+                background-position: 100%;
+                transition: background 450ms ease-in-out;
+            }
+
+            button:hover {
+                background-image: linear-gradient(90deg, deepskyblue 50%, transparent 50%);
+                background-size: 300%;
+                background-position: 100%;
+                transition: background 450ms ease-in-out;
+                background-color:deepskyblue;
+                background-position: 0;
+                color: white;
+            }
+            @media screen and (max-width: 950px) {
+                .column {
+                    width: 90%;
+
+                    float: none;
+                }
+                .follows {
+                    display:contents;
+                }
+            }
+            h1 {
+                text-align: center;
+            }
+
+            .profilearea {
+                color:#404040;
+            }
+            .follows {
+                font-size:25px;
+                width:20%; 
+               padding-top:1%;
+                margin:none;
+                float:left;
+                ' 
+            }
+        </style>
+
+        <div class = "profilearea">
+            <div class="row">
+                <div class="column">
+                    <section id="welcome">
+                        <h1 id ="fullname2"></h1><br>
+                        
+                        <span id="profilepic"></span>
+                    </section>
+                </div>
+                <div class="column right">
+
+                    <div>
+                        <h2> Name </h2>
+                        <p id="fullname"></p>
+                        <button id ='submitname' onclick='submitName()' style='display:none;font-size:14px;'>Submit Changes</button><br><br>
+                        <h2>Bio</h2>
+                        <p id="bio"></p>
+                        <button id ='submitbio' onclick='submitBio()' style='display:none;font-size:14px;'>Submit Changes</button>
+                                       <br><br>  <h2 id="">Email Address</h2>
+                        <p id="email"></p>
+                        <button id='editname' onclick="editName()" style='font-size:14px;'>Change your username!</button><br><br>
+                        <button id='editbio' onclick="editBio()" style='font-size:14px;' >Change your bio!</button>
+                        
+                    </div>
 
                 </div>
- 
+                <div class = 'follows' id='following'>
+                Following:<br><br>
             </div>
+            <br>
+            <div class='follows' id='followers'>
+                Followers: <br><br>
+            </div>
+            </div>
+            <br>
+            
+
         </div>
-    <br>
-    <div style='font-size:25px;margin-top:90px;' id='following'>
-    Following:<br><br>
-    </div>
-    <br>
-     <div style='font-size:25px;' id='followers'>
-    Followers: <br><br>
-    </div>
-
-    </div>
 
 
-       
 
 
- <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBNSzFD9R_JP_UNlF7pbpOr3d6h0XXW7hg",
-    authDomain: "social-media-69e85.firebaseapp.com",
-    databaseURL: "https://social-media-69e85.firebaseio.com",
-    projectId: "social-media-69e85",
-    storageBucket: "social-media-69e85.appspot.com",
-    messagingSenderId: "837818397370"
-  };
-  firebase.initializeApp(config);
- 
-    // Check to see if you are logged in
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user == null) {
-                myphotodiv = document.getElementById("invis");
-                myphotodiv.style.display="none";
-                signinbutton = document.getElementById("signin");
-                signinbutton.style.display="inline";
-                window.location.href='signin.html';
-                return;
-            } else {
-                user.providerData.forEach(function (profile) {
-    console.log("Sign-in provider: " + profile.providerId);
-    console.log("  Provider-specific UID: " + profile.uid);
-    console.log("  Name: " + profile.displayName);
-    console.log("  Email: " + profile.email);
-    console.log("  Photo URL: " + profile.photoURL);
-  });
-                userId = user.uid;
-                name = user.displayName;
-                imageUrl = user.photoURL;
-                email = user.email;
-                signinbutton = document.getElementById("signin");
-                signinbutton.style.display="none";
-                myphotodiv = document.getElementById("invis");
-                myphotodiv.style.display="inline";
-                followingdiv = document.getElementById("following");
-                followersdiv = document.getElementById("followers");
-                firebase.database().ref('following/' + userId).once('value', function(snapshot) {
-                    var followdata = snapshot.val();
-                  if(followdata == null) {
-                      followingdiv.innerHTML += "<span style='font-size:14px'> Nobody. Go make some friends!</span>";
-                  } else {
-                      for (var u in followdata) {
-                        
-                        firebase.database().ref('users/' + u).once('value', function(snapshot) {
-                      
-                            
-                             var profilepicture;
-                     if(snapshot.val().profile_picture == null) {
-                       profilepicture = (snapshot.val().profile_picture2);
-                    
-               } else {
-                   profilepicture = snapshot.val().profile_picture;
-               }
-                            followingdiv.innerHTML += "<span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><br>";
-                        });
-                    }
-                  }
-                    
-                });
-                firebase.database().ref('following/').once('value', function(snapshot) {
-                    var followeddata = snapshot.val();
-                    for (var u in followeddata) {
-                        if(followeddata[u][userId]) {
-                            firebase.database().ref('users/' + u).once('value', function(snapshot) {
-                         var profilepicture;
-                     if(snapshot.val().profile_picture == null) {
-                       profilepicture = (snapshot.val().profile_picture2);
-                    
-               } else {
-                   profilepicture = snapshot.val().profile_picture;
-               }
-                            followersdiv.innerHTML += "<span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><br>";
-                        
-                        });
+
+        <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyBNSzFD9R_JP_UNlF7pbpOr3d6h0XXW7hg",
+                authDomain: "social-media-69e85.firebaseapp.com",
+                databaseURL: "https://social-media-69e85.firebaseio.com",
+                projectId: "social-media-69e85",
+                storageBucket: "social-media-69e85.appspot.com",
+                messagingSenderId: "837818397370"
+            };
+            firebase.initializeApp(config);
+
+            // Check to see if you are logged in
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user == null) {
+                    myphotodiv = document.getElementById("invis");
+                    myphotodiv.style.display="none";
+                    signinbutton = document.getElementById("signin");
+                    signinbutton.style.display="inline";
+                    window.location.href='signin.html';
+                    return;
+                } else {
+                    user.providerData.forEach(function (profile) {
+                        console.log("Sign-in provider: " + profile.providerId);
+                        console.log("  Provider-specific UID: " + profile.uid);
+                        console.log("  Name: " + profile.displayName);
+                        console.log("  Email: " + profile.email);
+                        console.log("  Photo URL: " + profile.photoURL);
+                    });
+                    userId = user.uid;
+                    name = user.displayName;
+                    imageUrl = user.photoURL;
+                    email = user.email;
+                    signinbutton = document.getElementById("signin");
+                    signinbutton.style.display="none";
+                    myphotodiv = document.getElementById("invis");
+                    myphotodiv.style.display="inline";
+                    followingdiv = document.getElementById("following");
+                    followersdiv = document.getElementById("followers");
+                    firebase.database().ref('following/' + userId).once('value', function(snapshot) {
+                        var followdata = snapshot.val();
+                        if(followdata == null) {
+                            followingdiv.innerHTML += "<span style='font-size:14px'> Nobody. Go make some friends!</span>";
+                        } else {
+                            for (var u in followdata) {
+
+                                firebase.database().ref('users/' + u).once('value', function(snapshot) {
+
+
+                                    var profilepicture;
+                                    if(snapshot.val().profile_picture == null) {
+                                        profilepicture = (snapshot.val().profile_picture2);
+
+                                    } else {
+                                        profilepicture = snapshot.val().profile_picture;
+                                    }
+                                    followingdiv.innerHTML += "<span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline; padding-bottom: 0px; z-index:-1;'/></span><br><br>";
+                                });
+                            }
                         }
-                    }
-                });
-                firebase.database().ref('users/' + userId).once('value', function(snapshot) {
-                    var bioid = document.getElementById('bio');
-                    if(snapshot.val().biography == null) {
-                        bioid.innerHTML = "No bio yet.";
-                    }
-                   else {
-                         bioid.innerHTML = snapshot.val().biography;
-                   }
-                    var profilepicture;
-                     if(snapshot.val().profile_picture == null) {
-                       profilepicture = (snapshot.val().profile_picture2);
-                    
-               } else {
-                   profilepicture = imageUrl;
-               }
-                    
-                    var shownname = document.getElementById("profilepic"); 
-                shownname.innerHTML = "<img width='100%' src = '" + profilepicture + "' style='border-radius: 50%; display:inline-block;'/>"; 
-                    myphotodiv = document.getElementById("myphoto");
-               myphotodiv.innerHTML = "<img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
-                });
-                   
-                     
-               
-                     
-                
+
+                    });
+                    firebase.database().ref('following/').once('value', function(snapshot) {
+                        var followeddata = snapshot.val();
+                        for (var u in followeddata) {
+                            if(followeddata[u][userId]) {
+                                firebase.database().ref('users/' + u).once('value', function(snapshot) {
+                                    var profilepicture;
+                                    if(snapshot.val().profile_picture == null) {
+                                        profilepicture = (snapshot.val().profile_picture2);
+
+                                    } else {
+                                        profilepicture = snapshot.val().profile_picture;
+                                    }
+                                    followersdiv.innerHTML += "<span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline; padding-bottom: 0px; z-index:-1;'/></span><br><br>";
+
+                                });
+                            }
+                        }
+                    });
+                    firebase.database().ref('users/' + userId).once('value', function(snapshot) {
+                        var bioid = document.getElementById('bio');
+                        if(snapshot.val().biography == null) {
+                            bioid.innerHTML = "No bio yet.";
+                        }
+                        else {
+                            bioid.innerHTML = snapshot.val().biography;
+                        }
+                        var profilepicture;
+                        if(snapshot.val().profile_picture == null) {
+                            profilepicture = (snapshot.val().profile_picture2);
+
+                        } else {
+                            profilepicture = imageUrl;
+                        }
+
+                        var shownname = document.getElementById("profilepic"); 
+                        shownname.innerHTML = "<center><img width='50%' src = '" + profilepicture + "' style='border-radius: 50%; display:inline-block;'/></center>"; 
+                        myphotodiv = document.getElementById("myphoto");
+                        myphotodiv.innerHTML = "<img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+                    });
+
+
+
+
+
                 }
-                    
-              
-                                                        
+
+
+
                 var shownname = document.getElementById("fullname"); 
                 shownname.innerHTML = name; 
                 var shownname = document.getElementById("fullname2"); 
                 shownname.innerHTML = "Welcome, " + name; 
-                 var shownname = document.getElementById("email"); 
+                var shownname = document.getElementById("email"); 
                 shownname.innerHTML = email; 
-                 
 
-                    
-                
-                
+
+
+
+
                 // write data to document
-               
-               
+
+
             });
-            
+
+
+
+            function signin() {
+                window.location.href="signin.html";
+            }
+
+            function signout() {
+                console.log("Signing out");
+
+                firebase.auth().signOut().then(function() {
+                });
+                window.location.href="signin.html";
+            }
+            function editBio() {
+                var twitbio = document.getElementById("bio");
+                twitbio.contentEditable = "true";
+                twitbio.style.display = "inline-block";
+                twitbio.style.overflow = "auto";
+                twitbio.style.width= "300px";
+                twitbio.style.height = "100px";
+                twitbio.style.backgroundColor = "#F1F1F1";
+                twitbio.style.border = "solid 1px deepskyblue";
+                var editbutton = document.getElementById('editbio');
+                editbutton.style.display = "none";
+                var submitbutton = document.getElementById('submitbio');
+                submitbutton.style.display = "block";
                
-        
-        function signin() {
-            window.location.href="signin.html";
-        }
-        
-        function signout() {
-            console.log("Signing out");
             
-            firebase.auth().signOut().then(function() {
-            });
-            window.location.href="signin.html";
+            }
+              
+        function submitBio() {
+          
+            var twitbio = document.getElementById("bio");
+            var newbio = twitbio.innerHTML;
+        firebase.database().ref('users/' + userId).update({biography:newbio});
+          
+            twitbio.contentEditable = "false";
+            twitbio.style.width = "200px";
+            twitbio.style.height = "auto";
+            twitbio.style.backgroundColor= "transparent";
+            twitbio.style.border = "none";
+            twitbio.style.display = "";
+            var editbutton = document.getElementById('editbio');
+            editbutton.style.display = "block";
+            var submitbutton = document.getElementById('submitbio');
+            submitbutton.style.display = "none";
         }
-     function changeBio() {
-            var twitbio = document.getElementById("changebio").value;
-            var bio = document.getElementById("bio");
-            bio.innerHTML = twitbio;
-            var bioid = firebase.database().ref('users/' + userId).update({biography:twitbio});
-         twitbio.value = "";
-        }
-    
-    </script>
+            function editName() {
+                var twitname = document.getElementById("fullname");
+                twitname.contentEditable = "true";
+                twitname.style.display = "inline-block";
+                twitname.style.overflow = "auto";
+               twitname.style.width= "300px";
+                twitname.style.height = "100px";
+               twitname.style.backgroundColor = "#F1F1F1";
+                twitname.style.border = "solid 1px deepskyblue";
+                var editbutton = document.getElementById('editname');
+                editbutton.style.display = "none";
+                var submitbutton = document.getElementById('submitname');
+                submitbutton.style.display = "block";
+                
+            }
+            function submitName() {
+                 var twitname = document.getElementById("fullname");
+            var newname = twitname.innerHTML;
+        firebase.database().ref('users/' + userId).update({username:newname});
+          
+            twitname.contentEditable = "false";
+            twitname.style.width = "200px";
+            twitname.style.height = "auto";
+            twitname.style.backgroundColor= "transparent";
+            twitname.style.border = "none";
+            twitname.style.display = "";
+            var editbutton = document.getElementById('editname');
+            editbutton.style.display = "block";
+            var submitbutton = document.getElementById('submitname');
+            submitbutton.style.display = "none";
+                var user = firebase.auth().currentUser;
+
+user.updateProfile({
+  displayName: newname,
+
+}).then(function() {
+  // Update successful.
+}).catch(function(error) {
+  // An error happened.
+});
+            }
+
+        </script>
     </body>
 </html>
