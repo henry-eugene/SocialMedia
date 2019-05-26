@@ -249,6 +249,11 @@
                     else {
                         profilepic = users[u].profile_picture;
                     }
+                    if(data[u][t].tweet.includes("<br>")) {
+                        console.log(data[u][t].tweet);
+                        data[u][t].tweet = data[u][t].tweet.replace(/<br>/g, "");
+                          console.log(data[u][t].tweet);
+                    }
                     if(data[u][t].video != "" && data[u][t].video != null) {
                         var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
@@ -336,13 +341,8 @@
                     if(tweetdata[d[0]][userId].userliked)
                         likebutton.style.backgroundColor = "deepskyblue";
                     likebutton.style.color="white";
-                    console.log(i + " " + likebutton.style.backgroundColor);
+                    
                 } 
-
-
-                else {
-                    console.log(i + " else " + likebutton.style.backgroundColor);
-                }
 
             }
         }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+
 <head>
     <title>Igloo</title>
     
@@ -177,11 +177,14 @@ width: 90%;
 }
          h1 {
              text-align: center;
-             font-size: 25px;
+         }
+         
+         .profilearea {
+             color:#404040;
          }
     </style>
        
-
+<div class = "profilearea">
 <div class="row">
     <div class="column">
          <section id="welcome">
@@ -192,48 +195,21 @@ width: 90%;
         <div class="column right">
         
                 <div class="vl">
-                    <h2 class="is-size-4"> Full Name </h2>
-                    <p id="fullname"></p><br>
-                    <h2 class="is-size-4">Bio</h2>
+                    <h2> Full Name </h2>
+                    <p id="fullname"></p>
+                    <h2>Bio</h2>
                     <p id="bio"></p>
-                    
-                    
-<br>                    <h2 class="is-size-4" >Email Address</h2>
+                    <textarea id="changebio" placeholder="Type in here!";></textarea>
+                    <br><button onclick="changeBio()">Change your bio!</button>   <br>  
+<br>                    <h2 id="">Email Address</h2>
                     <p id="email"></p>
 
                 </div>
-            <button id="modalBtn">Update Profile</button>
- <div class="form_div">
-      <div class="modal" id="modalclose">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p style='background-color:transparent;' class="modal-card-title">Create a New Account!</p>
-      <button class="delete" aria-label="close"></button>
-    </header>
-    <section class="modal-card-body">
-    <input class="input is-info" type="email" placeholder="Enter Email" id="new_email_field" />
-        <span style='font-size: 18px;'>Username: </span>   <input class="input is-info" type="text" placeholder="Your username" id="new_username_field"> <span style='font-size: 14px; display:none;' id="invalidusername" ></span> 
-        <span style='font-size: 18px;'>Biography: </span><input class="input is-info" type="text" placeholder="Your username" id="changebio">
-    <span style='font-size: 18px;'>Password:  </span><input class="password input is-success" type="password" placeholder="Enter Password" id="new_password_field" onkeyup='check();'/>
-    <span style='font-size: 18px;'>Confirm Password: </span> <input class="password input is-success" type="password" placeholder="Enter Password" id="confirm_password_field" onkeyup='check();'/><span style='font-size: 14px; display:none;' id="passwordmatch">Passwords do not match.</span> 
-    
-     <span style='font-size: 18px;'>Profile Image: </span>  <label class="custom-file-upload"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /></label>
-        <div id="chosenImg" style="display:none;"></div>
-        <div id="chosenName" style="display:none;"></div>
-    
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button is-success" disabled="true" id="createBtn" style ="padding:5px; width:40%" onclick="createnewuser()"> Create A New Account!</button>
-      <button class="button" style="width:40%;" id="closemodalBtn">Cancel</button>
-    </footer>
-  </div>
-</div>
-     </div> 
+ 
             </div>
         </div>
     <br>
-    <div style='font-size:25px;margin-top:50px;' id='following'>
+    <div style='font-size:25px;margin-top:90px;' id='following'>
     Following:<br><br>
     </div>
     <br>
@@ -241,7 +217,7 @@ width: 90%;
     Followers: <br><br>
     </div>
 
-    
+    </div>
 
 
        
@@ -396,33 +372,7 @@ width: 90%;
             var bioid = firebase.database().ref('users/' + userId).update({biography:twitbio});
          twitbio.value = "";
         }
-     var modal = document.getElementsByClassName("modal");
-var btn = document.getElementById("modalBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("delete")[0];
-
-// When the user clicks on the button, open the modal 
-btn.onclick = function() {
-   modal[0].className = modal[0].className.replace("modal", "modal is-active");
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal[0].className = modal[0].className.replace("is-active", "");
-}
-
-// When the user clicks anywhere outside of the modal, close it
- var closemodal = document.getElementsByClassName("modal-background");
-window.onclick = function(event) {
-  if (event.target == closemodal[0]) {
-    modal[0].className = modal[0].className.replace("is-active", "");
-  }
-}
-var modalcloseBtn = document.getElementById("closemodalBtn");
-      modalcloseBtn.onclick = function() {
-  modal[0].className = modal[0].className.replace("is-active", "");
-}
+    
     </script>
     </body>
 </html>
