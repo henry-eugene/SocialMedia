@@ -309,7 +309,7 @@
                         var tunnellist;
                         if(data[u][t].tunnels.includes(", ")) {
                             tunnellist =  data[u][t].tunnels.split(", ");
-                            for(var i = 0; i < tunellist.length; i++) {
+                            for(var i = 0; i < tunnellist.length; i++) {
                                 mytab += " <small class = 'tunneltag'>" + tunnellist[i] + "</small>";
                             }
                         } else {
@@ -481,8 +481,10 @@
             d.style.backgroundColor= "transparent";
             d.style.border = "none";
             d.style.display = "";
+            var editbuttonid = "edit" + counter;
             var editbutton = document.getElementById(editbuttonid);
             editbutton.style.display = "block";
+            var submitbuttonid = "submit" + counter;
             var submitbutton = document.getElementById(submitbuttonid);
             submitbutton.style.display = "none";
 
