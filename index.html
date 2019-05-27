@@ -80,19 +80,19 @@
                     else {
                         for (var u in requestlist) {
                             firebase.database().ref('users/' + u).once('value', function(snapshot) {
-                             var profilepicture;
-                     if(snapshot.val().profile_picture == null) {
-                       profilepicture = (snapshot.val().profile_picture2);
-                    
-               } else {
-                   profilepicture = snapshot.val().profile_picture;
-               }
-                                
-                                
-                            document.getElementById('followrequests').innerHTML += "<span id='follow" + u + "'><span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br><br></span>";
-                        });
-                    }
+                                var profilepicture;
+                                if(snapshot.val().profile_picture == null) {
+                                    profilepicture = (snapshot.val().profile_picture2);
+
+                                } else {
+                                    profilepicture = snapshot.val().profile_picture;
+                                }
+
+
+                                document.getElementById('followrequests').innerHTML += "<span id='follow" + u + "'><span style='font-size:14px;'>" + snapshot.val().username + " <img src='" + profilepicture + "'style='max-height:26px; border-radius: 50%; vertical-align: middle;display:inline-block; padding-bottom: 0px; z-index:-1;'/></span><br><button onclick='acceptFollow(&apos;" + u + "&apos;)'>Accept Follow Request</button><br><br></span>";
+                            });
                         }
+                    }
                 });
 
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
@@ -166,7 +166,7 @@
             var followings = data[2];
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
-
+            var tunnels = document.getElementById('tunnelselect');
             console.log(followings);
             var editcounter = 0;
             for (var u in data) {
@@ -264,23 +264,59 @@
                         data[u][t].tweet = data[u][t].tweet.replace(/<br>/g, "");
                         console.log(data[u][t].tweet);
                     }
+
+
                     if(data[u][t].video != "" && data[u][t].video != null) {
                         var videolink = data[u][t].video.toString();
                         var changedlink = videolink.replace("watch?v=", "embed/");
                         changedlink = changedlink.replace(/&t=.*$/i, "");
                         changedlink = changedlink.replace(/&ab.*$/i, "");
-                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username;
+                        var tunnellist;
+                        if(data[u][t].tunnels.includes(", ")) {
+                            tunnellist =  data[u][t].tunnels.split(", ");
+                            for(var i = 0; i < tunellist.length; i++) {
+                                mytab += " <small class = 'tunneltag'>" + tunnellist[i] + "</small>";
+                            }
+                        } else {
+                            tunnellist = data[u][t].tunnels;
+                            mytab += " <small class = 'tunneltag'>" + tunnellist + "</small>";
+                        }
+
+                        mytab +="<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><iframe width='400px' height='250px' frameborder='0' allowfullscreen='allowfullscreen' src=" + changedlink + "></iframe>";   
                         mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
 
                     }
                     else if (data[u][t].img != "") {
-                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username;  
+                        var tunnellist;
+                        if(data[u][t].tunnels.includes(", ")) {
+                            tunnellist =  data[u][t].tunnels.split(", ");
+                            for(var i = 0; i < tunnellist.length; i++) {
+                                mytab += " <small class = 'tunneltag'>" + tunnellist[i] + "</small>";
+                            }
+                        } else {
+                            tunnellist = data[u][t].tunnels;
+                            mytab += " <small class = 'tunneltag'>" + tunnellist + "</small>";
+                        }
+                        mytab +="<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><img src='" + data[u][t].img + "' width='300px'>";   
                         mytab = mytab + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } else {
 
-                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username  + "<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username;
+                        var tunnellist;
+                        if(data[u][t].tunnels.includes(", ")) {
+                            tunnellist =  data[u][t].tunnels.split(", ");
+                            for(var i = 0; i < tunellist.length; i++) {
+                                mytab += " <small class = 'tunneltag'>" + tunnellist[i] + "</small>";
+                            }
+                        } else {
+                            tunnellist = data[u][t].tunnels;
+                            mytab += " <small class = 'tunneltag'>" + tunnellist + "</small>";
+                        }
+                        mytab +="<br><span class='popup' onclick='myFunction(" + epoch + ")'> " + time +  "<span class='popuptext' id='myPopup " + epoch + "'>" + time2 + "</span></span>" + "</span><br>" + "<br><br><span class = 'post' id='" + editcounter + "'>" + data[u][t].tweet + "</span><br><br><button id='" + t + " " + u + "' onclick='likeTweet(this.id)'><i class='far fa-thumbs-up'></i></button> <span id='likes " + t + "'> "+ data[u][t].likes +"</span> likes<br>";
 
                     } 
                     if(canEdit) {
@@ -324,8 +360,8 @@
                 for (i = 0; i < (rows.length - 1); i++) {
 
                     shouldSwitch = false;
-                     x = rows[i].getElementsByTagName("td")[0];
-                        y = rows[i + 1].getElementsByTagName("td")[0];
+                    x = rows[i].getElementsByTagName("td")[0];
+                    y = rows[i + 1].getElementsByTagName("td")[0];
                     if(sortby == "Newest") {
                         a = x.getElementsByClassName("epochsort")[0].innerHTML;
                         b = y.getElementsByClassName("epochsort")[0].innerHTML;
@@ -345,7 +381,7 @@
                     else if(sortby == "Most Likes") {
                         a = x.getElementsByTagName("span")[5].innerHTML;  
                         b = y.getElementsByTagName("span")[5].innerHTML;
-                      
+
                         if (a < b) {
                             shouldSwitch = true;
                             break;
@@ -354,13 +390,13 @@
                     else if(sortby == "Least Likes") {
                         a = x.getElementsByTagName("span")[5].innerHTML;  
                         b = y.getElementsByTagName("span")[5].innerHTML;
-                       
+
                         if (a > b) {
                             shouldSwitch = true;
                             break;
                         }
                     }
-                    
+
 
                 }
                 if (shouldSwitch) {
@@ -372,32 +408,45 @@
 
             }
 
-            for (i = 0; i < (rows.length); i++) {
+            for (var i = 0; i < (rows.length); i++) {
                 x = rows[i].getElementsByTagName("td")[0];
                 likebutton = x.getElementsByTagName("button")[0];
 
                 c = likebutton.id;
                 d= c.split(" ");
+                console.log(tweetdata[d[0]]);
+                if(tweetdata[d[0]]) {
 
-                if(tweetdata[d[0]][userId]) {
-                    if(tweetdata[d[0]][userId].userliked)
-                        likebutton.style.backgroundColor = "deepskyblue";
-                    likebutton.style.color="white";
 
-                } 
+                    if(tweetdata[d[0]][userId]) {
+                        if(tweetdata[d[0]][userId].userliked)
+                            likebutton.style.backgroundColor = "deepskyblue";
+                        likebutton.style.color="white";
 
+                    } 
+                }
             }
+            var changetunneltag = document.getElementsByClassName('tunneltag');
+            var colours = ["FireBrick","HotPink", "DarkOrange", "Gold", "DarkViolet", "SlateBlue", "SpringGreen", "Aquamarine", "DodgerBlue", "Chocolate"];
+            var min=0; 
+            var max=colours.length;  
+            for (var j = 0; j < changetunneltag.length; j++) {
+                var random = Math.floor(Math.random() * (+max - +min) + +min); 
+                changetunneltag[j].style.backgroundColor = colours[random];
+            }
+
+
         }
         document.addEventListener('input', function (event) {
 
-	// Only run on our select menu
-	if (event.target.id !== 'sortselect') {
-        return;
-    } 
+            // Only run on our select menu
+            if (event.target.id !== 'sortselect') {
+                return;
+            } 
 
-	sorttableby();
+            sorttableby();
 
-}, false);
+        }, false);
         function editpost(counter) {
             var d = document.getElementById(counter);  
             d.contentEditable = "true";
@@ -486,10 +535,11 @@
             var twitdoc = document.getElementById("twit");
             var twitimg = document.getElementById("imgTest");
             var twitvideo = document.getElementById("videolink");
-
+            var twittunnel = document.getElementById('tunnelselect');
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
             var videoValue = twitvideo.value;
+            var tunnelValues = twittunnel.value;
             if(imgValue != "" && videoValue != "") {
                 window.alert("cannot post both image and video");
                 return;
@@ -499,7 +549,7 @@
                 return;
             }
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue, likes:0});
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, video:videoValue, likes:0, tunnels:tunnelValues});
             twitdoc.value = "";
             console.log("tweet written")
 
@@ -508,14 +558,25 @@
                 if (data == null) {
                     console.log("No data found at /tweets/" + userId);  
                 } else { 
-                    firebase.database().ref('/users').once('value').then(function(snapshot) { 
-                        var userdata = (snapshot.val());
-                        if (userdata != null) {
-                            dataarray = [data,userdata]
-                            console.log(dataarray)
-                            updatetweets(dataarray); 
+                    firebase.database().ref('/following').once('value').then(function(snapshot) { 
+                        var followdata = (snapshot.val());
+
+                        if (followdata != null) {
+                            firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                                var userdata = (snapshot.val());
+                                if (userdata != null) {
+                                    dataarray = [data,userdata,followdata];
+                                    console.log(dataarray);
+                                    updatetweets(dataarray); 
+                                    firebase.database().ref('likes/').once('value').then(function(snapshot) {
+                                        sorttable(snapshot.val(),"Newest"); 
+                                    });
+
+                                }
+                            });
                         }
                     });
+
                 }
             });
 
@@ -585,13 +646,13 @@
         }
         button {
             font-family:inherit;
-            
+
             color: deepskyblue;
             font-size: 14px;
             border: 2px solid deepskyblue;
             border-radius: 2em;
             display: inline-block;
-           
+
             margin:2px;
             text-align: center;
             vertical-align:middle;
@@ -943,6 +1004,13 @@
             100% {-webkit-transform: rotate(2700deg);left:50%;}
         }
 
+        .tunneltag {
+            float:right;
+            background-color:"deepskyblue";
+            padding:3px;
+            margin:3px;
+            border-radius:0.2em;
+        }
     </style>
     <body>
         <div class="topnav">    
@@ -1100,8 +1168,10 @@
                     Post Something!<br>
                     <textarea id="twit" type="text" name="thetweet" cols="50" rows="15"></textarea>
                 </form> 
-                <label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose File</label><br><div style="width:100%; text-align:center;"> Or: &nbsp;<input id = 'videolink' type="url" placeholder="Enter video link here..."></div>
-                <br>
+                <label class="mybutton"><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose Image</label><br><div style="width:100%; text-align:center;"> Or: &nbsp;<input id = 'videolink' type="url" placeholder="Enter video link here..."></div>
+                
+                <h3 style='text-align:center;'>Tunnel Tags: <input style='text-align:center; padding: 5px 0px;
+            border-radius: 1em; border: solid 2px deepskyblue;' id='tunnelselect' type="text" placeholder="Funny, Question..."></h3>
                 <button type="button" onclick="tweet()" class="mybutton" id="submit">Submit</button>
 
                 <div id="imgTest" style="display:none;"></div>
