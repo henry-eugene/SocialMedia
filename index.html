@@ -271,7 +271,7 @@
                         var changedlink = videolink.replace("watch?v=", "embed/");
                         changedlink = changedlink.replace(/&t=.*$/i, "");
                         changedlink = changedlink.replace(/&ab.*$/i, "");
-                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username;
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + "<span>" + users[u].username + "</span>";
                         var tunnellist;
                         if(data[u][t].tunnels.includes(", ")) {
                             tunnellist =  data[u][t].tunnels.split(", ");
@@ -289,7 +289,7 @@
 
                     }
                     else if (data[u][t].img != "") {
-                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username;  
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + "<span>" + users[u].username + "</span>";  
                         var tunnellist;
                         if(data[u][t].tunnels.includes(", ")) {
                             tunnellist =  data[u][t].tunnels.split(", ");
@@ -305,7 +305,7 @@
 
                     } else {
 
-                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + users[u].username;
+                        mytab = mytab + "<td><span class='epochsort' style='display:none;'>"+ epoch + "</span><span class ='postinfo'><img src='" + profilepic + "' width='50px' height='50px' style='border-radius:50%; vertical-align: middle;''> "+ " " + "<span>" + users[u].username + "</span>";
                         var tunnellist;
                         if(data[u][t].tunnels.includes(", ")) {
                             tunnellist =  data[u][t].tunnels.split(", ");
@@ -379,18 +379,26 @@
                         }
                     }  
                     else if(sortby == "Most Likes") {
-                        a = x.getElementsByTagName("span")[5].innerHTML;  
-                        b = y.getElementsByTagName("span")[5].innerHTML;
-
+                        a = x.getElementsByTagName("span")[6].innerHTML;  
+                        b = y.getElementsByTagName("span")[6].innerHTML;
+                        console.log(a + " " + b);
                         if (a < b) {
                             shouldSwitch = true;
                             break;
                         }
                     }
                     else if(sortby == "Least Likes") {
-                        a = x.getElementsByTagName("span")[5].innerHTML;  
-                        b = y.getElementsByTagName("span")[5].innerHTML;
+                        a = x.getElementsByTagName("span")[6].innerHTML;  
+                        b = y.getElementsByTagName("span")[6].innerHTML;
 
+                        if (a > b) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    else if(sortby == "Username") {
+                        a = x.getElementsByTagName("span")[2].innerHTML;  
+                        b = y.getElementsByTagName("span")[2].innerHTML;
                         if (a > b) {
                             shouldSwitch = true;
                             break;
@@ -414,10 +422,8 @@
 
                 c = likebutton.id;
                 d= c.split(" ");
-                console.log(tweetdata[d[0]]);
+        
                 if(tweetdata[d[0]]) {
-
-
                     if(tweetdata[d[0]][userId]) {
                         if(tweetdata[d[0]][userId].userliked)
                             likebutton.style.backgroundColor = "deepskyblue";
@@ -1187,6 +1193,7 @@
                     <option value="Oldest">Oldest</option>
                     <option value="Most Likes">Most Likes</option>
                     <option value="Least Likes">Least Likes</option>
+                    <option value="Username">Username</option>
                     </select></h3>
 
                 <div style="color:deepskyblue; font-size: 25px;margin-top: 50px;">Follow Requests:</div> <br>
