@@ -471,10 +471,9 @@
 
         }
         function submitedit(counter,a,b) {
-            alert(counter + a + b);
+            alert("Edits submitted!");
             var d = document.getElementById(counter);
             var newtweet = d.innerHTML;
-            alert(newtweet);
             firebase.database().ref('tweets/' + a + "/" + b).update({tweet: newtweet});
             d.contentEditable = "false";
             d.style.width = "200px";
